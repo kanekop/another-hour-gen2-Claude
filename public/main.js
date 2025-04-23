@@ -1,5 +1,5 @@
 
-import { SCALE_AH, getAngles } from './clock-core.js';
+import { getAngles } from './clock-core.js';
 
 // Populate timezone select
 const timezoneSelect = document.getElementById('timezone-select');
@@ -55,12 +55,11 @@ function updateClock() {
   // Update digital clock
   const actualTime = now.format('HH:mm:ss');
   
-  // Calculate AH time (scaled by 24/23)
-  const totalSeconds = now.hours() * 3600 + now.minutes() * 60 + now.seconds();
-  const scaledSeconds = totalSeconds * (24/23); // Scale up instead of down
-  const ahHours = Math.floor(scaledSeconds / 3600);
-  const ahMinutes = Math.floor((scaledSeconds % 3600) / 60);
-  const ahSeconds = Math.floor(scaledSeconds % 60);
+  // Get 12-hour format time
+  const hours = now.hours() % 12;
+  const ahHours = hours;
+  const ahMinutes = now.minutes();
+  const ahSeconds = now.seconds();
   const ahTime = `${String(ahHours).padStart(2, '0')}:${String(ahMinutes).padStart(2, '0')}:${String(ahSeconds).padStart(2, '0')}`;
   
   document.getElementById('digital-clock').innerHTML = `
