@@ -15,6 +15,10 @@ app.get('/', (req, res) => {
   res.sendFile('index.html', { root: './public' });
 });
 
+app.get('/admin', (req, res) => {
+  res.sendFile('admin.html', { root: './public' });
+});
+
 app.listen(PORT, () =>
   console.log(`Server running → http://0.0.0.0:${PORT}`)
 );

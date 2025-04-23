@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clock Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+</head>
+<body>
+  <div class="admin-panel">
+    <h2>Clock Settings</h2>
+    <div class="settings-group">
+      <h3>Timezone Management</h3>
+      <select id="available-timezones" multiple></select>
+      <div class="buttons">
+        <button id="add-timezone">Add →</button>
+        <button id="remove-timezone">← Remove</button>
+      </div>
+      <select id="selected-timezones" multiple></select>
+    </div>
+    <div class="settings-group">
+      <h3>Display Settings</h3>
+      <label>
+        <input type="checkbox" id="show-ah-time" checked>
+        Show AH Time
+      </label>
+      <label>
+        <input type="checkbox" id="show-actual-time" checked>
+        Show Actual Time
+      </label>
+    </div>
+    <button id="save-settings" class="save-button">Save Settings</button>
+  </div>
+  <script type="module" src="admin.js"></script>
+</body>
+</html>

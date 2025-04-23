@@ -1,15 +1,23 @@
-
 import { SCALE_AH, getAngles } from './clock-core.js';
+import moment from 'moment-timezone';
+
+// Load settings
+const settings = JSON.parse(localStorage.getItem('clockSettings')) || {
+  timezones: moment.tz.names(),
+  showAHTime: true,
+  showActualTime: true
+};
 
 // Populate timezone select
 const timezoneSelect = document.getElementById('timezone-select');
-const timezones = moment.tz.names();
 const userTimezone = moment.tz.guess();
 
-timezones.forEach(timezone => {
+settings.timezones.forEach(timezone => {
+  const offset = moment.tz(timezone).utcOffset();
+  const offsetString = offset >= 0 ? `UTC+${offset / 60}` : `UTC${offset / 60}`;
   const option = document.createElement('option');
   option.value = timezone;
-  option.text = timezone;
+  option.text = `${timezone.split('/').pop()} (${offsetString})`; // Remove continent, show only city and offset
   option.selected = timezone === userTimezone;
   timezoneSelect.appendChild(option);
 });
@@ -22,13 +30,13 @@ for (let i = 0; i < 60; i++) {
   const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
   const radius = 95;
   const length = isMajor ? 10 : 5;
-  
+
   line.setAttribute('class', `tick ${isMajor ? 'major' : ''}`);
   line.setAttribute('x1', 100 + Math.sin(angle * Math.PI / 180) * (radius - length));
   line.setAttribute('y1', 100 - Math.cos(angle * Math.PI / 180) * (radius - length));
   line.setAttribute('x2', 100 + Math.sin(angle * Math.PI / 180) * radius);
   line.setAttribute('y2', 100 - Math.cos(angle * Math.PI / 180) * radius);
-  
+
   ticks.appendChild(line);
 }
 
@@ -47,22 +55,49 @@ function updateClock() {
   const timezone = timezoneSelect.value;
   const now = moment().tz(timezone);
   const { hourAngle, minuteAngle, secondAngle } = getAngles(now.toDate(), timezone);
-  
+
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
-  
+
   // Update digital clock
   const actualTime = now.format('HH:mm:ss');
   const { ahHours, ahMinutes, ahSeconds } = getAngles(now.toDate(), timezone);
   const ahTime = `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
-  
-  document.getElementById('digital-clock').innerHTML = `
-    Actual: ${actualTime}<br>
-    AH Time: ${ahTime}
-  `;
-  
+
+  let digitalClockOutput = '';
+  if (settings.showActualTime) {
+    digitalClockOutput += `Actual: ${actualTime}<br>`;
+  }
+  if (settings.showAHTime) {
+    digitalClockOutput += `AH Time: ${ahTime}`;
+  }
+
+  document.getElementById('digital-clock').innerHTML = digitalClockOutput;
+
   requestAnimationFrame(updateClock);
 }
 
 updateClock();
+
+
+// Admin Interface (Basic)
+const adminForm = document.getElementById('admin-form');
+const timezoneInput = document.getElementById('admin-timezones');
+const showAHCheckbox = document.getElementById('admin-show-ah');
+const showActualCheckbox = document.getElementById('admin-show-actual');
+
+timezoneInput.value = settings.timezones.join(',');
+showAHCheckbox.checked = settings.showAHTime;
+showActualCheckbox.checked = settings.showActualTime;
+
+
+adminForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const newTimezones = timezoneInput.value.split(',').map(tz => tz.trim()).filter(tz => tz !== "");
+  settings.timezones = newTimezones;
+  settings.showAHTime = showAHCheckbox.checked;
+  settings.showActualTime = showActualCheckbox.checked;
+  localStorage.setItem('clockSettings', JSON.stringify(settings));
+  location.reload(); // simplest way to refresh;  better to update the clock dynamically.
+});
