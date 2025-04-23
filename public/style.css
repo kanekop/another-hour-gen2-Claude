@@ -1,0 +1,46 @@
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  margin: 0;
+  background: #1a1a1a;
+}
+
+#clock {
+  width: 300px;
+  height: 300px;
+}
+
+.face {
+  fill: #222;
+  stroke: #444;
+  stroke-width: 2;
+}
+
+.ah-sector {
+  fill: rgba(255, 255, 0, 0.1);
+}
+
+.hand {
+  stroke: white;
+  stroke-linecap: round;
+  transform-origin: 100px 100px;
+}
+
+.hour { stroke-width: 4; }
+.minute { stroke-width: 3; }
+.second { stroke: #ff6b6b; stroke-width: 2; }
+
+.center {
+  fill: white;
+}
+
+.tick {
+  stroke: #666;
+  stroke-width: 1;
+}
+
+.tick.major {
+  stroke-width: 2;
+}
