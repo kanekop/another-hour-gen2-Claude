@@ -87,23 +87,4 @@ function updateClock() {
 
 updateClock();
 
-// Admin Interface (Basic)
-const adminForm = document.getElementById('admin-form');
-const timezoneInput = document.getElementById('admin-timezones');
-const showAHCheckbox = document.getElementById('admin-show-ah');
-const showActualCheckbox = document.getElementById('admin-show-actual');
-
-timezoneInput.value = settings.timezones.join(',');
-showAHCheckbox.checked = settings.showAHTime;
-showActualCheckbox.checked = settings.showActualTime;
-
-
-adminForm.addEventListener('submit', (e) => {
-  e.preventDefault();
-  const newTimezones = timezoneInput.value.split(',').map(tz => tz.trim()).filter(tz => tz !== "");
-  settings.timezones = newTimezones;
-  settings.showAHTime = showAHCheckbox.checked;
-  settings.showActualTime = showActualCheckbox.checked;
-  localStorage.setItem('clockSettings', JSON.stringify(settings));
-  location.reload(); 
-});
+// Admin form handling removed from main page
