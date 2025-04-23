@@ -62,7 +62,7 @@ function initializeTimezoneSelect() {
     ticks.appendChild(line);
   }
 
-  // Draw AH sector
+  // Draw AH sector (only visible during AH time)
   const ahSector = document.getElementById('ah-sector');
   const startAngle = 270;
   const endAngle = 300;
@@ -71,6 +71,8 @@ function initializeTimezoneSelect() {
   const y1 = 100 + radius * Math.sin(startAngle * Math.PI / 180);
   const x2 = 100 + radius * Math.cos(endAngle * Math.PI / 180);
   const y2 = 100 + radius * Math.sin(endAngle * Math.PI / 180);
+  const currentHour = moment().tz(timezoneSelect.value).hours();
+  ahSector.style.display = currentHour === 23 ? 'block' : 'none';
   ahSector.setAttribute('d', `M 100,100 L ${x1},${y1} A ${radius},${radius} 0 0,1 ${x2},${y2} Z`);
 }
 
