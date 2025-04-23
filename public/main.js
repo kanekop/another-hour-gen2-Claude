@@ -13,13 +13,21 @@ const settings = JSON.parse(localStorage.getItem('clockSettings')) || {
 };
 
 // Populate timezone select with UTC offsets
-settings.timezones.forEach(timezone => {
-  const offset = moment.tz(timezone).utcOffset();
+const timezonesWithOffset = settings.timezones.map(timezone => ({
+  name: timezone,
+  offset: moment.tz(timezone).utcOffset(),
+  city: timezone.split('/').pop()
+}));
+
+// Sort by UTC offset
+timezonesWithOffset.sort((a, b) => a.offset - b.offset);
+
+timezonesWithOffset.forEach(({ name, offset, city }) => {
   const offsetString = offset >= 0 ? `UTC+${offset/60}` : `UTC${offset/60}`;
   const option = document.createElement('option');
-  option.value = timezone;
-  option.text = `${timezone.split('/').pop()} (${offsetString})`;
-  option.selected = timezone === userTimezone;
+  option.value = name;
+  option.text = `${city} (${offsetString})`;
+  option.selected = name === userTimezone;
   timezoneSelect.appendChild(option);
 });
 
