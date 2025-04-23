@@ -1,5 +1,5 @@
 
-export const SCALE_AH = 23/24;
+export const SCALE_AH = 24/23;
 
 export function getAngles(date, timezone) {
   const localTime = moment(date).tz(timezone);
