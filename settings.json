@@ -1,6 +1,1 @@
-
-{
-  "timezones": [],
-  "showAHTime": true,
-  "showActualTime": true
-}
+{"timezones":["Australia/ACT","America/Adak","Africa/Addis_Ababa","Australia/Adelaide","Asia/Aden","US/Aleutian","Africa/Algiers","Asia/Almaty","Africa/Timbuktu","Europe/Tirane","Europe/Tiraspol","Asia/Tokyo","Asia/Tomsk","Pacific/Tongatapu","America/Toronto","America/Tortola","Africa/Tripoli"],"showAHTime":true,"showActualTime":true}
