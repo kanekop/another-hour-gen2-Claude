@@ -53,8 +53,21 @@ function updateClock() {
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
   
   // Update digital clock
-  const digitalTime = moment().tz(timezone).format('HH:mm:ss');
-  document.getElementById('digital-clock').textContent = digitalTime;
+  const now = moment().tz(timezone);
+  const actualTime = now.format('HH:mm:ss');
+  
+  // Calculate AH time (scaled by 23/24)
+  const totalSeconds = now.hours() * 3600 + now.minutes() * 60 + now.seconds();
+  const scaledSeconds = totalSeconds * SCALE_AH;
+  const ahHours = Math.floor(scaledSeconds / 3600);
+  const ahMinutes = Math.floor((scaledSeconds % 3600) / 60);
+  const ahSeconds = Math.floor(scaledSeconds % 60);
+  const ahTime = `${String(ahHours).padStart(2, '0')}:${String(ahMinutes).padStart(2, '0')}:${String(ahSeconds).padStart(2, '0')}`;
+  
+  document.getElementById('digital-clock').innerHTML = `
+    Actual: ${actualTime}<br>
+    AH Time: ${ahTime}
+  `;
   
   requestAnimationFrame(updateClock);
 }
