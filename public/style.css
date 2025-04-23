@@ -5,73 +5,73 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #1a1a1a;
+  background: #e5e5e5;
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
 body.inverted {
-  background: #e5e5e5;
+  background: #1a1a1a;
 }
 
 #timezone-select {
   margin-bottom: min(15px, 3vh);
   padding: 12px;
-  background: #333;
-  color: white;
-  border: 1px solid #444;
+  background: #ccc;
+  color: black;
+  border: 1px solid #bbb;
   border-radius: 8px;
   font-size: clamp(16px, 4vw, 20px);
   width: min(400px, 95vw);
 }
 
 body.inverted #timezone-select {
-  background: #ccc;
-  color: black;
-  border-color: #bbb;
+  background: #333;
+  color: white;
+  border-color: #444;
 }
 
 .face {
-  fill: #222;
-  stroke: #444;
-}
-
-body.inverted .face {
   fill: #ddd;
   stroke: #bbb;
 }
 
-.hand {
-  stroke: white;
+body.inverted .face {
+  fill: #222;
+  stroke: #444;
 }
 
-body.inverted .hand {
+.hand {
   stroke: black;
 }
 
-.second {
-  stroke: #ff6b6b;
+body.inverted .hand {
+  stroke: white;
 }
 
-body.inverted .second {
+.second {
   stroke: #940000;
 }
 
-.center {
-  fill: white;
+body.inverted .second {
+  stroke: #ff6b6b;
 }
 
-body.inverted .center {
+.center {
   fill: black;
 }
 
+body.inverted .center {
+  fill: white;
+}
+
 .tick {
-  stroke: #666;
+  stroke: #999;
 }
 
 body.inverted .tick {
-  stroke: #999;
+  stroke: #666;
 }
 
 .tick.major {
@@ -85,21 +85,21 @@ body.inverted .tick.major {
 }
 
 .ah-sector {
-  fill: rgba(255, 255, 0, 0.1);
-}
-
-body.inverted .ah-sector {
   fill: rgba(255, 255, 0, 0.2);
 }
 
+body.inverted .ah-sector {
+  fill: rgba(255, 255, 0, 0.1);
+}
+
 .digital-clock {
-  color: white;
-  background: #333;
+  color: black;
+  background: #ccc;
 }
 
 body.inverted .digital-clock {
-  color: black;
-  background: #ccc;
+  color: white;
+  background: #333;
 }
 
 #clock {
