@@ -6,11 +6,19 @@ const timezoneSelect = document.getElementById('timezone-select');
 const userTimezone = moment.tz.guess();
 
 // Load settings
-const settings = JSON.parse(localStorage.getItem('clockSettings')) || {
-  timezones: moment.tz.names(),
-  showAHTime: true,
-  showActualTime: true
-};
+let settings = { timezones: moment.tz.names(), showAHTime: true, showActualTime: true };
+
+fetch('/api/settings')
+  .then(res => res.json())
+  .then(data => {
+    settings = data;
+    if (settings.timezones.length === 0) {
+      settings.timezones = moment.tz.names();
+    }
+    initializeTimezoneSelect();
+  });
+
+function initializeTimezoneSelect() {
 
 // Populate timezone select with UTC offsets
 const timezonesWithOffset = settings.timezones.map(timezone => ({

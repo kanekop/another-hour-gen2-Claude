@@ -1,9 +1,22 @@
 
 import express from "express";
+import fs from "fs";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static("public"));
+app.use(express.json());
+
+// Settings endpoints
+app.get('/api/settings', (req, res) => {
+  const settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
+  res.json(settings);
+});
+
+app.post('/api/settings', (req, res) => {
+  fs.writeFileSync('settings.json', JSON.stringify(req.body));
+  res.json({ success: true });
+});
 
 // Health check route
 app.get('/health', (req, res) => {

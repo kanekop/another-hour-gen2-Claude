@@ -5,11 +5,16 @@ const showAHTime = document.getElementById('show-ah-time');
 const showActualTime = document.getElementById('show-actual-time');
 
 // Load current settings
-let settings = JSON.parse(localStorage.getItem('clockSettings')) || {
-  timezones: moment.tz.names(),
-  showAHTime: true,
-  showActualTime: true
-};
+let settings = { timezones: [], showAHTime: true, showActualTime: true };
+
+fetch('/api/settings')
+  .then(res => res.json())
+  .then(data => {
+    settings = data;
+    initializeTimezones();
+    showAHTime.checked = settings.showAHTime;
+    showActualTime.checked = settings.showActualTime;
+  });
 
 // Initialize timezone lists
 function initializeTimezones() {
@@ -58,8 +63,11 @@ document.getElementById('save-settings').addEventListener('click', () => {
     showAHTime: showAHTime.checked,
     showActualTime: showActualTime.checked
   };
-  localStorage.setItem('clockSettings', JSON.stringify(settings));
-  alert('Settings saved!');
+  fetch('/api/settings', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(settings)
+  }).then(() => alert('Settings saved!'));
 });
 
 initializeTimezones();
