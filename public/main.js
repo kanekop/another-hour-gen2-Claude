@@ -52,6 +52,10 @@ function updateClock() {
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
   
+  // Update digital clock
+  const digitalTime = moment().tz(timezone).format('HH:mm:ss');
+  document.getElementById('digital-clock').textContent = digitalTime;
+  
   requestAnimationFrame(updateClock);
 }
 

@@ -55,3 +55,13 @@ body {
 .tick.major {
   stroke-width: 2;
 }
+
+.digital-clock {
+  margin-top: 20px;
+  font-family: monospace;
+  font-size: 24px;
+  color: white;
+  background: #333;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
