@@ -8,6 +8,51 @@ body {
   background: #1a1a1a;
   padding: 20px;
   box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+body.inverted {
+  background: #e5e5e5;
+}
+
+body.inverted #timezone-select {
+  background: #ccc;
+  color: black;
+  border-color: #bbb;
+}
+
+body.inverted .face {
+  fill: #ddd;
+  stroke: #bbb;
+}
+
+body.inverted .hand {
+  stroke: black;
+}
+
+body.inverted .second {
+  stroke: #940000;
+}
+
+body.inverted .center {
+  fill: black;
+}
+
+body.inverted .tick {
+  stroke: #999;
+}
+
+body.inverted .tick.major {
+  stroke: #666;
+}
+
+body.inverted .ah-sector {
+  fill: rgba(255, 255, 0, 0.2);
+}
+
+body.inverted .digital-clock {
+  color: black;
+  background: #ccc;
 }
 
 #timezone-select {

@@ -78,6 +78,10 @@ function updateClock() {
   const timezone = timezoneSelect.value;
   const currentTime = moment().tz(timezone);
   const { hourAngle, minuteAngle, secondAngle, ahHours, ahMinutes, ahSeconds } = getAngles(currentTime.toDate(), timezone);
+  
+  // Check if it's AH hour and toggle inverted colors
+  const isAHHour = currentTime.hours() === 23;
+  document.body.classList.toggle('inverted', isAHHour);
 
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
