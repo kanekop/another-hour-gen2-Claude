@@ -34,8 +34,8 @@ for (let i = 0; i < 60; i++) {
 
 // Draw AH sector
 const ahSector = document.getElementById('ah-sector');
-const startAngle = 255; // 23:00 (345 - 90 to adjust for SVG coordinates)
-const endAngle = 270; // 24:00 (360 - 90 to adjust for SVG coordinates)
+const startAngle = 240; // 11:00 (330 - 90 to adjust for SVG coordinates)
+const endAngle = 270; // 12:00 (360 - 90 to adjust for SVG coordinates)
 const radius = 95;
 const x1 = 100 + radius * Math.cos(startAngle * Math.PI / 180);
 const y1 = 100 + radius * Math.sin(startAngle * Math.PI / 180);
