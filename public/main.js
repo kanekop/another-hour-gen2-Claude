@@ -44,16 +44,15 @@ const y2 = 100 + radius * Math.sin(endAngle * Math.PI / 180);
 ahSector.setAttribute('d', `M 100,100 L ${x1},${y1} A ${radius},${radius} 0 0,1 ${x2},${y2} Z`);
 
 function updateClock() {
-  const now = new Date();
   const timezone = timezoneSelect.value;
-  const { hourAngle, minuteAngle, secondAngle } = getAngles(now, timezone);
+  const now = moment().tz(timezone);
+  const { hourAngle, minuteAngle, secondAngle } = getAngles(now.toDate(), timezone);
   
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
   
   // Update digital clock
-  const now = moment().tz(timezone);
   const actualTime = now.format('HH:mm:ss');
   
   // Calculate AH time (scaled by 23/24)
