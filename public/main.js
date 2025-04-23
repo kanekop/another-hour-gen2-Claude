@@ -71,20 +71,23 @@ function initializeTimezoneSelect() {
   const y1 = 100 + radius * Math.sin(startAngle * Math.PI / 180);
   const x2 = 100 + radius * Math.cos(endAngle * Math.PI / 180);
   const y2 = 100 + radius * Math.sin(endAngle * Math.PI / 180);
-  const currentHour = moment().tz(timezoneSelect.value).hours();
-  ahSector.style.display = currentHour === 23 ? 'block' : 'none';
+//  const currentHour = moment().tz(timezoneSelect.value).hours();
+//  ahSector.style.display = currentHour === 23 ? 'block' : 'none';
   ahSector.setAttribute('d', `M 100,100 L ${x1},${y1} A ${radius},${radius} 0 0,1 ${x2},${y2} Z`);
 }
 
 function updateClock() {
   const timezone = timezoneSelect.value;
   const currentTime = moment().tz(timezone);
+  const ahSector   = document.getElementById('ah-sector');
   const { hourAngle, minuteAngle, secondAngle, ahHours, ahMinutes, ahSeconds } = getAngles(currentTime.toDate(), timezone);
   
   // Check if it's AH hour and toggle inverted colors
   const isAHHour = currentTime.hours() === 23;
-  document.body.classList.toggle('inverted', isAHHour);
+  document.body.classList.toggle('inverted', !isAHHour);
 
+  // ★ AH セクター表示／非表示 ★
+  ahSector.style.display = isAHHour ? 'block' : 'none';
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
