@@ -5,8 +5,11 @@
   <meta charset="UTF-8">
   <title>Another Hour Clock</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
+  <select id="timezone-select"></select>
   <svg id="clock" viewBox="0 0 200 200">
     <circle class="face" cx="100" cy="100" r="95"/>
     <path id="ah-sector" class="ah-sector"/>

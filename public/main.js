@@ -1,6 +1,19 @@
 
 import { SCALE_AH, getAngles } from './clock-core.js';
 
+// Populate timezone select
+const timezoneSelect = document.getElementById('timezone-select');
+const timezones = moment.tz.names();
+const userTimezone = moment.tz.guess();
+
+timezones.forEach(timezone => {
+  const option = document.createElement('option');
+  option.value = timezone;
+  option.text = timezone;
+  option.selected = timezone === userTimezone;
+  timezoneSelect.appendChild(option);
+});
+
 // Draw tick marks
 const ticks = document.getElementById('ticks');
 for (let i = 0; i < 60; i++) {
@@ -32,7 +45,8 @@ ahSector.setAttribute('d', `M 100,100 L ${x1},${y1} A ${radius},${radius} 0 0,1 
 
 function updateClock() {
   const now = new Date();
-  const { hourAngle, minuteAngle, secondAngle } = getAngles(now);
+  const timezone = timezoneSelect.value;
+  const { hourAngle, minuteAngle, secondAngle } = getAngles(now, timezone);
   
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
