@@ -42,19 +42,37 @@ function initializeTimezones() {
 showAHTime.checked = settings.showAHTime;
 showActualTime.checked = settings.showActualTime;
 
+// Move timezone functions
+function moveToSelected(option) {
+  selectedTimezones.add(option.cloneNode(true));
+  availableTimezones.remove(option.index);
+}
+
+function moveToAvailable(option) {
+  availableTimezones.add(option.cloneNode(true));
+  selectedTimezones.remove(option.index);
+}
+
 // Event listeners
 document.getElementById('add-timezone').addEventListener('click', () => {
-  Array.from(availableTimezones.selectedOptions).forEach(option => {
-    selectedTimezones.add(option.cloneNode(true));
-    availableTimezones.remove(option.index);
-  });
+  Array.from(availableTimezones.selectedOptions).forEach(moveToSelected);
 });
 
 document.getElementById('remove-timezone').addEventListener('click', () => {
-  Array.from(selectedTimezones.selectedOptions).forEach(option => {
-    availableTimezones.add(option.cloneNode(true));
-    selectedTimezones.remove(option.index);
-  });
+  Array.from(selectedTimezones.selectedOptions).forEach(moveToAvailable);
+});
+
+// Double-click handlers
+availableTimezones.addEventListener('dblclick', (e) => {
+  if (e.target.tagName === 'OPTION') {
+    moveToSelected(e.target);
+  }
+});
+
+selectedTimezones.addEventListener('dblclick', (e) => {
+  if (e.target.tagName === 'OPTION') {
+    moveToAvailable(e.target);
+  }
 });
 
 document.getElementById('save-settings').addEventListener('click', () => {
