@@ -7,9 +7,16 @@ export function getAngles(date, timezone) {
   const minutes = localTime.minutes();
   const seconds = localTime.seconds();
   
-  const secondAngle = (seconds * 6) * SCALE_AH;
-  const minuteAngle = (minutes * 6 + seconds * 0.1) * SCALE_AH;
-  const hourAngle = (hours * 30 + minutes * 0.5) * SCALE_AH;
+  const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+  const scaledSeconds = totalSeconds * SCALE_AH;
+  
+  const ahHours = Math.floor(scaledSeconds / 3600);
+  const ahMinutes = Math.floor((scaledSeconds % 3600) / 60);
+  const ahSeconds = Math.floor(scaledSeconds % 60);
+  
+  const secondAngle = ahSeconds * 6;
+  const minuteAngle = ahMinutes * 6 + ahSeconds * 0.1;
+  const hourAngle = ahHours * 30 + ahMinutes * 0.5;
   
   return { hourAngle, minuteAngle, secondAngle };
 }
