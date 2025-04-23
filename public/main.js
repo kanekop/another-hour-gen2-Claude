@@ -1,5 +1,9 @@
+// Import clock core functionality
 import { SCALE_AH, getAngles } from './clock-core.js';
-import moment from 'moment-timezone';
+
+// Initialize timezone select
+const timezoneSelect = document.getElementById('timezone-select');
+const userTimezone = moment.tz.guess();
 
 // Load settings
 const settings = JSON.parse(localStorage.getItem('clockSettings')) || {
@@ -8,16 +12,13 @@ const settings = JSON.parse(localStorage.getItem('clockSettings')) || {
   showActualTime: true
 };
 
-// Populate timezone select
-const timezoneSelect = document.getElementById('timezone-select');
-const userTimezone = moment.tz.guess();
-
+// Populate timezone select with UTC offsets
 settings.timezones.forEach(timezone => {
   const offset = moment.tz(timezone).utcOffset();
-  const offsetString = offset >= 0 ? `UTC+${offset / 60}` : `UTC${offset / 60}`;
+  const offsetString = offset >= 0 ? `UTC+${offset/60}` : `UTC${offset/60}`;
   const option = document.createElement('option');
   option.value = timezone;
-  option.text = `${timezone.split('/').pop()} (${offsetString})`; // Remove continent, show only city and offset
+  option.text = `${timezone.split('/').pop()} (${offsetString})`;
   option.selected = timezone === userTimezone;
   timezoneSelect.appendChild(option);
 });
@@ -42,8 +43,8 @@ for (let i = 0; i < 60; i++) {
 
 // Draw AH sector
 const ahSector = document.getElementById('ah-sector');
-const startAngle = 240; // 11:00 (330 - 90 to adjust for SVG coordinates)
-const endAngle = 270; // 12:00 (360 - 90 to adjust for SVG coordinates)
+const startAngle = 240;
+const endAngle = 270;
 const radius = 95;
 const x1 = 100 + radius * Math.cos(startAngle * Math.PI / 180);
 const y1 = 100 + radius * Math.sin(startAngle * Math.PI / 180);
@@ -53,16 +54,15 @@ ahSector.setAttribute('d', `M 100,100 L ${x1},${y1} A ${radius},${radius} 0 0,1 
 
 function updateClock() {
   const timezone = timezoneSelect.value;
-  const now = moment().tz(timezone);
-  const { hourAngle, minuteAngle, secondAngle } = getAngles(now.toDate(), timezone);
+  const currentTime = moment().tz(timezone);
+  const { hourAngle, minuteAngle, secondAngle, ahHours, ahMinutes, ahSeconds } = getAngles(currentTime.toDate(), timezone);
 
   document.getElementById('hour').style.transform = `rotate(${hourAngle}deg)`;
   document.getElementById('minute').style.transform = `rotate(${minuteAngle}deg)`;
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
 
   // Update digital clock
-  const actualTime = now.format('HH:mm:ss');
-  const { ahHours, ahMinutes, ahSeconds } = getAngles(now.toDate(), timezone);
+  const actualTime = currentTime.format('HH:mm:ss');
   const ahTime = `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
 
   let digitalClockOutput = '';
@@ -74,12 +74,10 @@ function updateClock() {
   }
 
   document.getElementById('digital-clock').innerHTML = digitalClockOutput;
-
   requestAnimationFrame(updateClock);
 }
 
 updateClock();
-
 
 // Admin Interface (Basic)
 const adminForm = document.getElementById('admin-form');
@@ -99,5 +97,5 @@ adminForm.addEventListener('submit', (e) => {
   settings.showAHTime = showAHCheckbox.checked;
   settings.showActualTime = showActualCheckbox.checked;
   localStorage.setItem('clockSettings', JSON.stringify(settings));
-  location.reload(); // simplest way to refresh;  better to update the clock dynamically.
+  location.reload(); 
 });

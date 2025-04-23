@@ -1,7 +1,7 @@
 
-const SCALE_AH = 24/23; // Scale factor for AH time
+export const SCALE_AH = 24/23; // Scale factor for AH time
 
-function getAngles(date, timezone) {
+export function getAngles(date, timezone) {
   const localTime = moment(date).tz(timezone);
   const hours = localTime.hours();
   const minutes = localTime.minutes();
@@ -23,5 +23,3 @@ function getAngles(date, timezone) {
   
   return { hourAngle, minuteAngle, secondAngle, ahHours, ahMinutes, ahSeconds };
 }
-
-export { SCALE_AH, getAngles };
