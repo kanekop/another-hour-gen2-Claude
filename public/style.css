@@ -33,8 +33,8 @@ body.inverted #timezone-select {
 }
 
 .face {
-  fill: #ddd;
-  stroke: #bbb;
+  fill: #fff;
+  stroke: #ddd;
 }
 
 body.inverted .face {
@@ -43,7 +43,7 @@ body.inverted .face {
 }
 
 .hand {
-  stroke: black;
+  stroke: #333;
 }
 
 body.inverted .hand {
@@ -59,7 +59,7 @@ body.inverted .second {
 }
 
 .center {
-  fill: black;
+  fill: #333;
 }
 
 body.inverted .center {
@@ -80,7 +80,7 @@ body.inverted .tick {
 }
 
 body.inverted .tick.major {
-  stroke: #666;
+  stroke: #999;
   stroke-width: 2;
 }
 
@@ -105,52 +105,6 @@ body.inverted .digital-clock {
 #clock {
   width: min(90vw, min(90vh, 500px));
   height: min(90vw, min(90vh, 500px));
-}
-
-.face {
-  fill: #222;
-  stroke: #444;
-  stroke-width: 2;
-}
-
-.ah-sector {
-  fill: rgba(255, 255, 0, 0.1);
-}
-
-.hand {
-  stroke: white;
-  stroke-linecap: round;
-  transform-origin: 100px 100px;
-}
-
-.hour { stroke-width: 4; }
-.minute { stroke-width: 3; }
-.second { stroke: #ff6b6b; stroke-width: 2; }
-
-.center {
-  fill: white;
-}
-
-.tick {
-  stroke: #666;
-  stroke-width: 1;
-}
-
-.tick.major {
-  stroke-width: 2;
-}
-
-.digital-clock {
-  margin-top: min(15px, 3vh);
-  font-family: monospace;
-  font-size: clamp(18px, 5vw, 28px);
-  color: white;
-  background: #333;
-  padding: min(12px, 2.5vh) min(24px, 5vw);
-  border-radius: 8px;
-  text-align: center;
-  line-height: 1.6;
-  width: min(400px, 95vw);
 }
 
 @media (max-width: 480px) {
