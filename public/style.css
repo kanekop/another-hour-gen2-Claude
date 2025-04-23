@@ -5,73 +5,73 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #1a1a1a;
+  background: #e5e5e5;
   padding: 20px;
   box-sizing: border-box;
   transition: all 0.3s ease;
 }
 
 body.inverted {
-  background: #e5e5e5;
+  background: #1a1a1a;
 }
 
 #timezone-select {
   margin-bottom: min(15px, 3vh);
   padding: 12px;
-  background: #333;
-  color: white;
-  border: 1px solid #444;
+  background: #ccc;
+  color: black;
+  border: 1px solid #bbb;
   border-radius: 8px;
   font-size: clamp(16px, 4vw, 20px);
   width: min(400px, 95vw);
 }
 
 body.inverted #timezone-select {
-  background: #ccc;
-  color: black;
-  border-color: #bbb;
+  background: #333;
+  color: white;
+  border-color: #444;
 }
 
 .face {
+  fill: #fff;
+  stroke: #ddd;
+}
+
+body.inverted .face {
   fill: #222;
   stroke: #444;
 }
 
-body.inverted .face {
-  fill: #ddd;
-  stroke: #bbb;
-}
-
 .hand {
-  stroke: white;
+  stroke: #333;
 }
 
 body.inverted .hand {
-  stroke: black;
+  stroke: white;
 }
 
 .second {
-  stroke: #ff6b6b;
-}
-
-body.inverted .second {
   stroke: #940000;
 }
 
+body.inverted .second {
+  stroke: #ff6b6b;
+}
+
 .center {
-  fill: white;
+  fill: #333;
 }
 
 body.inverted .center {
-  fill: black;
+  fill: white;
 }
 
 .tick {
-  stroke: #666;
+  stroke: #999;
 }
 
 body.inverted .tick {
-  stroke: #999;
+  stroke: #666;
 }
 
 .tick.major {
@@ -80,77 +80,31 @@ body.inverted .tick {
 }
 
 body.inverted .tick.major {
-  stroke: #666;
+  stroke: #999;
   stroke-width: 2;
 }
 
 .ah-sector {
-  fill: rgba(255, 255, 0, 0.1);
-}
-
-body.inverted .ah-sector {
   fill: rgba(255, 255, 0, 0.2);
 }
 
+body.inverted .ah-sector {
+  fill: rgba(255, 255, 0, 0.1);
+}
+
 .digital-clock {
-  color: white;
-  background: #333;
+  color: black;
+  background: #ccc;
 }
 
 body.inverted .digital-clock {
-  color: black;
-  background: #ccc;
+  color: white;
+  background: #333;
 }
 
 #clock {
   width: min(90vw, min(90vh, 500px));
   height: min(90vw, min(90vh, 500px));
-}
-
-.face {
-  fill: #222;
-  stroke: #444;
-  stroke-width: 2;
-}
-
-.ah-sector {
-  fill: rgba(255, 255, 0, 0.1);
-}
-
-.hand {
-  stroke: white;
-  stroke-linecap: round;
-  transform-origin: 100px 100px;
-}
-
-.hour { stroke-width: 4; }
-.minute { stroke-width: 3; }
-.second { stroke: #ff6b6b; stroke-width: 2; }
-
-.center {
-  fill: white;
-}
-
-.tick {
-  stroke: #666;
-  stroke-width: 1;
-}
-
-.tick.major {
-  stroke-width: 2;
-}
-
-.digital-clock {
-  margin-top: min(15px, 3vh);
-  font-family: monospace;
-  font-size: clamp(18px, 5vw, 28px);
-  color: white;
-  background: #333;
-  padding: min(12px, 2.5vh) min(24px, 5vw);
-  border-radius: 8px;
-  text-align: center;
-  line-height: 1.6;
-  width: min(400px, 95vw);
 }
 
 @media (max-width: 480px) {
