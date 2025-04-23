@@ -55,9 +55,9 @@ function updateClock() {
   // Update digital clock
   const actualTime = now.format('HH:mm:ss');
   
-  // Calculate AH time (scaled by 23/24)
+  // Calculate AH time (scaled by 24/23)
   const totalSeconds = now.hours() * 3600 + now.minutes() * 60 + now.seconds();
-  const scaledSeconds = totalSeconds * SCALE_AH;
+  const scaledSeconds = totalSeconds * (24/23); // Scale up instead of down
   const ahHours = Math.floor(scaledSeconds / 3600);
   const ahMinutes = Math.floor((scaledSeconds % 3600) / 60);
   const ahSeconds = Math.floor(scaledSeconds % 60);
