@@ -11,11 +11,9 @@ export function getAngles(date, timezone) {
   // Calculate if we're in AH hour (10-11 PM)
   const isAHHour = hours === 22;
   
-  // Calculate total milliseconds
+  // Calculate total milliseconds and scale it only if not in AH hour
   const totalMs = ((hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds);
-  
-  // If before AH hour, scale all time. During AH hour, keep normal time
-  const scaledMs = hours < 22 ? totalMs * SCALE_AH : totalMs;
+  const scaledMs = isAHHour ? totalMs : totalMs * SCALE_AH;
   
   // Convert back to hours, minutes, seconds
   const ahSeconds = (scaledMs / 1000) % 60;
