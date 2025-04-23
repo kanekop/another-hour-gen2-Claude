@@ -8,8 +8,8 @@ export function getAngles(date, timezone) {
   const seconds = localTime.seconds();
   const milliseconds = localTime.milliseconds();
   
-  // Calculate if we're in AH hour (10-11 PM)
-  const isAHHour = hours === 22;
+  // Calculate if we're in AH hour (23:00-24:00)
+  const isAHHour = hours === 23;
   
   // Calculate total milliseconds and scale it only if not in AH hour
   const totalMs = ((hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds);

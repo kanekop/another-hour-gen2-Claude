@@ -64,8 +64,8 @@ function initializeTimezoneSelect() {
 
   // Draw AH sector
   const ahSector = document.getElementById('ah-sector');
-  const startAngle = 240;
-  const endAngle = 270;
+  const startAngle = 270;
+  const endAngle = 300;
   const radius = 95;
   const x1 = 100 + radius * Math.cos(startAngle * Math.PI / 180);
   const y1 = 100 + radius * Math.sin(startAngle * Math.PI / 180);
