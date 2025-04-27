@@ -35,15 +35,20 @@ function start() {
 
 function update() {
   remaining = Math.max(0, endTime - Date.now());
-  if (remaining === 0) {
+  if (remaining <= 0) {
     clearInterval(intervalId);
     alert('Time is up!');
   }
-  updateDisplay(remaining);
+  updateDisplay(remaining / 0.96);   // AH 秒で表示
+
 }
 
 startBtn.addEventListener('click', start);
-stopBtn.addEventListener('click', () => clearInterval(intervalId));
+stopBtn.addEventListener('click', () => {
+  clearInterval(intervalId);
+  remaining = Math.max(0, endTime - Date.now());
+});
+
 resetBtn.addEventListener('click', () => {
   clearInterval(intervalId);
   updateDisplay(0);
