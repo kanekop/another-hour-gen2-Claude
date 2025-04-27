@@ -149,21 +149,37 @@ body.inverted .digital-clock {
   display: block;
 }
 
-.toggle-button {
+button, .toggle-button {
   margin: min(15px, 3vh) 0;
-  padding: 8px 16px;
+  padding: 12px 24px;
   background: #333;
   color: white;
-  border: 1px solid #444;
-  border-radius: 8px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
+  transition: opacity 0.2s;
 }
 
-body.inverted .toggle-button {
-  background: #ccc;
-  color: black;
-  border-color: #bbb;
+button:hover, .toggle-button:hover {
+  opacity: 0.9;
+}
+
+.stopwatch-display, .timer-display {
+  font-family: monospace;
+  font-size: 2.5em;
+  margin: 20px 0;
+  padding: 20px 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+}
+
+body.inverted .stopwatch-display,
+body.inverted .timer-display {
+  background: #333;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
   font-family: monospace;
   font-size: clamp(18px, 5vw, 28px);
@@ -184,19 +200,4 @@ body.inverted .toggle-button {
   .digital-clock {
     padding: 8px 12px;
   }
-}
-
-/* Stopwatch and Timer styles */
-.stopwatch-display, .timer-display {
-  font-family: monospace;
-  font-size: 2em;
-  margin: 20px 0;
-  padding: 10px;
-  background: #333;
-  border-radius: 5px;
-}
-
-body.inverted .stopwatch-display,
-body.inverted .timer-display {
-  background: #ccc;
 }
