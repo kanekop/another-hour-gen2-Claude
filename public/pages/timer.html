@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AH Timer</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .timer-input {
+      margin: 20px 0;
+    }
+    .timer-display {
+      font-family: monospace;
+      font-size: 2em;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-input">
+    <input type="number" id="hours" placeholder="HH" min="0" max="23">:
+    <input type="number" id="minutes" placeholder="MM" min="0" max="59">:
+    <input type="number" id="seconds" placeholder="SS" min="0" max="59">
+  </div>
+  <div class="timer-display">00:00:00</div>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <button id="reset">Reset</button>
+  <script type="module" src="/js/timer-ui.js"></script>
+</body>
+</html>

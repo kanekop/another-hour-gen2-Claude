@@ -1,10 +1,19 @@
+import express from 'express';
+import fs from 'fs';
+import stopwatchRouter from './src/routes/stopwatch.js';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-import express from "express";
-import fs from "fs";
+const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = 3000;
 
-app.use(express.static("public"));
+app.use(express.static('public'));
+app.use('/css', express.static(join(__dirname, 'public/css')));
+app.use('/js', express.static(join(__dirname, 'public/js')));
+app.use('/pages', express.static(join(__dirname, 'public/pages')));
+app.use('/shared', express.static(join(__dirname, 'src/shared')));
+app.use('/api/stopwatch', stopwatchRouter);
 app.use(express.json());
 
 // Settings endpoints
@@ -32,6 +41,6 @@ app.get('/admin', (req, res) => {
   res.sendFile('admin.html', { root: './public' });
 });
 
-app.listen(PORT, () =>
-  console.log(`Server running → http://0.0.0.0:${PORT}`)
-);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running → http://0.0.0.0:${port}`);
+});
