@@ -110,3 +110,11 @@ function updateClock() {
 
 // Listen for timezone changes
 timezoneSelect.addEventListener('change', updateClock);
+
+// Digital clock toggle
+const toggleButton = document.getElementById('toggle-digital');
+const digitalClock = document.getElementById('digital-clock');
+
+toggleButton.addEventListener('click', () => {
+  digitalClock.classList.toggle('hidden');
+});
