@@ -142,11 +142,11 @@ body.inverted .digital-clock {
 
 .digital-clock {
   margin-top: min(15px, 3vh);
-  display: block;
+  display: none;
 }
 
-.digital-clock.hidden {
-  display: none;
+.digital-clock.visible {
+  display: block;
 }
 
 .toggle-button {

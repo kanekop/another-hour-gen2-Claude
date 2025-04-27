@@ -140,5 +140,5 @@ const toggleButton = document.getElementById('toggle-digital');
 const digitalClock = document.getElementById('digital-clock');
 
 toggleButton.addEventListener('click', () => {
-  digitalClock.classList.toggle('hidden');
+  digitalClock.classList.toggle('visible');ist.toggle('hidden');
 });
