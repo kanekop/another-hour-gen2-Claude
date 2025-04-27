@@ -25,23 +25,30 @@ function initializeTimezoneSelect() {
 
   // Define representative cities for each UTC offset
   const representativeCities = [
-    { timezone: 'Pacific/Auckland', city: 'Auckland' },    // UTC+12
-    { timezone: 'Asia/Tokyo', city: 'Tokyo' },            // UTC+9
-    { timezone: 'Asia/Shanghai', city: 'Beijing' },       // UTC+8
-    { timezone: 'Asia/Bangkok', city: 'Bangkok' },        // UTC+7
-    { timezone: 'Asia/Dhaka', city: 'Dhaka' },           // UTC+6
-    { timezone: 'Asia/Karachi', city: 'Karachi' },       // UTC+5
-    { timezone: 'Asia/Dubai', city: 'Dubai' },           // UTC+4
-    { timezone: 'Europe/Moscow', city: 'Moscow' },        // UTC+3
-    { timezone: 'Europe/Paris', city: 'Paris' },         // UTC+2
-    { timezone: 'Europe/London', city: 'London' },        // UTC+1
-    { timezone: 'UTC', city: 'UTC' },                    // UTC+0
+    { timezone: 'Pacific/Apia', city: 'Samoa' },         // UTC+13
+    { timezone: 'Pacific/Auckland', city: 'Auckland' },   // UTC+12
+    { timezone: 'Pacific/Noumea', city: 'Noumea' },      // UTC+11
+    { timezone: 'Australia/Sydney', city: 'Sydney' },     // UTC+10
+    { timezone: 'Asia/Tokyo', city: 'Tokyo' },           // UTC+9
+    { timezone: 'Asia/Shanghai', city: 'Beijing' },      // UTC+8
+    { timezone: 'Asia/Bangkok', city: 'Bangkok' },       // UTC+7
+    { timezone: 'Asia/Dhaka', city: 'Dhaka' },          // UTC+6
+    { timezone: 'Asia/Karachi', city: 'Karachi' },      // UTC+5
+    { timezone: 'Asia/Dubai', city: 'Dubai' },          // UTC+4
+    { timezone: 'Europe/Moscow', city: 'Moscow' },       // UTC+3
+    { timezone: 'Europe/Paris', city: 'Paris' },        // UTC+2
+    { timezone: 'Europe/London', city: 'London' },       // UTC+1
+    { timezone: 'UTC', city: 'UTC' },                   // UTC+0
+    { timezone: 'Atlantic/Azores', city: 'UTC-1' },     // UTC-1
+    { timezone: 'Atlantic/South_Georgia', city: 'UTC-2' }, // UTC-2
     { timezone: 'America/Sao_Paulo', city: 'São Paulo' }, // UTC-3
-    { timezone: 'America/New_York', city: 'New York' },   // UTC-4
-    { timezone: 'America/Chicago', city: 'Chicago' },     // UTC-5
-    { timezone: 'America/Denver', city: 'Denver' },       // UTC-6
+    { timezone: 'America/New_York', city: 'New York' },  // UTC-4
+    { timezone: 'America/Chicago', city: 'Chicago' },    // UTC-5
+    { timezone: 'America/Denver', city: 'Denver' },      // UTC-6
     { timezone: 'America/Los_Angeles', city: 'Los Angeles' }, // UTC-7
-    { timezone: 'Pacific/Honolulu', city: 'Honolulu' }    // UTC-10
+    { timezone: 'Pacific/Pitcairn', city: 'UTC-8' },    // UTC-8
+    { timezone: 'Pacific/Gambier', city: 'UTC-9' },     // UTC-9
+    { timezone: 'Pacific/Honolulu', city: 'Honolulu' }   // UTC-10
   ];
 
   // Sort by UTC offset
