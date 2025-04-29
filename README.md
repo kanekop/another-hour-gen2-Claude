@@ -1,133 +1,117 @@
-# Another Hour Clock - Project Summary
 
-## Core Concept
-Another Hour Clock operates on a unique 24-hour system that creates a 25-hour day by running each second at 96% of regular length. This provides users with an alternative perception of time, helping them explore a new way to experience temporal flow.
+# Another Hour Clock
+
+A web-based clock that **condenses the 24-hour day into 23 hours** by shortening every real-world second to **23 / 24 ≈ 0.958 333 s**.  
+From 23:00 to 24:00 (real time) the clock enters the “Another Hour (AH)” period, giving users the feeling of an extra hour each day.
+
+---
+
+## Table of Contents
+1. [Features](#features)  
+2. [Directory Structure](#directory-structure)  
+3. [Installation](#installation)  
+4. [Configuration](#configuration)  
+5. [Usage](#usage)  
+6. [Technical Notes](#technical-notes)  
+7. [Roadmap](#roadmap)  
+
+---
 
 ## Features
+| Category | Description |
+| -------- | ----------- |
+| **Dual Time Display** | Simultaneously shows Standard Time and AH Time. |
+| **12-hour Analog Face** | SVG-based 12-hour dial with a highlighted AH sector (real-time 23:00 – 24:00). |
+| **Digital Toggle** | Optional digital read-out beneath the dial. |
+| **Visual Cues** | Dial colour inversion during the AH period. |
+| **Time Tools** | • AH-aware Stopwatch (planned)<br>• AH-aware Timer (planned) |
+| **Multi-Timezone View** | Display AH Time for selected world time zones. |
+| **Admin Panel** | Manage time-zones, appearance, and environment keys from the browser. |
 
-### Clock Display
-- **Dual Time Display**: Shows both standard time and AH (Another Hour) time
-- **Analog Clock**: 12-hour analog clock face with special AH hour indicator
-- **Digital Time**: Optional digital display showing both time formats
-- **Visual Indicators**: Special sector marking for AH hour (actual 23:00-24:00)
-- **Dark/Light Mode**: Automatic color inversion during AH hour
+---
 
-### Time Tools
-- **Stopwatch**: AH-adjusted stopwatch for measuring elapsed time
-- **Timer**: Countdown timer that accounts for AH time scaling
-- **Multi-timezone Support**: View AH time across different global time zones
+## Directory Structure
 
-### Customization
-- **Admin Panel**: Configure timezone preferences and display settings
-- **Display Options**: Toggle between analog and digital displays
-- **Timezone Management**: Add/remove timezones for quick reference
-
-### Technical Features
-- **96% Time Scaling**: Each second runs at 0.96 of standard length
-- **Real-time Updates**: Smooth animation using requestAnimationFrame
-- **Timezone Handling**: Comprehensive timezone support via Moment.js
-- **Special AH Hour**: Unique handling of the extra hour (23:00-24:00)
-
-## Project Structure
-```
 project/
-├── public/                 # Frontend assets and client-side code
-│   ├── css/               # Stylesheets directory
-│   │   └── style.css      # Additional styles for components
-│   ├── js/                # JavaScript modules directory
-│   │   ├── stopwatch-ui.js # Stopwatch interface logic
-│   │   └── timer-ui.js    # Timer interface logic
-│   ├── pages/             # Additional HTML pages
-│   │   ├── stopwatch.html # Stopwatch interface
-│   │   └── timer.html     # Timer interface
-│   ├── admin.css          # Admin panel styling
-│   ├── admin.html         # Admin interface
-│   ├── admin.js           # Admin panel logic
-│   ├── clock-core.js      # Core clock calculation logic
-│   ├── index.html         # Main clock interface
-│   ├── main.js            # Clock rendering and updates
-│   └── style.css          # Main styling
-├── src/                    # Server-side source code
-│   ├── routes/            # Express routes
-│   │   └── stopwatch.js   # Stopwatch route handlers
-│   └── shared/            # Shared utilities
-│       └── ah-time.js     # AH time calculations
-├── server.js              # Express server
-├── settings.json          # Clock configuration
-└── package.json           # Project dependencies
-```
+├── public/                  # Client assets
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── clock-core.js    # Core time maths
+│   │   ├── main.js          # Rendering / UI glue
+│   │   ├── stopwatch-ui.js  # (planned)
+│   │   └── timer-ui.js      # (planned)
+│   ├── pages/
+│   │   ├── stopwatch.html   # (planned)
+│   │   └── timer.html       # (planned)
+│   ├── index.html
+│   ├── admin.html
+│   └── admin.css
+├── src/
+│   ├── routes/
+│   │   └── stopwatch.js     # API stub
+│   └── shared/
+│       └── ah-time.js       # Shared helpers
+├── server.js
+├── settings.json
+├── .env.example             # Sample environment vars
+└── package.json
 
-## Key Files Description
 
-### Server-Side
-- `server.js`: Express server handling static files and API endpoints for settings
-- `settings.json`: Stores timezone preferences and display settings
+---
 
-### Frontend
-- `public/clock-core.js`: Contains core time calculation logic and hand angle computations
-- `public/main.js`: Handles clock rendering, updates, and timezone management
-- `public/index.html`: Main clock interface with SVG-based analog clock
-- `public/admin.html` & `admin.js`: Admin interface for managing timezones and display settings
+## Installation
+bash
+git clone https://github.com/your-name/another-hour.git
+cd another-hour
+npm install
+cp .env.example .env   # then edit values
+npm start              # runs node server.js
 
-## Core Logic Location
 
-The core clock logic is primarily in two files:
+### Minimum Requirements
+* **Node >= 18**
+* Modern browser with SVG support (Chrome, Firefox, Safari, Edge)
 
-1. `public/clock-core.js`:
-   - Contains `SCALE_AH` constant (24/23) for time scaling
-   - `getAngles()` function calculates clock hand positions
-   - Handles special "AH hour" (23:00-24:00) calculations
+---
 
-2. `public/main.js`:
-   - Manages clock updates and rendering
-   - Handles timezone conversions
-   - Controls the AH sector display
+## Configuration
+Create a **.env** file (or set system env vars):
 
-## Clock Rendering
+| Key | Purpose |
+| --- | ------- |
+| `SESSION_SECRET` | Session encryption key (32 + random chars). |
+| `ADMIN_KEY` | Single admin password for the panel. |
 
-The clock is rendered client-side using:
-- SVG for the analog clock face
-- JavaScript for dynamic updates
-- requestAnimationFrame for smooth animation
-- Moment.js for timezone handling
+---
 
-Key components:
-- SVG circle for clock face
-- SVG lines for clock hands
-- Special sector for AH hour indication
-- Digital time display
+## Usage
+1. Navigate to `http://localhost:3000`  
+2. Select your timezone from the drop-down.  
+3. Click **Toggle Digital Display** to show / hide numeric clocks.  
+4. Log in to `/admin` with the `ADMIN_KEY` to add or remove time-zones, change colours, etc.
 
-## Main Dependencies
+---
 
-```json
-{
-  "express": "^4.21.2",    // Web server framework
-  "moment": "latest",      // Time manipulation (client-side)
-  "moment-timezone": "latest" // Timezone handling (client-side)
-}
-```
+## Technical Notes
+* **SCALE_AH = 23 / 24** (≈ 0.958333) converts real seconds to AH seconds.  
+* Rendering loop uses `requestAnimationFrame` (≈ 60 fps) for smooth hand motion.  
+* **Moment.js** / **moment-timezone** handle offsets; can be swapped for **dayjs** in the future.  
+* AH period detection:  
+  js
+  const inAhHour = realDate.getHours() === 23;
 
-## Entry Point
 
-The application starts with:
-```bash
-npm start
-```
+---
 
-Which runs `node server.js` as defined in package.json.
+## Roadmap
+- [ ] Complete stopwatch & timer modules (UI + persistence)  
+- [ ] i18n (English / Japanese UI strings)  
+- [ ] Replace Moment.js with dayjs + plugins  
+- [ ] PWA support & offline caching  
+- [ ] watchOS companion app (stretch goal)
 
-## Special Features
+---
 
-1. **AH Time Calculation**: 
-   - Normal hours run at 24/23 speed
-   - Special handling for the 23:00-24:00 hour
+© 2025 Another Hour Project. MIT License.
 
-2. **Timezone Support**:
-   - Multiple timezone management
-   - UTC offset display
-   - Automatic local timezone detection
-
-3. **Visual Indicators**:
-   - Color inversion during AH hour
-   - Special sector marking AH hour period
-   - Dual time display (actual and AH time)
