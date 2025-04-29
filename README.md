@@ -1,5 +1,33 @@
 # Another Hour Clock - Project Summary
 
+## Core Concept
+Another Hour Clock operates on a unique 12-hour system that creates a 25-hour day by running each second at 96% of regular length. This provides users with an alternative perception of time, helping them explore a new way to experience temporal flow.
+
+## Features
+
+### Clock Display
+- **Dual Time Display**: Shows both standard time and AH (Another Hour) time
+- **Analog Clock**: 12-hour analog clock face with special AH hour indicator
+- **Digital Time**: Optional digital display showing both time formats
+- **Visual Indicators**: Special sector marking for AH hour (23:00-24:00)
+- **Dark/Light Mode**: Automatic color inversion during AH hour
+
+### Time Tools
+- **Stopwatch**: AH-adjusted stopwatch for measuring elapsed time
+- **Timer**: Countdown timer that accounts for AH time scaling
+- **Multi-timezone Support**: View AH time across different global time zones
+
+### Customization
+- **Admin Panel**: Configure timezone preferences and display settings
+- **Display Options**: Toggle between analog and digital displays
+- **Timezone Management**: Add/remove timezones for quick reference
+
+### Technical Features
+- **96% Time Scaling**: Each second runs at 0.96 of standard length
+- **Real-time Updates**: Smooth animation using requestAnimationFrame
+- **Timezone Handling**: Comprehensive timezone support via Moment.js
+- **Special AH Hour**: Unique handling of the extra hour (23:00-24:00)
+
 ## Project Structure
 ```
 project/
