@@ -1,7 +1,7 @@
 # Another Hour Clock - Project Summary
 
 ## Core Concept
-Another Hour Clock operates on a unique 12-hour system that creates a 25-hour day by running each second at 96% of regular length. This provides users with an alternative perception of time, helping them explore a new way to experience temporal flow.
+Another Hour Clock operates on a unique 24-hour system that creates a 25-hour day by running each second at 96% of regular length. This provides users with an alternative perception of time, helping them explore a new way to experience temporal flow.
 
 ## Features
 
@@ -9,7 +9,7 @@ Another Hour Clock operates on a unique 12-hour system that creates a 25-hour da
 - **Dual Time Display**: Shows both standard time and AH (Another Hour) time
 - **Analog Clock**: 12-hour analog clock face with special AH hour indicator
 - **Digital Time**: Optional digital display showing both time formats
-- **Visual Indicators**: Special sector marking for AH hour (23:00-24:00)
+- **Visual Indicators**: Special sector marking for AH hour (actual 23:00-24:00)
 - **Dark/Light Mode**: Automatic color inversion during AH hour
 
 ### Time Tools
