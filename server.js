@@ -4,15 +4,29 @@ import stopwatchRouter from './src/routes/stopwatch.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-// Load environment variables early
-const {
-  SESSION_SECRET = 'default_session_secret',  // Add your session secret in Secrets
-  ADMIN_KEY = 'default_admin_key',           // Add your admin key in Secrets
-} = process.env;
+import session from 'express-session';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
+
+// Use session middleware with secret from environment
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
+// Admin authentication middleware
+const requireAdmin = (req, res, next) => {
+  const adminKey = req.headers['x-admin-key'];
+  if (adminKey === process.env.ADMIN_KEY) {
+    next();
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+};
 
 app.use(express.static('public'));
 app.use('/css', express.static(join(__dirname, 'public/css')));
@@ -28,7 +42,7 @@ app.get('/api/settings', (req, res) => {
   res.json(settings);
 });
 
-app.post('/api/settings', (req, res) => {
+app.post('/api/settings', requireAdmin, (req, res) => {
   fs.writeFileSync('settings.json', JSON.stringify(req.body));
   res.json({ success: true });
 });
