@@ -1,4 +1,3 @@
-
 # Another Hour Clock - Project Summary
 
 ## Project Structure
