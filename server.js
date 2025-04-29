@@ -4,6 +4,12 @@ import stopwatchRouter from './src/routes/stopwatch.js';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
+// Load environment variables early
+const {
+  SESSION_SECRET = 'default_session_secret',  // Add your session secret in Secrets
+  ADMIN_KEY = 'default_admin_key',           // Add your admin key in Secrets
+} = process.env;
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
 const port = 3000;
