@@ -32,16 +32,29 @@ Another Hour Clock operates on a unique 24-hour system that creates a 25-hour da
 ```
 project/
 ├── public/                 # Frontend assets and client-side code
+│   ├── css/               # Stylesheets directory
+│   │   └── style.css      # Additional styles for components
+│   ├── js/                # JavaScript modules directory
+│   │   ├── stopwatch-ui.js # Stopwatch interface logic
+│   │   └── timer-ui.js    # Timer interface logic
+│   ├── pages/             # Additional HTML pages
+│   │   ├── stopwatch.html # Stopwatch interface
+│   │   └── timer.html     # Timer interface
 │   ├── admin.css          # Admin panel styling
 │   ├── admin.html         # Admin interface
 │   ├── admin.js           # Admin panel logic
 │   ├── clock-core.js      # Core clock calculation logic
 │   ├── index.html         # Main clock interface
-│   ├── main.js           # Clock rendering and updates
-│   └── style.css         # Main styling
-├── server.js             # Express server
-├── settings.json         # Clock configuration
-└── package.json         # Project dependencies
+│   ├── main.js            # Clock rendering and updates
+│   └── style.css          # Main styling
+├── src/                    # Server-side source code
+│   ├── routes/            # Express routes
+│   │   └── stopwatch.js   # Stopwatch route handlers
+│   └── shared/            # Shared utilities
+│       └── ah-time.js     # AH time calculations
+├── server.js              # Express server
+├── settings.json          # Clock configuration
+└── package.json           # Project dependencies
 ```
 
 ## Key Files Description
