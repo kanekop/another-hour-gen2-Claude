@@ -1,4 +1,3 @@
-
 import { SCALE_AH, getAngles } from './clock-core.js';
 
 // Initialize timezone select
@@ -142,3 +141,11 @@ const digitalClock = document.getElementById('digital-clock');
 toggleButton.addEventListener('click', () => {
   digitalClock.classList.toggle('visible');ist.toggle('hidden');
 });
+
+// All Time Zone ボタンの処理
+const allTimeZoneButton = document.getElementById('all-time-zone-button');
+if (allTimeZoneButton) {
+  allTimeZoneButton.addEventListener('click', () => {
+    window.location.href = '/pages/world-clock.html'; // 世界時計ページのパスを指定
+  });
+}
