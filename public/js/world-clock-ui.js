@@ -21,7 +21,7 @@ const worldTimezones = [
   { timezone: 'Europe/Paris', city: 'Paris (France)' },
   { timezone: 'Europe/Berlin', city: 'Berlin (Germany)' },
   { timezone: 'Europe/London', city: 'London (UK)' },
-  { timezone: 'UTC', city: 'UTC' },
+  { timezone: 'UTC', city: 'UTC' }, 
   { timezone: 'Atlantic/Azores', city: 'Azores (Portugal)' },
   { timezone: 'America/Sao_Paulo', city: 'São Paulo (Brazil)' },
   { timezone: 'America/New_York', city: 'New York (USA)' },
@@ -94,7 +94,6 @@ function createClockElement(timezoneData) {
   hourHand.setAttribute("y1", "100");
   hourHand.setAttribute("x2", "100");
   hourHand.setAttribute("y2", "60"); // 短め
-  hourHand.style.transformOrigin = "100px 100px"; // ★追加
   analogClockSVG.appendChild(hourHand);
 
   // 分針
@@ -105,7 +104,6 @@ function createClockElement(timezoneData) {
   minuteHand.setAttribute("y1", "100");
   minuteHand.setAttribute("x2", "100");
   minuteHand.setAttribute("y2", "40"); // 長め
-  minuteHand.style.transformOrigin = "100px 100px"; // ★追加
   analogClockSVG.appendChild(minuteHand);
 
   // 秒針
@@ -116,7 +114,6 @@ function createClockElement(timezoneData) {
   secondHand.setAttribute("y1", "100");
   secondHand.setAttribute("x2", "100");
   secondHand.setAttribute("y2", "30"); // さらに長め、細め
-  secondHand.style.transformOrigin = "100px 100px"; // ★追加
   analogClockSVG.appendChild(secondHand);
 
   // 中心のドット
@@ -175,19 +172,18 @@ function getAhDigitalTime(dateObject, timezone) {
  * 指定されたタイムゾーンの時計表示を更新します。
  * @param {object} timezoneData - タイムゾーン情報 (timezone, city)
  */
-// updateWorldClockTime 関数を修正
 function updateWorldClockTime(timezoneData) {
   const timezone = timezoneData.timezone;
-  const now = new Date(); // 現在の実時間を取得
+  const now = new Date();
   const timezoneIdSuffix = timezone.replace(/[\/\+\:]/g, '-');
 
-  // 通常時刻の表示
+  // 通常時刻の表示 (変更なし)
   const normalTimeEl = document.getElementById(`time-${timezoneIdSuffix}`);
   if (normalTimeEl) {
     normalTimeEl.textContent = moment(now).tz(timezone).format('HH:mm:ss');
   }
 
-  // AH時刻の計算と表示
+  // AH時刻の計算と表示 (変更なし)
   const { ahHours, ahMinutes, ahSeconds, isAHHour } = getAhDigitalTime(now, timezone);
   const ahTimeEl = document.getElementById(`ah-time-${timezoneIdSuffix}`);
   if (ahTimeEl) {
@@ -197,20 +193,22 @@ function updateWorldClockTime(timezoneData) {
   }
 
   // アナログ時計の針の更新
-  // getAngles は Dateオブジェクトとタイムゾーン文字列を引数に取ります
-  const angles = getAngles(now, timezone); // now は Dateオブジェクト
+  const angles = getAngles(now, timezone);
 
   const hourHand = document.getElementById(`hour-hand-${timezoneIdSuffix}`);
   if (hourHand) {
-    hourHand.setAttribute("transform", `rotate(${angles.hourAngle}, 100, 100)`);
+    // 変更点: setAttribute から style.transform へ
+    hourHand.style.transform = `rotate(${angles.hourAngle}deg)`;
   }
   const minuteHand = document.getElementById(`minute-hand-${timezoneIdSuffix}`);
   if (minuteHand) {
-    minuteHand.setAttribute("transform", `rotate(${angles.minuteAngle}, 100, 100)`);
+    // 変更点: setAttribute から style.transform へ
+    minuteHand.style.transform = `rotate(${angles.minuteAngle}deg)`;
   }
   const secondHand = document.getElementById(`second-hand-${timezoneIdSuffix}`);
   if (secondHand) {
-    secondHand.setAttribute("transform", `rotate(${angles.secondAngle}, 100, 100)`);
+    // 変更点: setAttribute から style.transform へ
+    secondHand.style.transform = `rotate(${angles.secondAngle}deg)`;
   }
 
   // 点滅処理 (変更なし)

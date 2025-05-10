@@ -2,6 +2,7 @@
 /* Original styles.css content */
 
 /* Additional styles for stopwatch and timer */
+/*
 .stopwatch-display, .timer-display {
   font-family: monospace;
   font-size: 2em;
@@ -15,3 +16,4 @@ body.inverted .stopwatch-display,
 body.inverted .timer-display {
   background: #ccc;
 }
+*/

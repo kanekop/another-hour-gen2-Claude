@@ -90,7 +90,7 @@ body.inverted .normal-time-display-sub {
 .analog-clock-world .analog-hand-world { /* SVG内の全ての針の共通スタイル */
   stroke-linecap: round;
   /* transform-origin はJSで設定しているか、CSSで指定する場合は詳細度を考慮 */
-  /* transform-origin: 100px 100px; */ /* ← もしJSで設定していなければここを有効化 */
+  transform-origin: 100px 100px; /* ← もしJSで設定していなければここを有効化 */
 }
 
 .analog-clock-world .analog-hand-world.hour-world { /* SVG内の時針 */
