@@ -4,32 +4,37 @@ import { SCALE_AH, getAngles } from '../clock-core.js';
 
 // 3. 地域表示を英語に変更
 const worldTimezones = [
-  { timezone: 'Pacific/Apia', city: 'Apia (Samoa)' },
-  { timezone: 'Pacific/Auckland', city: 'Auckland (New Zealand)' },
-  { timezone: 'Pacific/Fiji', city: 'Suva (Fiji)' },
-  { timezone: 'Pacific/Noumea', city: 'Noumea (New Caledonia)' },
-  { timezone: 'Australia/Sydney', city: 'Sydney (Australia)' },
-  { timezone: 'Asia/Tokyo', city: 'Tokyo (Japan)' },
-  { timezone: 'Asia/Seoul', city: 'Seoul (South Korea)' },
-  { timezone: 'Asia/Shanghai', city: 'Shanghai (China)' },
-  { timezone: 'Asia/Singapore', city: 'Singapore' },
-  { timezone: 'Asia/Bangkok', city: 'Bangkok (Thailand)' },
-  { timezone: 'Asia/Dhaka', city: 'Dhaka (Bangladesh)' },
-  { timezone: 'Asia/Karachi', city: 'Karachi (Pakistan)' },
-  { timezone: 'Asia/Dubai', city: 'Dubai (UAE)' },
-  { timezone: 'Europe/Moscow', city: 'Moscow (Russia)' },
-  { timezone: 'Europe/Paris', city: 'Paris (France)' },
-  { timezone: 'Europe/Berlin', city: 'Berlin (Germany)' },
-  { timezone: 'Europe/London', city: 'London (UK)' },
-  { timezone: 'UTC', city: 'UTC' }, 
-  { timezone: 'Atlantic/Azores', city: 'Azores (Portugal)' },
-  { timezone: 'America/Sao_Paulo', city: 'São Paulo (Brazil)' },
-  { timezone: 'America/New_York', city: 'New York (USA)' },
-  { timezone: 'America/Chicago', city: 'Chicago (USA)' },
-  { timezone: 'America/Denver', city: 'Denver (USA)' },
-  { timezone: 'America/Los_Angeles', city: 'Los Angeles (USA)' }
-  // { timezone: 'Pacific/Honolulu', city: 'Honolulu (USA)' }
+  { timezone: 'Pacific/Apia', city: 'Apia (Samoa)' }, // UTC+13
+  { timezone: 'Pacific/Auckland', city: 'Auckland (New Zealand)' }, // UTC+12
+  { timezone: 'Pacific/Noumea', city: 'Noumea (New Caledonia)' }, // UTC+11
+  { timezone: 'Australia/Sydney', city: 'Sydney (Australia)' }, // UTC+10
+  { timezone: 'Asia/Tokyo', city: 'Tokyo (Japan)' }, // UTC+9
+  { timezone: 'Asia/Singapore', city: 'Singapore' }, // UTC+8
+  { timezone: 'Asia/Bangkok', city: 'Bangkok (Thailand)' }, // UTC+7
+  { timezone: 'Asia/Dhaka', city: 'Dhaka (Bangladesh)' }, // UTC+6
+  { timezone: 'Asia/Karachi', city: 'Karachi (Pakistan)' }, // UTC+5
+  { timezone: 'Asia/Dubai', city: 'Dubai (UAE)' }, // UTC+4
+  { timezone: 'Europe/Moscow', city: 'Moscow (Russia)' }, // UTC+3
+  { timezone: 'Europe/Paris', city: 'Paris (France)' }, // UTC+2
+  { timezone: 'Europe/London', city: 'London (UK)' }, // UTC+0 (Greenwich Mean Time)
+  { timezone: 'UTC', city: 'UTC' }, // UTC+0
+  { timezone: 'Atlantic/Azores', city: 'Azores (Portugal)' }, // UTC-1
+  { timezone: 'Atlantic/Cape_Verde', city: 'Cape Verde' },               // UTC-1 (CVT)  
+  { timezone: 'Atlantic/South_Georgia', city: 'South Georgia (UK)' }, // UTC-2 (追加候補1)
+  { timezone: 'America/Sao_Paulo', city: 'São Paulo (Brazil)' }, // UTC-3
+  { timezone: 'America/New_York', city: 'New York (USA)' }, // UTC-4
+  { timezone: 'America/Chicago', city: 'Chicago (USA)' }, // UTC-5
+  { timezone: 'America/Denver', city: 'Denver (USA)' }, // UTC-6
+  { timezone: 'America/Los_Angeles', city: 'Los Angeles (USA)' },        // UTC-8 (PST) / UTC-7 (PDT)
+  { timezone: 'America/Anchorage', city: 'Anchorage (USA)' }, // UTC-9 (アラスカ標準時) (追加候補2)
+  { timezone: 'Pacific/Gambier', city: 'Gambier Islands (France)' },      // UTC-9 (追加)
+  { timezone: 'Pacific/Honolulu', city: 'Honolulu (USA)' }, // UTC-10 (ハワイ標準時) (追加候補3)
+  { timezone: 'Pacific/Pago_Pago', city: 'Pago Pago (Samoa)' }, // UTC-11 (追加候補4)
+  { timezone: 'Etc/GMT+12', city: 'Baker Island (USA)' }                // UTC-12 (最も遅い場所の一つ、無人島だがTZとして存在)
+  
 ];
+
+
 
 const container = document.getElementById('world-clocks-container');
 

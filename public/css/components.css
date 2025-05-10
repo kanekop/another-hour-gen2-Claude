@@ -1,6 +1,5 @@
 
 /* Common Button Styles */
-/*
 button, .toggle-button {
   margin: min(15px, 3vh) 0;
   padding: 12px 24px;
@@ -16,9 +15,7 @@ button, .toggle-button {
 button:hover, .toggle-button:hover {
   opacity: 0.9;
 }
-*/
 /* Digital Display Components */
-/*
 .digital-clock,
 .stopwatch-display,
 .timer-display {
@@ -37,4 +34,3 @@ body.inverted .timer-display {
   background: #ccc;
   color: black;
 }
-*/
