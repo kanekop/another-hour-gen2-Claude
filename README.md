@@ -28,13 +28,19 @@ From 23:00 to 24:00 (real time) the clock enters the "Another Hour (AH)" period,
 project/
 ├── public/                 # Frontend assets and client-side code
 │   ├── css/               # Stylesheets directory
-│   │   └── style.css      # Additional styles for components
+│   │   ├── components.css # Common component styles
+│   │   ├── main-clock.css # Main clock styles
+│   │   ├── stopwatch.css  # Stopwatch styles
+│   │   ├── timer.css      # Timer styles
+│   │   └── world-clock.css # World clock styles
 │   ├── js/                # JavaScript modules directory
 │   │   ├── stopwatch-ui.js # Stopwatch interface logic
-│   │   └── timer-ui.js    # Timer interface logic
+│   │   ├── timer-ui.js    # Timer interface logic
+│   │   └── world-clock-ui.js # World clock interface logic
 │   ├── pages/             # Additional HTML pages
 │   │   ├── stopwatch.html # Stopwatch interface
-│   │   └── timer.html     # Timer interface
+│   │   ├── timer.html     # Timer interface
+│   │   └── world-clock.html # World clock interface
 │   ├── admin.css          # Admin panel styling
 │   ├── admin.html         # Admin interface
 │   ├── admin.js           # Admin panel logic
