@@ -1,5 +1,6 @@
 // public/clock-core.js から SCALE_AH をインポートします。
-import { SCALE_AH } from '../clock-core.js';
+// public/clock-core.js から SCALE_AH と getAngles をインポートします。
+import { SCALE_AH, getAngles } from '../clock-core.js';
 
 // 3. 地域表示を英語に変更
 const worldTimezones = [
@@ -43,24 +44,97 @@ function createClockElement(timezoneData) {
   clockItem.dataset.timezone = timezoneData.timezone;
 
   const cityName = document.createElement('h3');
-  cityName.textContent = timezoneData.city; // 3. 英語表示に変更済み
+  cityName.textContent = timezoneData.city;
 
-  // 1. AH時間と通常時間の表示順序・スタイル変更
   const ahTimeDisplay = document.createElement('div');
-  ahTimeDisplay.classList.add('ah-time-display-main'); // 新しいクラス名 (スタイル変更のため)
+  ahTimeDisplay.classList.add('ah-time-display-main');
   ahTimeDisplay.id = `ah-time-${timezoneData.timezone.replace(/[\/\+\:]/g, '-')}`;
 
   const normalTimeDisplay = document.createElement('div');
-  normalTimeDisplay.classList.add('normal-time-display-sub'); // 新しいクラス名 (スタイル変更のため)
+  normalTimeDisplay.classList.add('normal-time-display-sub');
   normalTimeDisplay.id = `time-${timezoneData.timezone.replace(/[\/\+\:]/g, '-')}`;
 
+  // アナログ時計用のSVG要素をここから追加
+  const svgNamespace = "http://www.w3.org/2000/svg";
+  const analogClockSVG = document.createElementNS(svgNamespace, "svg");
+  const timezoneIdSuffix = timezoneData.timezone.replace(/[\/\+\:]/g, '-'); // ID用サフィックス
+
+  analogClockSVG.setAttribute("class", "analog-clock-world");
+  analogClockSVG.setAttribute("viewBox", "0 0 200 200"); // メインクロックのviewBoxを流用
+
+  // 盤面 (円)
+  const face = document.createElementNS(svgNamespace, "circle");
+  face.setAttribute("class", "analog-face-world"); // 新しいクラス名
+  face.setAttribute("cx", "100");
+  face.setAttribute("cy", "100");
+  face.setAttribute("r", "95");
+  analogClockSVG.appendChild(face);
+
+  // 目盛り（簡易版 - 12個の大きな点）- まずは省略してもOK
+  const ticksGroup = document.createElementNS(svgNamespace, "g");
+  ticksGroup.setAttribute("class", "analog-ticks-world");
+  for (let i = 0; i < 12; i++) {
+    const angle = i * 30; // 30度ごと
+    const tick = document.createElementNS(svgNamespace, "line");
+    tick.setAttribute("x1", "100");
+    tick.setAttribute("y1", "15"); // 中心から少し外側
+    tick.setAttribute("x2", "100");
+    tick.setAttribute("y2", "25"); // 短い線
+    tick.setAttribute("transform", `rotate(${angle}, 100, 100)`);
+    ticksGroup.appendChild(tick);
+  }
+  analogClockSVG.appendChild(ticksGroup);
+
+
+  // 時針
+  const hourHand = document.createElementNS(svgNamespace, "line");
+  hourHand.setAttribute("id", `hour-hand-${timezoneIdSuffix}`);
+  hourHand.setAttribute("class", "analog-hand-world hour-world"); // 新しいクラス名
+  hourHand.setAttribute("x1", "100");
+  hourHand.setAttribute("y1", "100");
+  hourHand.setAttribute("x2", "100");
+  hourHand.setAttribute("y2", "60"); // 短め
+  hourHand.style.transformOrigin = "100px 100px"; // ★追加
+  analogClockSVG.appendChild(hourHand);
+
+  // 分針
+  const minuteHand = document.createElementNS(svgNamespace, "line");
+  minuteHand.setAttribute("id", `minute-hand-${timezoneIdSuffix}`);
+  minuteHand.setAttribute("class", "analog-hand-world minute-world"); // 新しいクラス名
+  minuteHand.setAttribute("x1", "100");
+  minuteHand.setAttribute("y1", "100");
+  minuteHand.setAttribute("x2", "100");
+  minuteHand.setAttribute("y2", "40"); // 長め
+  minuteHand.style.transformOrigin = "100px 100px"; // ★追加
+  analogClockSVG.appendChild(minuteHand);
+
+  // 秒針
+  const secondHand = document.createElementNS(svgNamespace, "line");
+  secondHand.setAttribute("id", `second-hand-${timezoneIdSuffix}`);
+  secondHand.setAttribute("class", "analog-hand-world second-world"); // 新しいクラス名
+  secondHand.setAttribute("x1", "100");
+  secondHand.setAttribute("y1", "100");
+  secondHand.setAttribute("x2", "100");
+  secondHand.setAttribute("y2", "30"); // さらに長め、細め
+  secondHand.style.transformOrigin = "100px 100px"; // ★追加
+  analogClockSVG.appendChild(secondHand);
+
+  // 中心のドット
+  const centerDot = document.createElementNS(svgNamespace, "circle");
+  centerDot.setAttribute("class", "analog-center-world"); // 新しいクラス名
+  centerDot.setAttribute("cx", "100");
+  centerDot.setAttribute("cy", "100");
+  centerDot.setAttribute("r", "4");
+  analogClockSVG.appendChild(centerDot);
+  // アナログ時計SVG要素の追加ここまで
+
   clockItem.appendChild(cityName);
-  clockItem.appendChild(ahTimeDisplay); // AH時間を先に追加
-  clockItem.appendChild(normalTimeDisplay); // 通常時間を後に追加
+  clockItem.appendChild(ahTimeDisplay);
+  clockItem.appendChild(normalTimeDisplay);
+  clockItem.appendChild(analogClockSVG); // デジタル表示の下にアナログ時計を追加
 
   return clockItem;
 }
-
 // getAhDigitalTime 関数は変更なし (前回のコードのまま)
 /**
  * 指定された日時とタイムゾーンに基づいて、デジタル表示用のAH時間を計算します。
@@ -101,26 +175,45 @@ function getAhDigitalTime(dateObject, timezone) {
  * 指定されたタイムゾーンの時計表示を更新します。
  * @param {object} timezoneData - タイムゾーン情報 (timezone, city)
  */
+// updateWorldClockTime 関数を修正
 function updateWorldClockTime(timezoneData) {
   const timezone = timezoneData.timezone;
-  const now = new Date();
+  const now = new Date(); // 現在の実時間を取得
+  const timezoneIdSuffix = timezone.replace(/[\/\+\:]/g, '-');
 
-  // 通常時刻の表示 (クラス名変更に対応)
-  const normalTimeEl = document.getElementById(`time-${timezone.replace(/[\/\+\:]/g, '-')}`);
+  // 通常時刻の表示
+  const normalTimeEl = document.getElementById(`time-${timezoneIdSuffix}`);
   if (normalTimeEl) {
     normalTimeEl.textContent = moment(now).tz(timezone).format('HH:mm:ss');
   }
 
-  // AH時刻の計算と表示 (クラス名変更に対応)
+  // AH時刻の計算と表示
   const { ahHours, ahMinutes, ahSeconds, isAHHour } = getAhDigitalTime(now, timezone);
-  const ahTimeEl = document.getElementById(`ah-time-${timezone.replace(/[\/\+\:]/g, '-')}`);
+  const ahTimeEl = document.getElementById(`ah-time-${timezoneIdSuffix}`);
   if (ahTimeEl) {
     const ahTimeString =
       `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
-    ahTimeEl.textContent = `AH: ${ahTimeString}`; // "AH: " プレフィックスは維持するか、スタイルで調整
+    ahTimeEl.textContent = `AH: ${ahTimeString}`;
   }
 
-  // 2. AH時間帯のタイムゾーンの時計を点滅させる
+  // アナログ時計の針の更新
+  // getAngles は Dateオブジェクトとタイムゾーン文字列を引数に取ります
+  const angles = getAngles(now, timezone); // now は Dateオブジェクト
+
+  const hourHand = document.getElementById(`hour-hand-${timezoneIdSuffix}`);
+  if (hourHand) {
+    hourHand.setAttribute("transform", `rotate(${angles.hourAngle}, 100, 100)`);
+  }
+  const minuteHand = document.getElementById(`minute-hand-${timezoneIdSuffix}`);
+  if (minuteHand) {
+    minuteHand.setAttribute("transform", `rotate(${angles.minuteAngle}, 100, 100)`);
+  }
+  const secondHand = document.getElementById(`second-hand-${timezoneIdSuffix}`);
+  if (secondHand) {
+    secondHand.setAttribute("transform", `rotate(${angles.secondAngle}, 100, 100)`);
+  }
+
+  // 点滅処理 (変更なし)
   const clockItem = document.querySelector(`[data-timezone="${timezone}"]`);
   if (clockItem) {
     if (isAHHour) {
@@ -129,8 +222,8 @@ function updateWorldClockTime(timezoneData) {
       clockItem.classList.remove('blinking-ah');
     }
   }
-
 }
+
 
 // updateAllClocksLoop 関数は変更なし (前回のコードのまま)
 /**

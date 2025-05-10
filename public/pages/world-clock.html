@@ -89,7 +89,68 @@
     .blinking-ah {
       animation: firefly-blink 2s ease-in-out infinite;
     }
+    /* public/pages/world-clock.html の <style> タグ内に追加 */
 
+    /* ... (既存のスタイル) ... */
+
+    .analog-clock-world {
+      width: 100px; /* アナログ時計の表示サイズ */
+      height: 100px;
+      margin: 10px auto 0; /* デジタル表示の下に配置、中央揃え */
+      display: block; /* 中央揃えのため */
+    }
+
+    .analog-face-world {
+      fill: #333; /* 盤面の色 */
+      stroke: #555; /* 盤面の枠線 */
+      stroke-width: 2;
+    }
+
+    .analog-ticks-world line {
+        stroke: #777; /* 目盛りの色 */
+        stroke-width: 2;
+    }
+
+    .analog-hand-world {
+      stroke-linecap: round;
+      transform-origin: 100px 100px; /* 回転の中心 (viewBoxの中心) */
+    }
+    .analog-hand-world.hour-world {
+      stroke: #e0e0e0; /* 時針の色 */
+      stroke-width: 6;
+    }
+    .analog-hand-world.minute-world {
+      stroke: #e0e0e0; /* 分針の色 */
+      stroke-width: 4;
+    }
+    .analog-hand-world.second-world {
+      stroke: #ff6b6b; /* 秒針の色 (メインクロックの秒針色に合わせる) */
+      stroke-width: 2;
+    }
+    .analog-center-world {
+      fill: #e0e0e0; /* 中心のドットの色 */
+    }
+
+    /* body.inverted 時のアナログ時計スタイル */
+    body.inverted .analog-face-world {
+      fill: #ccc;
+      stroke: #aaa;
+    }
+    body.inverted .analog-ticks-world line {
+        stroke: #888;
+    }
+    body.inverted .analog-hand-world.hour-world,
+    body.inverted .analog-hand-world.minute-world {
+      stroke: #333; /* 暗い背景では明るい針、明るい背景では暗い針 */
+    }
+    body.inverted .analog-hand-world.second-world {
+      stroke: #c00000; /* inverted 時の秒針の色 */
+    }
+    body.inverted .analog-center-world {
+      fill: #333;
+    }
+
+    /* ... (既存のスタイル) ... */
   </style>
 </head>
 <body>
