@@ -64,3 +64,69 @@ body.inverted .normal-time-display-sub {
 .blinking-ah {
   animation: firefly-blink 2s ease-in-out infinite;
 }
+
+/* world-clock.css */
+
+/* ... (既存の .world-clock-item やデジタル表示のスタイルはそのまま) ... */
+
+.analog-clock-world { /* SVG要素自体のスタイル */
+  width: 100px;
+  height: 100px;
+  margin: 10px auto 0;
+  display: block;
+}
+
+.analog-clock-world .analog-face-world { /* SVG内の盤面 */
+  fill: #333;
+  stroke: #555;
+  stroke-width: 2;
+}
+
+.analog-clock-world .analog-ticks-world line { /* SVG内の目盛り */
+    stroke: #777;
+    stroke-width: 2;
+}
+
+.analog-clock-world .analog-hand-world { /* SVG内の全ての針の共通スタイル */
+  stroke-linecap: round;
+  /* transform-origin はJSで設定しているか、CSSで指定する場合は詳細度を考慮 */
+  /* transform-origin: 100px 100px; */ /* ← もしJSで設定していなければここを有効化 */
+}
+
+.analog-clock-world .analog-hand-world.hour-world { /* SVG内の時針 */
+  stroke: #e0e0e0;
+  stroke-width: 6;
+}
+
+.analog-clock-world .analog-hand-world.minute-world { /* SVG内の分針 */
+  stroke: #e0e0e0;
+  stroke-width: 4;
+}
+
+.analog-clock-world .analog-hand-world.second-world { /* SVG内の秒針 */
+  stroke: #ff6b6b;
+  stroke-width: 2;
+}
+
+.analog-clock-world .analog-center-world { /* SVG内の中央ドット */
+  fill: #e0e0e0;
+}
+
+/* body.inverted 時のスタイルも同様に、.analog-clock-world を親セレクタに追加 */
+body.inverted .analog-clock-world .analog-face-world {
+  fill: #ccc;
+  stroke: #aaa;
+}
+body.inverted .analog-clock-world .analog-ticks-world line {
+    stroke: #888;
+}
+body.inverted .analog-clock-world .analog-hand-world.hour-world,
+body.inverted .analog-clock-world .analog-hand-world.minute-world {
+  stroke: #333;
+}
+body.inverted .analog-clock-world .analog-hand-world.second-world {
+  stroke: #c00000;
+}
+body.inverted .analog-clock-world .analog-center-world {
+  fill: #333;
+}
