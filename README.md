@@ -13,7 +13,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
     * [Configuration](#configuration)
     * [Running the Application](#running-the-application)
 5.  [Usage](#usage)
-    * [Main Clock](#main-clock)
+    * [Main Clock (/)](#main-clock-)
     * [World Clock](#world-clock)
     * [Stopwatch and Timer](#stopwatch-and-timer)
     * [Admin Panel](#admin-panel)
@@ -143,7 +143,7 @@ project/
 
 ## Usage
 
-### Main Clock (`/`)
+### Main Clock (/)
 
 * Displays the primary "Another Hour" analog and digital clock.
 * Use the dropdown menu to select your current timezone for the main clock display.
