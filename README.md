@@ -56,40 +56,47 @@ Another Hour Clock is a unique web-based application that redefines your percept
 *(If you have a live deployment, link it here. e.g., `[Live Demo](your-app-url.com)`)*
 
 ## Project Structure
-another-hour/
-├── public/                   # Frontend assets (HTML, CSS, client-side JS)
-│   ├── css/                  # Stylesheets
-│   │   ├── style.css         # Global base styles
+
+```
+project/
+├── public/                   # Frontend assets and client-side code
+│   ├── css/                  # Stylesheets directory
 │   │   ├── components.css    # Common UI component styles
-│   │   ├── main-clock.css    # Styles for the main clock page (index.html)
-│   │   ├── world-clock.css   # Styles for the world clock page
-│   │   ├── stopwatch.css     # Styles for the stopwatch page
-│   │   ├── timer.css         # Styles for the timer page
-│   │   └── admin.css         # Styles for the admin panel
-│   ├── js/                   # Client-side JavaScript modules
-│   │   ├── main.js           # Logic for the main clock page
-│   │   ├── world-clock-ui.js # Logic for the world clock page
-│   │   ├── stopwatch-ui.js   # Logic for the stopwatch page
-│   │   ├── timer-ui.js       # Logic for the timer page
-│   │   └── admin.js          # Logic for the admin panel
-│   ├── pages/                # Additional HTML pages
-│   │   ├── world-clock.html
-│   │   ├── stopwatch.html
-│   │   └── timer.html
-│   ├── admin.html            # Admin panel interface
-│   ├── clock-core.js         # Core AH time calculation & analog angle logic (client-side)
-│   └── index.html            # Main clock page
-├── src/                      # Server-side source code (Node.js)
-│   ├── routes/               # Express route handlers
-│   │   └── stopwatch.js      # API routes for stopwatch functionality
-│   └── shared/               # Shared utilities/libraries (can be used by client & server if configured)
-│       └── ah-time.js        # Core AH time conversion utilities (AH_FACTOR based)
-├── server.js                 # Express server setup
-├── settings.json             # Application settings (e.g., default timezones)
-├── package.json              # Node.js project metadata and dependencies
-├── package-lock.json
-├── .env.example              # Example environment variables file
-└── README.md                 # This file
+│   │   ├── main-clock.css    # Main clock page styles
+│   │   ├── stopwatch.css     # Stopwatch page styles
+│   │   ├── style.css        # Global styles
+│   │   ├── timer.css        # Timer page styles
+│   │   └── world-clock.css  # World clock page styles
+│   ├── js/                  # Client-side JavaScript modules
+│   │   ├── stopwatch-ui.js  # Stopwatch functionality
+│   │   ├── timer-ui.js      # Timer functionality
+│   │   └── world-clock-ui.js # World clock functionality
+│   ├── pages/               # Additional HTML pages
+│   │   ├── stopwatch.html   # Stopwatch interface
+│   │   ├── timer.html       # Timer interface
+│   │   └── world-clock.html # World clock interface
+│   ├── admin.css            # Admin panel styling
+│   ├── admin.html           # Admin interface
+│   ├── admin.js             # Admin panel logic
+│   ├── clock-core.js        # Core clock calculation logic
+│   ├── index.html           # Main clock interface
+│   ├── main.js              # Main application logic
+│   └── style.css            # Legacy global styles
+├── src/                     # Server-side source code
+│   ├── routes/              # Express route handlers
+│   │   └── stopwatch.js     # Stopwatch API routes
+│   └── shared/              # Shared utilities
+│       └── ah-time.js       # AH time conversion utilities
+├── .gitignore              # Git ignore configuration
+├── .replit                 # Replit configuration
+├── README.md               # Project documentation
+├── generated-icon.png      # Project icon
+├── index.js               # Legacy entry point
+├── package-lock.json      # Node.js dependency lock
+├── package.json           # Node.js project configuration
+├── server.js              # Express server
+└── settings.json          # Application settings
+```
 
 ## Getting Started
 
