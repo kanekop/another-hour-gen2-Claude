@@ -185,19 +185,27 @@ project/
 
 ### Another Hour (AH) Time Calculation
 
-This project implements two distinct "Another Hour" time concepts:
+This project features two distinct "Another Hour" time concepts, each tailored to specific functionalities:
 
-1.  **Main Clock & World Clock (23-hour cycle - `public/clock-core.js`):**
-    * The standard 24-hour day is condensed into a 23-hour "Another Hour" day.
-    * Time runs faster for the first 23 real hours (`SCALE_AH = 24 / 23`, approx 1.04167x speed).
-    * The real-time period from 23:00 to 00:00 is designated as the "Another Hour". For digital display, this hour can be shown as 24:xx. For analog display, this hour is visually mapped to the 00:00-01:00 segment on a 12-hour dial for a distinct representation.
-    * This logic is used for both the main clock and all clocks on the World Clock page.
+1.  **Main Clock & World Clock (23-Hour AH Day Cycle):**
+    * **File:** `public/clock-core.js`
+    * **Concept:** The standard 24-hour real day is conceptually transformed into a 23-hour "Another Hour" (AH) day.
+    * **Mechanism:**
+        * For the first 23 real hours of a day (00:00 to 22:59 real time), AH time runs approximately 4.17% faster than real time. This is achieved using `SCALE_AH = 24 / 23`.
+        * The real-time hour from 23:00 to 23:59 is designated as the special "Another Hour" period.
+    * **Digital Display during AH Period:** AH time is shown as `24:xx` (e.g., real time 23:30 might be AH 24:30).
+    * **Analog Display during AH Period:** On the 12-hour analog dial, this "Another Hour" is visually represented by the hands moving through the 00:00 to 00:59 segment as if it's the start of a new cycle, but distinct from the normal scaled time. The hands are driven by real minutes and seconds during this hour.
+    * **Usage:** This logic applies to the main clock on `index.html` and all individual clocks on the `world-clock.html` page.
 
-2.  **Stopwatch/Timer (25-hour day equivalent - `src/shared/ah-time.js`):**
-    * Used specifically for the Stopwatch and Timer utilities.
-    * An "AH second" is defined as `0.96` real seconds (`AH_FACTOR = 0.96`).
-    * This effectively creates a 25-AH-hour equivalent within a 24-real-hour period (`24 / 0.96 = 25`).
-    * Functions `toAhMillis()` and `fromAhMillis()` handle conversions.
+2.  **Stopwatch & Timer (25-AH-Hour Day Equivalent):**
+    * **File:** `src/shared/ah-time.js`
+    * **Concept:** Time is measured in "AH units" where an AH second is shorter than a real second, leading to a 25-AH-hour equivalent within a 24-real-hour period.
+    * **Mechanism:**
+        * 1 AH second = 0.96 real seconds. This is defined by `AH_FACTOR = 0.96`.
+        * This means AH time for these tools runs approximately 4.17% faster than real time (`1 / 0.96 \approx 1.04167`).
+        * Consequently, 25 AH hours will elapse in 24 real hours (`24 real hours * (1 AH hour / 0.96 real hours) = 25 AH hours`).
+    * **Functions:** `toAhMillis()` converts real-time milliseconds to AH milliseconds, and `fromAhMillis()` converts AH milliseconds back to real-time.
+    * **Usage:** This calculation is exclusively used for the Stopwatch (`stopwatch.html`) and Timer (`timer.html`) utilities to provide a distinct time measurement experience.
 
 ### Frontend
 
@@ -257,4 +265,4 @@ The following outlines completed tasks and potential future improvements:
 Example: This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
-*(Placeholder: © 2025 Your Name/Project Name. All Rights Reserved. If not using an open-source license)*
+*(Placeholder: © 2025 Yoshimune Kaneko/Another Hour. All Rights Reserved. If not using an open-source license)*
