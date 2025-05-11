@@ -5,7 +5,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
 ## Table of Contents
 
 1.  [Features](#features)
-2.  [Live Demo (Optional)](#live-demo-optional)
+2.  [Live Demo](#live-demo)
 3.  [Project Structure](#project-structure)
 4.  [Getting Started](#getting-started)
     * [Prerequisites](#prerequisites)
@@ -15,13 +15,13 @@ Another Hour Clock is a unique web-based application that redefines your percept
 5.  [Usage](#usage)
     * [Main Clock](#main-clock)
     * [World Clock](#world-clock)
-    * [Stopwatch & Timer](#stopwatch--timer)
+    * [Stopwatch and Timer](#stopwatch-and-timer)
     * [Admin Panel](#admin-panel)
 6.  [Technical Details](#technical-details)
     * [Another Hour (AH) Time Calculation](#another-hour-ah-time-calculation)
     * [Frontend](#frontend)
     * [Backend](#backend)
-7.  [Contributing (Optional)](#contributing-optional)
+7.  [Contributing](#contributing)
 8.  [Roadmap](#roadmap)
 9.  [License](#license)
 
@@ -51,7 +51,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
 * **Visual Cues:**
     * Main clock dial and World Clock page background invert colors during the "Another Hour" period (based on selected/local timezone).
 
-## Live Demo (Optional)
+## Live Demo
 
 *(If you have a live deployment, link it here. e.g., `[Live Demo](your-app-url.com)`)*
 
@@ -160,7 +160,7 @@ project/
     * (WIP) Analog AH Time
 * Timezones in their "Another Hour" (23:00-00:00 local standard time) will have a blinking effect.
 
-### Stopwatch & Timer (`/pages/stopwatch.html`, `/pages/timer.html`)
+### Stopwatch and Timer (`/pages/stopwatch.html`, `/pages/timer.html`)
 
 * These pages provide stopwatch and timer functionalities, respectively.
 * The timekeeping is aware of the "Another Hour" concept, meaning durations are based on AH seconds (where 1 AH second = 0.96 real seconds, as defined in `src/shared/ah-time.js`).
@@ -205,7 +205,7 @@ This project explores two related but distinct "Another Hour" concepts:
 * Provides API endpoints (e.g., for settings, stopwatch).
 * Uses environment variables for configuration (session secret, admin key).
 
-## Contributing (Optional)
+## Contributing
 
 *(If you plan to open source this and accept contributions, add guidelines here. For now, this can be omitted or be a placeholder.)*
 *We welcome contributions! Please see `CONTRIBUTING.md` for details on how to submit pull requests, report issues, and suggest features.*
