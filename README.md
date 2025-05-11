@@ -1,6 +1,6 @@
 # Another Hour Clock
 
-Another Hour Clock is a unique web-based application that redefines your perception of time. It primarily features a conceptual clock operating on a 23-hour day, achieved by adjusting the an "Another Hour" (AH) period. This project also includes a World Clock feature displaying multiple timezones with this unique AH concept, alongside standard time tools like a stopwatch and timer.
+Another Hour Clock is a unique web-based application that redefines your perception of time. It primarily features a conceptual clock operating on a 23-hour day, achieved by running time slightly faster and incorporating an "Another Hour" (AH) period (the real-time 23rd hour). This project also includes an advanced World Clock, AH-aware time tools (Stopwatch, Timer), and an Admin Panel for configuration. The entire site defaults to a light theme, with the main clock page visually transitioning to a dark theme during its AH period.
 
 ## Table of Contents
 
@@ -13,7 +13,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
     * [Configuration](#configuration)
     * [Running the Application](#running-the-application)
 5.  [Usage](#usage)
-    * [Main Clock (/)](#main-clock-)
+    * [Main Clock](#main-clock)
     * [World Clock](#world-clock)
     * [Stopwatch and Timer](#stopwatch-and-timer)
     * [Admin Panel](#admin-panel)
@@ -21,6 +21,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
     * [Another Hour (AH) Time Calculation](#another-hour-ah-time-calculation)
     * [Frontend](#frontend)
     * [Backend](#backend)
+    * [Theme](#theme)
 7.  [Contributing](#contributing)
 8.  [Roadmap](#roadmap)
 9.  [License](#license)
@@ -28,32 +29,42 @@ Another Hour Clock is a unique web-based application that redefines your percept
 ## Features
 
 * **Main Analog & Digital Clock:**
-    * Displays time based on the "Another Hour" concept (a 23-hour cycle within a 24-hour real-time day).
-    * SVG-based 12-hour analog dial with visual cues for the "Another Hour" period.
-    * Toggleable digital display for both AH time and standard local time.
-    * Timezone selection for the main clock.
-* **World Clock Page:**
-    * Displays multiple timezones simultaneously.
-    * Each timezone shows:
-        * City name.
-        * Digital AH time.
-        * Digital standard local time.
-        * Analog clock face with hands (currently work-in-progress for correct hand movement).
-    * Visual indication (blinking) for timezones currently in their "Another Hour" period.
-    * Dynamic background inversion based on the user's local "Another Hour" status.
+    * Displays time based on the "Another Hour" concept (a 23-hour AH day cycle within a 24-hour real-time day).
+    * SVG-based 12-hour analog dial with a highlighted "AH Sector" indicating the Another Hour period (real-time 23:00-00:00).
+    * Toggleable digital display showing both AH time and standard local time.
+    * Timezone selection dropdown for the main clock.
+    * Visual theme inverts to dark mode during the selected timezone's AH period.
+
+* **World Clock Page (`/pages/world-clock.html`):**
+    * Displays a grid of 24 analog and digital clocks for different timezones.
+    * Dynamically selects 24 distinct UTC offsets (from UTC-11 to UTC+12) at page load and assigns representative cities, considering current DST rules to ensure accurate real-time offsets.
+    * Each clock item displays:
+        * City name (and country/region).
+        * Digital AH time (calculated based on the 23-hour cycle concept).
+        * Digital standard local time for that city.
+        * Fully functional analog clock with hands correctly representing the AH time.
+    * Timezones currently in their "Another Hour" (local standard time 23:00-00:00) are visually distinguished:
+        * The specific clock item inverts to a dark theme.
+        * A subtle blinking/pulsing effect is applied to the item.
+    * The overall page theme remains light, regardless of individual clock AH statuses.
+
 * **Time Tools (AH-Aware):**
-    * Stopwatch that can measure elapsed time in AH units.
-    * Timer that can count down in AH units.
-* **Admin Panel:**
-    * Manage displayed timezones for the main clock.
-    * Configure display settings (e.g., show/hide AH time, show/hide actual time).
-    * (Potentially) Manage environment keys or other settings.
-* **Visual Cues:**
-    * Main clock dial and World Clock page background invert colors during the "Another Hour" period (based on selected/local timezone).
+    * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in AH units, where 1 AH second = 0.96 real seconds (based on a 25-hour day equivalent).
+    * **Timer (`/pages/timer.html`):** Allows setting a countdown duration in AH units (also based on the 0.96 AH_FACTOR).
+
+* **Admin Panel (`/admin`):**
+    * Password-protected panel to manage application settings.
+    * Configure timezones available for the main clock.
+    * Adjust display preferences (e.g., show/hide AH time, show/hide actual time on the main clock).
+
+* **Visual Theme:**
+    * The application defaults to a light theme (bright background, dark text).
+    * The Main Clock page inverts to a dark theme specifically when the selected timezone enters its "Another Hour" (23:00-00:00 local time).
+    * Individual clock items on the World Clock page invert to a dark theme and apply a visual effect when their respective timezone is in its AH period.
 
 ## Live Demo
 
-*(If you have a live deployment, link it here. e.g., `[Live Demo](your-app-url.com)`)*
+*(If you have a live deployment, link it here. e.g., `[Live Demo](https://your-app-url.com)`)*
 
 ## Project Structure
 
@@ -110,10 +121,9 @@ project/
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/another-hour.git](https://github.com/your-username/another-hour.git)
+    git clone [https://github.com/your-username/another-hour.git](https://github.com/your-username/another-hour.git) # Replace with your actual repository URL
     cd another-hour
     ```
-    *(Replace `your-username` with the actual username or repository URL)*
 
 2.  **Install dependencies:**
     ```bash
@@ -123,13 +133,13 @@ project/
 ### Configuration
 
 1.  **Create a `.env` file:**
-    Copy the example environment file and edit its values:
+    Copy the example environment file `.env.example` to `.env` and edit its values:
     ```bash
     cp .env.example .env
     ```
     Then, open `.env` in a text editor and set the following variables:
-    * `SESSION_SECRET`: A long, random string used for session encryption (e.g., generate one using a password manager or online tool).
-    * `ADMIN_KEY`: A password to access the admin panel.
+    * `SESSION_SECRET`: A long, random string for session encryption.
+    * `ADMIN_KEY`: A password to access the admin panel at `/admin`.
 
 ### Running the Application
 
@@ -137,100 +147,114 @@ project/
     ```bash
     npm start
     ```
-    This command typically runs `node server.js`.
+    This command runs `node server.js`.
 
 2.  Open your web browser and navigate to `http://localhost:3000` (or the port specified in `server.js`).
 
 ## Usage
 
-### Main Clock (/)
+### Main Clock
 
-* Displays the primary "Another Hour" analog and digital clock.
-* Use the dropdown menu to select your current timezone for the main clock display.
-* Click "Toggle Digital Display" to show or hide the numerical time (both AH and standard).
+* Accessible at the root path (`/`).
+* Displays the primary "Another Hour" analog clock for the selected timezone.
+* Use the dropdown menu to change the timezone.
+* Click "Toggle Digital Display" to show/hide numerical AH time and standard time.
+* The page theme will invert to dark mode if the selected timezone is in its "Another Hour" (23:00-00:00 local).
+* Click the "All Time Zone" button to navigate to the World Clock page.
 
-### World Clock (`/pages/world-clock.html`)
+### World Clock
 
-* Accessible via the "All Time Zone" button on the main clock page (if implemented).
-* Shows a grid of clocks for various world cities.
-* Each clock displays:
-    * City Name
-    * Digital AH Time
-    * Digital Standard Time
-    * (WIP) Analog AH Time
-* Timezones in their "Another Hour" (23:00-00:00 local standard time) will have a blinking effect.
+* Accessible via the "All Time Zone" button from the Main Clock page, or directly at `/pages/world-clock.html`.
+* Displays a grid of 24 clocks, each representing a distinct UTC offset from UTC-11 to UTC+12.
+* Representative cities are dynamically chosen for each offset at page load, considering current DST.
+* Each clock item shows the city, digital AH time, digital standard time, and an analog AH clock.
+* Clock items for timezones currently in their "Another Hour" (23:00-00:00 local standard time) will invert to a dark theme and have a blinking/pulsing visual effect.
 
-### Stopwatch and Timer (`/pages/stopwatch.html`, `/pages/timer.html`)
+### Stopwatch and Timer
 
-* These pages provide stopwatch and timer functionalities, respectively.
-* The timekeeping is aware of the "Another Hour" concept, meaning durations are based on AH seconds (where 1 AH second = 0.96 real seconds, as defined in `src/shared/ah-time.js`).
+* Accessible at `/pages/stopwatch.html` and `/pages/timer.html` respectively.
+* These tools operate using "AH seconds" where 1 AH second = 0.96 real seconds (based on a 25-hour day concept, distinct from the main clock's 23-hour cycle).
 
-### Admin Panel (`/admin`)
+### Admin Panel
 
-* Log in using the `ADMIN_KEY` defined in your `.env` file.
-* Allows management of timezones displayed on the main clock and other application settings.
+* Accessible at `/admin`.
+* Login using the `ADMIN_KEY` defined in the `.env` file.
+* Allows management of timezones selectable for the main clock and other application settings (like showing/hiding AH or actual time on the main clock).
 
 ## Technical Details
 
 ### Another Hour (AH) Time Calculation
 
-This project explores two related but distinct "Another Hour" concepts:
+This project implements two distinct "Another Hour" time concepts:
 
-1.  **Main Clock (23-hour cycle / `clock-core.js`):**
-    * The 24-hour real day is effectively condensed into a 23-hour AH day.
-    * This is achieved by making AH time run faster than real time for the first 23 real hours. `SCALE_AH = 24 / 23` (approx 1.04167) is used, meaning 1 real second corresponds to `SCALE_AH` AH seconds.
-    * The real-time period from 23:00 to 00:00 is treated as the "Another Hour" (or the 24th hour in the AH display, effectively making the AH clock appear to have an extra hour within the 23-hour cycle framework).
-    * Analog display during this AH period (real 23:00-00:00) maps to 00:00-01:00 on the 12-hour dial for visual effect.
+1.  **Main Clock & World Clock (23-hour cycle - `public/clock-core.js`):**
+    * The standard 24-hour day is condensed into a 23-hour "Another Hour" day.
+    * Time runs faster for the first 23 real hours (`SCALE_AH = 24 / 23`, approx 1.04167x speed).
+    * The real-time period from 23:00 to 00:00 is designated as the "Another Hour". For digital display, this hour can be shown as 24:xx. For analog display, this hour is visually mapped to the 00:00-01:00 segment on a 12-hour dial for a distinct representation.
+    * This logic is used for both the main clock and all clocks on the World Clock page.
 
-2.  **Stopwatch/Timer (25-hour day equivalent / `src/shared/ah-time.js`):**
-    * Used for the Stopwatch and Timer utilities.
-    * Defines an "AH second" as being slightly shorter than a real second: `AH_FACTOR = 0.96`.
-    * This means 1 AH second = 0.96 real seconds. Over a 24-hour real-time period, this would equate to `24 / 0.96 = 25` AH hours.
-    * `toAhMillis(realMs) = realMs / AH_FACTOR`
-    * `fromAhMillis(ahMs) = ahMs * AH_FACTOR`
-
-*(Developer Note: The World Clock currently uses the `clock-core.js` (23-hour cycle) logic for its AH time calculation to maintain consistency with the main clock's concept.)*
+2.  **Stopwatch/Timer (25-hour day equivalent - `src/shared/ah-time.js`):**
+    * Used specifically for the Stopwatch and Timer utilities.
+    * An "AH second" is defined as `0.96` real seconds (`AH_FACTOR = 0.96`).
+    * This effectively creates a 25-AH-hour equivalent within a 24-real-hour period (`24 / 0.96 = 25`).
+    * Functions `toAhMillis()` and `fromAhMillis()` handle conversions.
 
 ### Frontend
 
-* Built with HTML, CSS, and vanilla JavaScript (ES6 Modules).
-* Moment.js and Moment Timezone are used for time and timezone manipulations.
-* SVG is used for rendering analog clocks.
-* Client-side routing is handled by direct navigation and links.
+* Built with HTML5, CSS3, and Vanilla JavaScript (ES6 Modules).
+* **Moment.js** and **Moment Timezone** are used for robust date, time, and timezone manipulations.
+* SVG (Scalable Vector Graphics) is used for rendering all analog clock faces and hands, allowing for smooth animations and scalability.
+* Client-side logic handles all time calculations, clock updates, and dynamic DOM manipulations.
 
 ### Backend
 
-* Node.js with Express.js framework.
-* Serves static frontend files.
-* Provides API endpoints (e.g., for settings, stopwatch).
-* Uses environment variables for configuration (session secret, admin key).
+* Node.js with the Express.js framework.
+* Serves static frontend files from the `public` directory.
+* Provides a simple API endpoint for the Stopwatch (`/api/stopwatch/elapsed`).
+* Manages application settings (`settings.json`) via API endpoints (`/api/settings`) with admin authentication.
+* Uses `express-session` for session management (though currently minimal in its direct use for end-users beyond potential admin sessioning).
+
+### Theme
+
+* The application defaults to a light visual theme.
+* The main clock page dynamically switches to a dark theme when the displayed time enters the "Another Hour" (23:00 local time).
+* On the World Clock page, individual clock items switch to a dark theme and apply a visual effect when their respective timezone is in its "Another Hour."
 
 ## Contributing
 
-*(If you plan to open source this and accept contributions, add guidelines here. For now, this can be omitted or be a placeholder.)*
-*We welcome contributions! Please see `CONTRIBUTING.md` for details on how to submit pull requests, report issues, and suggest features.*
+*(This section can be expanded if you wish to accept external contributions. For now, it's a standard placeholder.)*
+We welcome contributions! Please see `CONTRIBUTING.md` (if you create one) for details on how to submit pull requests, report issues, and suggest features.
 
 ## Roadmap
 
-The following are planned or potential future improvements:
+The following outlines completed tasks and potential future improvements:
 
-* **World Clock:**
-    * [ ] **Fix analog hand movement for all world clocks.**
-    * [ ] Allow user selection/customization of displayed timezones.
-* **Stopwatch & Timer:**
-    * [ ] UI/UX enhancements.
-    * [ ] (Optional) Persistence of lap times or timer settings.
-* **General:**
-    * [ ] Internationalization (i18n) for UI text (e.g., English/Japanese).
-    * [ ] Consider replacing Moment.js with a lighter library like Day.js (with necessary plugins) to reduce bundle size.
-    * [ ] Progressive Web App (PWA) features for offline caching and "installability".
-    * [ ] Refine and unify the two "Another Hour" concepts if possible, or clarify their distinct applications more prominently.
+**Completed for World Clock:**
+* [x] Display 24 clocks for distinct UTC offsets.
+* [x] Dynamically select representative cities considering DST.
+* [x] Implement fully functional analog hands for each world clock.
+* [x] Implement individual dark mode + blinking for AH-active world clocks.
+* [x] Ensure World Clock page defaults to light theme.
+
+**Enhancements & Future Ideas:**
+* [ ] **World Clock:** Display a global message when any of the 24 world clocks are in their "Another Hour."
+* [ ] **World Clock:** Highlight the clock item corresponding to the user's local timezone.
+* [ ] **World Clock:** Refine the visual style of AH-active clock items (e.g., color scheme, AH sector display).
+* [ ] **World Clock:** Allow user customization of displayed timezones or grid layout.
+* [ ] **Stopwatch & Timer:** UI/UX enhancements and (optional) persistence of lap times/timer settings.
+* [ ] **General:** Internationalization (i18n) for UI text (e.g., English/Japanese).
+* [ ] **General:** Performance optimization, especially for rendering many clocks.
+* [ ] **General:** Consider replacing Moment.js with a lighter library like Day.js (with necessary plugins) to reduce bundle size.
+* [ ] **General:** Progressive Web App (PWA) features for offline caching and "installability."
+* [ ] **General:** Further refine or unify the two "Another Hour" concepts, or clarify their distinct applications more prominently in the UI if they remain separate.
 * **Stretch Goals:**
     * [ ] watchOS companion app.
-    * [ ] Customizable themes/skins.
+    * [ ] Customizable themes/skins for the entire application.
 
 ## License
 
-This project is licensed under the MIT License - see the `LICENSE` file for details (if you add one).
+*(Choose a license if you haven't already. MIT is a common choice.)*
+Example: This project is licensed under the MIT License. See the `LICENSE` file for details.
 
-*(Placeholder: © 2025 Your Name/Project Name. All Rights Reserved. or choose an open-source license like MIT.)*
+---
+*(Placeholder: © 2025 Your Name/Project Name. All Rights Reserved. If not using an open-source license)*
