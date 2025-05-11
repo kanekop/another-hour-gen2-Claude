@@ -1,3 +1,4 @@
+
 /* public/style.css */
 
 /* Global Styles */
@@ -8,30 +9,30 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #e5e5e5; /* デフォルトを明るい背景色に */
-  color: #1a1a1a;     /* デフォルトの文字色を暗い色に */
+  background: #e5e5e5;
+  color: #1a1a1a;
   padding: 20px;
   box-sizing: border-box;
-  font-family: sans-serif; /* プロジェクト全体で共通のフォントを指定 */
+  font-family: sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.inverted {
-  background: #1a1a1a; /* inverted 時を暗い背景色に */
-  color: white;      /* inverted 時の文字色を明るい色に */
+  background: #1a1a1a;
+  color: white;
 }
 
-/* Global Form Elements (inverted 時のスタイルもここで対応) */
+/* Global Form Elements */
 select,
-input[type="number"], /* input type も具体的に指定推奨 */
-input[type="text"] { /* 他のinputタイプもあれば追加 */
-  padding: 8px 12px; /* 少し広めに調整 */
-  border-radius: 6px; /* 少し丸みを調整 */
+input[type="number"],
+input[type="text"] {
+  padding: 8px 12px;
+  border-radius: 6px;
   border: 1px solid #bbb;
   background-color: #f0f0f0;
   color: #1a1a1a;
-  font-size: clamp(14px, 3vw, 16px); /* フォントサイズも調整 */
-  margin: 5px 0; /* 適度なマージン */
+  font-size: clamp(14px, 3vw, 16px);
+  margin: 5px 0;
 }
 
 body.inverted select,
@@ -39,15 +40,15 @@ body.inverted input[type="number"],
 body.inverted input[type="text"] {
   background: #333;
   color: white;
-  border-color: #555; /* 境界線色も反転 */
+  border-color: #555;
 }
 
 select:focus,
 input[type="number"]:focus,
 input[type="text"]:focus {
   outline: none;
-  border-color: #007bff; /* フォーカス時の色をアクセントカラーに */
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* フォーカス時の影 */
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
 body.inverted select:focus,
@@ -57,21 +58,17 @@ body.inverted input[type="text"]:focus {
   box-shadow: 0 0 0 0.2rem rgba(86,164,255,.25);
 }
 
-/* Timezone Select specific global adjustment (if needed beyond generic select) */
-#timezone-select { /* main.js で使われているID */
+/* Timezone Select */
+#timezone-select {
   margin-top: min(15px, 3vh);
-  padding: 12px;   /* この要素に特有の大きめパディング */
+  padding: 12px;
   font-size: clamp(16px, 4vw, 20px);
   width: min(400px, 95vw);
-  /* select の基本スタイルを継承しつつ、上記で上書き */
 }
-/* #timezone-select の inverted スタイルは body.inverted select でカバーされる想定 */
 
-
-/* Media Queries for global adjustments */
+/* Media Queries */
 @media (max-width: 480px) {
   body {
     padding: 10px;
   }
-  /* 必要であれば、グローバルなフォーム要素のフォントサイズなどをさらに調整 */
 }
