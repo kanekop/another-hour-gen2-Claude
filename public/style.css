@@ -1,3 +1,5 @@
+/* public/style.css */
+
 /* Global Styles */
 body {
   display: flex;
@@ -6,68 +8,70 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #e5e5e5; /* ★変更★ デフォルトを明るい背景色に */
-  color: #1a1a1a;     /* ★変更★ デフォルトの文字色を暗い色に */
+  background: #e5e5e5; /* デフォルトを明るい背景色に */
+  color: #1a1a1a;     /* デフォルトの文字色を暗い色に */
   padding: 20px;
   box-sizing: border-box;
-  transition: background-color 0.3s ease, color 0.3s ease; /* ★変更★ トランジション対象を具体的に */
+  font-family: sans-serif; /* プロジェクト全体で共通のフォントを指定 */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.inverted {
-  background: #1a1a1a; /* ★変更★ inverted 時を暗い背景色に */
-  color: white;      /* ★変更★ inverted 時の文字色を明るい色に */
+  background: #1a1a1a; /* inverted 時を暗い背景色に */
+  color: white;      /* inverted 時の文字色を明るい色に */
 }
 
-/* Global Form Elements */
-select {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #bbb; /* ★変更★ ライトモードに合わせた境界線色 */
-  background-color: #f0f0f0; /* ★変更★ ライトモードに合わせた背景色 */
-  color: #1a1a1a;           /* ★変更★ ライトモードに合わせた文字色 */
-}
-
-input { /* 基本的なinputスタイルも同様に */
-  padding: 8px;
-  border-radius: 4px;
+/* Global Form Elements (inverted 時のスタイルもここで対応) */
+select,
+input[type="number"], /* input type も具体的に指定推奨 */
+input[type="text"] { /* 他のinputタイプもあれば追加 */
+  padding: 8px 12px; /* 少し広めに調整 */
+  border-radius: 6px; /* 少し丸みを調整 */
   border: 1px solid #bbb;
   background-color: #f0f0f0;
   color: #1a1a1a;
+  font-size: clamp(14px, 3vw, 16px); /* フォントサイズも調整 */
+  margin: 5px 0; /* 適度なマージン */
 }
 
+body.inverted select,
+body.inverted input[type="number"],
+body.inverted input[type="text"] {
+  background: #333;
+  color: white;
+  border-color: #555; /* 境界線色も反転 */
+}
 
-#timezone-select {
+select:focus,
+input[type="number"]:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff; /* フォーカス時の色をアクセントカラーに */
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); /* フォーカス時の影 */
+}
+
+body.inverted select:focus,
+body.inverted input[type="number"]:focus,
+body.inverted input[type="text"]:focus {
+  border-color: #56a4ff;
+  box-shadow: 0 0 0 0.2rem rgba(86,164,255,.25);
+}
+
+/* Timezone Select specific global adjustment (if needed beyond generic select) */
+#timezone-select { /* main.js で使われているID */
   margin-top: min(15px, 3vh);
-  padding: 12px;
-  background: #f0f0f0; /* ★変更★ */
-  color: #1a1a1a;      /* ★変更★ */
-  border: 1px solid #bbb; /* ★変更★ */
-  border-radius: 8px;
+  padding: 12px;   /* この要素に特有の大きめパディング */
   font-size: clamp(16px, 4vw, 20px);
   width: min(400px, 95vw);
+  /* select の基本スタイルを継承しつつ、上記で上書き */
 }
-
-body.inverted #timezone-select {
-  background: #333; /* ★変更★ inverted時のスタイル */
-  color: white;
-  border-color: #444;
-}
+/* #timezone-select の inverted スタイルは body.inverted select でカバーされる想定 */
 
 
-
-
-
-
-
-
-/* Media Queries */
+/* Media Queries for global adjustments */
 @media (max-width: 480px) {
   body {
     padding: 10px;
   }
-
-  .digital-clock { /* components.css にあるべきだが、ここで調整 */
-    padding: 8px 12px;
-  }
-  /* stopwatch-display, timer-displayなども必要に応じて調整 */
+  /* 必要であれば、グローバルなフォーム要素のフォントサイズなどをさらに調整 */
 }

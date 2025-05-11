@@ -23,3 +23,10 @@ body.inverted .timer-display {
 .controls button {
   min-width: 80px;
 }
+
+/* .controls は stopwatch と timer で共通化できる可能性あり */
+.controls button {
+  margin: 0 10px; /* components.css の button スタイルと競合・調整が必要な可能性あり */
+  padding: 10px 20px; /* components.css の button スタイルと競合・調整が必要な可能性あり */
+}
+

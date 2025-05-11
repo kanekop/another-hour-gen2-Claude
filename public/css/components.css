@@ -1,63 +1,106 @@
-/* Digital Clock (共通コンポーネントスタイルは components.css へ移行推奨) */
-.digital-clock { /* デフォルト (ライトモード) */
-  color: #1a1a1a;
-  background: #ccc;
-  margin-top: min(15px, 3vh); /* main-clock.css から移動された重複定義を考慮 */
-  display: none; /* main-clock.css から移動された重複定義を考慮 */
-}
-body.inverted .digital-clock { /* inverted (ダークモード) */
-  color: white;
-  background: #333;
+/* public/css/components.css */
+
+/* Digital Clock (共通コンポーネント) */
+.digital-clock {
+  margin-top: min(15px, 3vh);
+  padding: min(12px, 2.5vh) min(24px, 5vw);
+  border-radius: 8px;
+  text-align: center;
+  line-height: 1.6;
+  width: min(400px, 95vw);
+  font-family: monospace;
+  font-size: clamp(16px, 4.5vw, 24px); /* フォントサイズ調整 */
+  display: none; /* 初期状態は非表示 */
+  background: #f0f0f0; /* ライトモードの背景 */
+  color: #1a1a1a;    /* ライトモードの文字色 */
+  border: 1px solid #ddd; /* ライトモードの境界線 */
 }
 
-.digital-clock.visible { /* 表示状態はそのまま */
+.digital-clock.visible {
   display: block;
 }
 
-/* Buttons (共通コンポーネントスタイルは components.css へ移行推奨) */
-button, .toggle-button { /* デフォルト (ライトモード) */
-  margin: min(15px, 3vh) 0;
-  padding: 12px 24px;
+body.inverted .digital-clock {
+  background: #333;
+  color: white;
+  border-color: #444;
+}
+
+/* Buttons (共通コンポーネント) */
+button,
+.toggle-button { /* .toggle-button も汎用ボタンスタイルを継承 */
+  margin: 10px 5px; /* マージン調整 */
+  padding: 10px 20px; /* パディング調整 */
   background: #555; /* ライトモードでのボタン背景 */
-  color: white;     /* ライトモードでのボタン文字色 */
+  color: white;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 16px;
-  transition: opacity 0.2s;
-}
-button:hover, .toggle-button:hover {
-  opacity: 0.8; /* 少し濃くするなどの調整 */
+  font-size: clamp(14px, 3.5vw, 16px); /* フォントサイズ調整 */
+  transition: background-color 0.2s ease, opacity 0.2s ease; /* トランジション対象を明確化 */
+  text-decoration: none; /* a タグでボタンとして使う場合も考慮 */
+  display: inline-block; /* a タグでボタンとして使う場合も考慮 */
+  text-align: center;
 }
 
-body.inverted button,
-body.inverted .toggle-button { /* inverted (ダークモード) */
-  background: #333;
-  color: white;
-}
-body.inverted button:hover,
-body.inverted .toggle-button:hover {
+button:hover,
+.toggle-button:hover {
+  background: #444; /* ホバー時の色を少し濃く */
   opacity: 0.9;
 }
 
+button:active,
+.toggle-button:active {
+  background: #333; /* クリック時の色をさらに濃く */
+}
 
-/* Stopwatch & Timer Display (共通コンポーネントスタイルは components.css へ移行推奨) */
-.stopwatch-display, .timer-display { /* デフォルト (ライトモード) */
+
+body.inverted button,
+body.inverted .toggle-button {
+  background: #3a3a3a; /* Inverted時のボタン背景 */
+  color: white;
+}
+
+body.inverted button:hover,
+body.inverted .toggle-button:hover {
+  background: #4a4a4a;
+  opacity: 0.9;
+}
+
+body.inverted button:active,
+body.inverted .toggle-button:active {
+  background: #5a5a5a;
+}
+
+
+/* Stopwatch & Timer Display (共通コンポーネント) */
+.stopwatch-display,
+.timer-display {
   font-family: monospace;
-  font-size: 2.5em; /* style.css 内の重複定義を一つに */
-  margin: 20px 0;
-  padding: 20px 30px;
+  font-size: clamp(2em, 8vw, 3em); /* レスポンシブフォントサイズ */
+  margin: 20px auto; /* 上下マージン、左右autoで中央寄せ */
+  padding: 15px 25px; /* パディング調整 */
   background: #f0f0f0;  /* ライトモードでの背景 */
   color: #1a1a1a;       /* ライトモードでの文字色 */
+  border: 1px solid #ddd; /* ライトモードの境界線 */
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  letter-spacing: 2px;
-  /* 下の重複した digital-clock に似たスタイルは削除または統合 */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* 影を少し控えめに */
+  letter-spacing: 1px; /* 文字間隔調整 */
+  text-align: center;
+  width: fit-content; /* 内容に応じた幅 */
+  max-width: 90%; /* 最大幅 */
 }
 
 body.inverted .stopwatch-display,
-body.inverted .timer-display { /* inverted (ダークモード) */
-  background: #333;
+body.inverted .timer-display {
+  background: #2c2c2c; /* Inverted時の背景 */
   color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border-color: #444;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* Back Button (world-clock.html で使用) */
+.back-button {
+  /* 共通ボタンスタイルを適用しつつ、必要ならここで微調整 */
+  margin-bottom: 20px; /* 他の要素との間隔 */
 }

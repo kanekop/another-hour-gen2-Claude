@@ -133,3 +133,65 @@ body.inverted .ah-sector { /* inverted (ダークモード) */
   fill: rgba(255, 255, 0, 0.1);
 }
 /* --- Main Clock Specific Styles END --- */
+/* public/css/main-clock.css */
+#clock { /* メインクロックのSVGコンテナ */
+  width: min(90vw, min(90vh, 500px));
+  height: min(90vw, min(90vh, 500px));
+  /* 他のページのアナログ時計とはサイズが異なる想定 */
+}
+
+/* メインクロックのアナログ時計盤 (デフォルト: ライトテーマ時) */
+.face {
+  fill: #ddd;    /* ライトテーマの盤面 */
+  stroke: #bbb;  /* ライトテーマの盤面枠線 */
+  stroke-width: 2;
+}
+.hand {
+  stroke: black; /* ライトテーマの針の色 */
+  stroke-linecap: round;
+  transform-origin: 100px 100px; /* SVGの中心 */
+}
+.hour { stroke-width: 6; /* 時針の太さ (main-clock.css 内の指定を優先) */ }
+.minute { stroke-width: 4; /* 分針の太さ (main-clock.css 内の指定を優先) */ }
+.second {
+  stroke: #c00000; /* ライトテーマの秒針の色 */
+  stroke-width: 2;
+}
+.center {
+  fill: black;   /* ライトテーマの中心ドット */
+}
+.tick {
+  stroke: #999;  /* ライトテーマの目盛り */
+  stroke-width: 1;
+}
+.tick.major {
+  stroke: #666;  /* ライトテーマの主要な目盛り */
+  stroke-width: 2;
+}
+.ah-sector {
+  fill: rgba(255, 220, 0, 0.2); /* ライトテーマのAHセクター (黄色系) */
+}
+
+/* メインクロックのアナログ時計盤 (body.inverted: ダークテーマ時) */
+body.inverted .face {
+  fill: #222;
+  stroke: #444;
+}
+body.inverted .hand {
+  stroke: white;
+}
+body.inverted .second {
+  stroke: #ff6b6b; /* ダークテーマの秒針の色 */
+}
+body.inverted .center {
+  fill: white;
+}
+body.inverted .tick {
+  stroke: #666;
+}
+body.inverted .tick.major {
+  stroke: #888;
+}
+body.inverted .ah-sector {
+  fill: rgba(255, 255, 0, 0.1); /* ダークテーマのAHセクター */
+}
