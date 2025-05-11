@@ -107,7 +107,7 @@ function updateClock() {
   
   // Check if it's AH hour and toggle inverted colors
   const isAHHour = currentTime.hours() === 23;
-  document.body.classList.toggle('inverted', !isAHHour);
+  document.body.classList.toggle('inverted', isAHHour);
 
   // ★ AH セクター表示／非表示 ★
   ahSector.style.display = isAHHour ? 'block' : 'none';

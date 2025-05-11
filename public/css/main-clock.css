@@ -61,3 +61,75 @@ body.inverted .tick {
 body.inverted .ah-sector {
   fill: rgba(255, 255, 0, 0.2);
 }
+
+/* --- Main Clock Specific Styles (main-clock.css に移行推奨だが、一旦ここで調整) --- */
+/* 注意: これらのスタイルは public/css/main-clock.css にあるべきです。 */
+/* もし style.css に残す場合でも、他のページに影響しないよう詳細度を上げるか、 */
+/* 不要なら main-clock.css のみに記述します。 */
+/* ここでは、style.css がグローバルな影響を持つことを考慮し、 */
+/* 汎用的なクラス名に対するデフォルト（ライトモード）と inverted（ダークモード）を定義します。*/
+
+/* アナログ時計の盤面 */
+.face { /* デフォルト (ライトモード) */
+  fill: #ddd;
+  stroke: #bbb;
+  stroke-width: 2; /* main-clock.css から移動された重複定義を考慮 */
+}
+body.inverted .face { /* inverted (ダークモード) */
+  fill: #222;
+  stroke: #444;
+}
+
+/* アナログ時計の針 */
+.hand { /* デフォルト (ライトモード) */
+  stroke: black;
+  stroke-linecap: round;
+  transform-origin: 100px 100px; /* main-clock.css から移動された重複定義を考慮 */
+}
+body.inverted .hand { /* inverted (ダークモード) */
+  stroke: white;
+}
+
+/* 秒針の色 */
+.second { /* デフォルト (ライトモード) */
+  stroke: #c00000; /* ライトモードで見やすい赤系統 */
+  /* stroke-width: 2; は .second 自体に main-clock.css で定義されている想定 */
+}
+body.inverted .second { /* inverted (ダークモード) */
+  stroke: #ff6b6b; /* ダークモードでおなじみの赤 */
+}
+
+/* 中心のドット */
+.center { /* デフォルト (ライトモード) */
+  fill: black;
+}
+body.inverted .center { /* inverted (ダークモード) */
+  fill: white;
+}
+
+/* 目盛り */
+.tick { /* デフォルト (ライトモード) */
+  stroke: #999;
+  /* stroke-width: 1; は .tick 自体に main-clock.css で定義されている想定 */
+}
+body.inverted .tick { /* inverted (ダークモード) */
+  stroke: #666;
+}
+
+.tick.major { /* デフォルト (ライトモード) */
+  stroke: #666; /* 主要な目盛りは少し濃く */
+  /* stroke-width: 2; は .tick.major 自体に main-clock.css で定義されている想定 */
+}
+body.inverted .tick.major { /* inverted (ダークモード) */
+  stroke: #888; /* inverted 時の主要な目盛り */
+}
+
+
+/* AHセクター */
+.ah-sector { /* デフォルト (ライトモード) */
+  fill: rgba(255, 220, 0, 0.2); /* ライトモードで見やすい黄色系 */
+}
+body.inverted .ah-sector { /* inverted (ダークモード) */
+  fill: rgba(255, 255, 0, 0.1);
+}
+/* --- Main Clock Specific Styles END --- */

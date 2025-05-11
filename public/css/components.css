@@ -1,36 +1,63 @@
+/* Digital Clock (共通コンポーネントスタイルは components.css へ移行推奨) */
+.digital-clock { /* デフォルト (ライトモード) */
+  color: #1a1a1a;
+  background: #ccc;
+  margin-top: min(15px, 3vh); /* main-clock.css から移動された重複定義を考慮 */
+  display: none; /* main-clock.css から移動された重複定義を考慮 */
+}
+body.inverted .digital-clock { /* inverted (ダークモード) */
+  color: white;
+  background: #333;
+}
 
-/* Common Button Styles */
-button, .toggle-button {
+.digital-clock.visible { /* 表示状態はそのまま */
+  display: block;
+}
+
+/* Buttons (共通コンポーネントスタイルは components.css へ移行推奨) */
+button, .toggle-button { /* デフォルト (ライトモード) */
   margin: min(15px, 3vh) 0;
   padding: 12px 24px;
-  background: #333;
-  color: white;
+  background: #555; /* ライトモードでのボタン背景 */
+  color: white;     /* ライトモードでのボタン文字色 */
   border: none;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   transition: opacity 0.2s;
 }
-
 button:hover, .toggle-button:hover {
-  opacity: 0.9;
+  opacity: 0.8; /* 少し濃くするなどの調整 */
 }
-/* Digital Display Components */
-.digital-clock,
-.stopwatch-display,
-.timer-display {
-  font-family: monospace;
-  font-size: 2em;
-  margin: 20px 0;
-  padding: 10px 20px;
+
+body.inverted button,
+body.inverted .toggle-button { /* inverted (ダークモード) */
   background: #333;
-  border-radius: 5px;
   color: white;
 }
+body.inverted button:hover,
+body.inverted .toggle-button:hover {
+  opacity: 0.9;
+}
 
-body.inverted .digital-clock,
+
+/* Stopwatch & Timer Display (共通コンポーネントスタイルは components.css へ移行推奨) */
+.stopwatch-display, .timer-display { /* デフォルト (ライトモード) */
+  font-family: monospace;
+  font-size: 2.5em; /* style.css 内の重複定義を一つに */
+  margin: 20px 0;
+  padding: 20px 30px;
+  background: #f0f0f0;  /* ライトモードでの背景 */
+  color: #1a1a1a;       /* ライトモードでの文字色 */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  letter-spacing: 2px;
+  /* 下の重複した digital-clock に似たスタイルは削除または統合 */
+}
+
 body.inverted .stopwatch-display,
-body.inverted .timer-display {
-  background: #ccc;
-  color: black;
+body.inverted .timer-display { /* inverted (ダークモード) */
+  background: #333;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
