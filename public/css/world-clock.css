@@ -1,42 +1,56 @@
 /* public/css/world-clock.css */
 
-/* ... (既存の #world-clocks-container スタイルはそのまま) ... */
 #world-clocks-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* ここが重要 */
-  gap: 20px;
+  gap: 1vw; /* ビューポート幅に応じたgapで、より柔軟に */
   width: 100%;
-  max-width: 1200px; /* この値も列数に影響する可能性があります */
   margin-top: 20px;
+  padding: 1vw; /* コンテナにもビューポートに応じたパディング */
+  box-sizing: border-box;
+
+  /* デフォルト: 横6列。各列は利用可能なスペースを均等に分割 */
+  grid-template-columns: repeat(6, minmax(0, 1fr));
 }
+
+
 /* デフォルト (ライトモード) の .world-clock-item スタイル */
 .world-clock-item {
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 15px;
+  padding: 1.5vmin; /* アイテム内のパディングもビューポートの最小次元に応じて調整 */
   background: #f0f0f0;
   color: #1a1a1a;
   text-align: center;
   transition: box-shadow 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden; /* 内容がはみ出るのを防ぐ */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around; /* アイテム内の要素を均等配置 */
+  align-items: center; /* アイテム内の要素を中央揃え */
 }
 
 .world-clock-item h3 {
   margin-top: 0;
-  font-size: 1.2em;
+  font-size: clamp(0.75em, 2vmin, 1em); /* フォントサイズをレスポンシブに */
   color: #c28000;
-  margin-bottom: 10px;
+  margin-bottom: 0.5vmin;
+  white-space: nowrap; /* 都市名が長い場合に改行させない (必要に応じて) */
+  overflow: hidden;    /* はみ出た部分は隠す */
+  text-overflow: ellipsis; /* はみ出た部分を ... で表示 */
+  max-width: 100%;     /* 親要素の幅を超えないように */
 }
 
 .ah-time-display-main {
-  font-size: 1.8em;
+  font-size: clamp(0.9em, 2.5vmin, 1.3em); /* フォントサイズをレスポンシブに */
   font-weight: bold;
   color: #1a1a1a;
-  margin: 5px 0;
+  margin: 0.5vmin 0;
 }
 
 .normal-time-display-sub {
-  font-size: 0.9em;
+  font-size: clamp(0.7em, 1.8vmin, 0.8em); /* フォントサイズをレスポンシブに */
   color: #555;
+  margin-bottom: 0.5vmin;
 }
 
 /* --- AH状態の .world-clock-item の特別スタイル --- */
@@ -89,11 +103,54 @@
 }
 
 
+/* --- メディアクエリによる列数調整 --- */
+
+/* 縦長の画面、または一般的なタブレット幅程度まで (横6列ではアイテムが小さくなりすぎる場合) */
+@media (max-width: 1024px) { /* ブレークポイントは適宜調整 */
+  #world-clocks-container {
+    grid-template-columns: repeat(4, minmax(0, 1fr)); /* 横4列 */
+  }
+}
+
+/* スマートフォンの縦持ちなど、さらに狭い画面 */
+@media (max-width: 767px) {
+  #world-clocks-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 横3列 */
+    gap: 1.5vw;
+  }
+  .world-clock-item {
+    padding: 1vmin;
+  }
+}
+
+/* 非常に狭い画面 (例: 3列でも厳しい場合) */
+@media (max-width: 480px) {
+  #world-clocks-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 横2列 */
+    gap: 2vw;
+  }
+  /* 2列の場合、アイテム内のフォントや時計サイズをさらに調整することも検討 */
+  .world-clock-item h3 {
+    font-size: clamp(0.7em, 2.5vmin, 0.9em);
+  }
+  .ah-time-display-main {
+    font-size: clamp(0.8em, 3vmin, 1.1em);
+  }
+  .normal-time-display-sub {
+    font-size: clamp(0.65em, 2vmin, 0.75em);
+  }
+  .analog-clock-world {
+    width: clamp(40px, 12vmin, 60px);
+    height: clamp(40px, 12vmin, 60px);
+  }
+}
+
+
 /* --- デフォルトのアナログ時計のスタイル (body が inverted でない場合) --- */
 .analog-clock-world {
-  width: 100px;
-  height: 100px;
-  margin: 10px auto 0;
+  width: clamp(50px, 10vmin, 70px);  /* アナログ時計のサイズをレスポンシブに */
+  height: clamp(50px, 10vmin, 70px);
+  margin: 0.5vmin auto 0;
   display: block;
 }
 

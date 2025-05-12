@@ -37,7 +37,9 @@ Another Hour Clock is a unique web-based application that redefines your percept
 
 * **World Clock Page (`/pages/world-clock.html`):**
     * Displays a grid of 24 analog and digital clocks for different timezones, all operating on the unified AH time scale.
+    * **Layout**: Presents all 24 clocks in a fixed grid layout (e.g., 6 columns wide on larger screens, adjusting to fewer columns on narrower screens like tablets and smartphones) to ensure all clocks are visible for maximum impact.
     * Dynamically selects 24 distinct UTC offsets (from UTC-11 to UTC+12) at page load and assigns representative cities, considering current DST rules to ensure accurate real-time offsets.
+    * **User Timezone Highlight**: The city name corresponding to the user's detected local timezone is highlighted (e.g., displayed in red and bold text) for easy identification.
     * Each clock item displays:
         * City name (and country/region).
         * Digital AH time (calculated based on the unified 23-hour AH day cycle concept).
@@ -86,24 +88,24 @@ project/
 │   ├── admin.css            # Admin panel styling
 │   ├── admin.html           # Admin interface
 │   ├── admin.js             # Admin panel logic
-│   ├── clock-core.js        # Core clock calculation logic
+│   ├── clock-core.js        # Core clock calculation logic for main/world clocks
 │   ├── index.html           # Main clock interface
-│   ├── main.js              # Main application logic
-│   └── style.css            # Legacy global styles
+│   ├── main.js              # Main application logic for index.html
+│   └── style.css            # Legacy global styles (if any remaining, ideally merged)
 ├── src/                     # Server-side source code
 │   ├── routes/              # Express route handlers
-│   │   └── stopwatch.js     # Stopwatch API routes
+│   │   ├── stopwatch.js     # Stopwatch API routes
+│   │   └── timer.js         # Timer API routes (if any, or future use)
 │   └── shared/              # Shared utilities
-│       └── ah-time.js       # AH time conversion utilities
-├── .gitignore              # Git ignore configuration
-├── .replit                 # Replit configuration
-├── README.md               # Project documentation
-├── generated-icon.png      # Project icon
-├── index.js               # Legacy entry point
-├── package-lock.json      # Node.js dependency lock
-├── package.json           # Node.js project configuration
-├── server.js              # Express server
-└── settings.json          # Application settings
+│       └── ah-time.js       # Unified AH time conversion utilities
+├── .env                     # Environment variables (SESSION_SECRET, ADMIN_KEY) - Not in repo
+├── .env.example             # Example environment file
+├── .gitignore               # Git ignore configuration
+├── README.md                # Project documentation
+├── package-lock.json        # Node.js dependency lock
+├── package.json             # Node.js project configuration
+└── server.js                # Express server
+└── settings.json            # Application settings
 ```
 
 ## Getting Started
@@ -163,7 +165,8 @@ project/
 ### World Clock
 
 * Accessible via the "All Time Zone" button from the Main Clock page, or directly at `/pages/world-clock.html`.
-* Displays a grid of 24 clocks, each representing a distinct UTC offset, all operating on the unified AH scale.
+* Displays a grid of 24 clocks, each representing a distinct UTC offset, all operating on the unified AH scale. The layout aims to show all 24 clocks simultaneously on larger screens, adjusting to fewer columns on smaller screens while ensuring all clocks remain accessible via scrolling if necessary.
+* The user's own timezone is highlighted for quick reference.
 * Representative cities are dynamically chosen for each offset.
 * Each clock item shows the city, digital AH time, digital standard time, and an analog AH clock.
 * Clock items for timezones currently in their "Another Hour" will invert to a dark theme and have a visual effect.
@@ -190,7 +193,7 @@ All time-related features in this project (Main Clock, World Clock, Stopwatch, a
     * AH time runs approximately 4.17% faster than real time. This is achieved by defining 1 AH second as exactly **`23/24`** of a real second (which is approximately 0.95833 real seconds).
     * Equivalently, 1 real second corresponds to **`24/23`** AH seconds.
     * The `public/clock-core.js` file (for Main Clock and World Clock angular calculations) uses `SCALE_AH = 24/23`. This `SCALE_AH` represents the factor by which real time is multiplied to get AH time (e.g., `ah_ms = real_ms * SCALE_AH`).
-    * The `src/shared/ah-time.js` file (for Stopwatch and Timer millisecond conversions) defines `AH_SECOND_IN_REAL_SECONDS = 23/24`.
+    * The `src/shared/ah-time.js` file (for Stopwatch and Timer millisecond conversions) defines `AH_SECOND_IN_REAL_SECONDS = 23/24` (or an equivalent constant representing this ratio).
         * `toAhMillis(realMs)` calculates `realMs / AH_SECOND_IN_REAL_SECONDS` (which is mathematically equivalent to `realMs * (24/23)`).
         * `fromAhMillis(ahMs)` calculates `ahMs * AH_SECOND_IN_REAL_SECONDS`.
     * Thus, both systems achieve the same time scaling consistent with the 23-hour AH day concept.
@@ -228,21 +231,21 @@ We welcome contributions! Please see `CONTRIBUTING.md` (if you create one) for d
 
 The following outlines completed tasks and potential future improvements:
 
-**Completed for World Clock:**
-* [x] Display 24 clocks for distinct UTC offsets.
-* [x] Dynamically select representative cities considering DST.
+**Completed Features:**
+* [x] Display 24 clocks for distinct UTC offsets on World Clock page.
+* [x] Dynamically select representative cities considering DST for World Clock.
 * [x] Implement fully functional analog hands for each world clock.
 * [x] Implement individual dark mode + blinking for AH-active world clocks.
 * [x] Ensure World Clock page defaults to light theme.
-
-**Time Scale Unification:**
-* [x] Unified all AH time calculations across Main Clock, World Clock, Stopwatch, and Timer to use the `24/23` scaling factor (where 1 AH sec = `23/24` real sec $\approx$ 0.95833 real sec).
+* [x] Unified all AH time calculations across Main Clock, World Clock, Stopwatch, and Timer to use the `24/23` scaling factor (1 AH sec = `23/24` real sec $\approx$ 0.95833 real sec).
+* [x] World Clock: Default layout changed to a fixed grid (e.g., 6 columns, responsive) to display all 24 clocks.
+* [x] World Clock: User's local timezone city name is highlighted.
 
 **Enhancements & Future Ideas:**
 * [ ] **World Clock:** Display a global message when any of the 24 world clocks are in their "Another Hour."
-* [ ] **World Clock:** Highlight the clock item corresponding to the user's local timezone.
 * [ ] **World Clock:** Refine the visual style of AH-active clock items (e.g., color scheme, AH sector display).
 * [ ] **World Clock:** Allow user customization of displayed timezones or grid layout.
+* [ ] **World Clock:** (Low Priority) Option to toggle between fixed grid and auto-fit responsive layout.
 * [ ] **Stopwatch & Timer:** UI/UX enhancements and (optional) persistence of lap times/timer settings.
 * [ ] **General:** Internationalization (i18n) for UI text (e.g., English/Japanese).
 * [ ] **General:** Performance optimization, especially for rendering many clocks.
