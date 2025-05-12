@@ -1,5 +1,6 @@
 // public/js/timer-ui.js
 import { fromAhMillis } from '/shared/ah-time.js';
+import { toAhMillis } from '/shared/ah-time.js';
 
 const display = document.querySelector('.timer-display');
 const startBtn = document.getElementById('start');

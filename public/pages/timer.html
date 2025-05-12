@@ -1,11 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AH Timer</title>
-    <link rel="stylesheet" href="/style.css"> <link rel="stylesheet" href="/css/components.css"> <link rel="stylesheet" href="/css/timer.css"> 
+    <link rel="stylesheet" href="/style.css"> 
+    <link rel="stylesheet" href="/css/components.css"> 
+    <link rel="stylesheet" href="/css/timer.css"> 
 </head>
 <body>
   <div class="timer-input">
@@ -14,9 +15,10 @@
     <input type="number" id="seconds" placeholder="SS" min="0" max="59">
   </div>
   <div class="timer-display">00:00:00</div>
-  <button id="start">Start</button>
-  <button id="stop">Stop</button>
-  <button id="reset">Reset</button>
-  <script type="module" src="/js/timer-ui.js"></script>
+  <div class="controls"> 
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <button id="reset">Reset</button>
+  </div> <script type="module" src="/js/timer-ui.js"></script>
 </body>
 </html>

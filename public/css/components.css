@@ -104,3 +104,22 @@ body.inverted .timer-display {
   /* 共通ボタンスタイルを適用しつつ、必要ならここで微調整 */
   margin-bottom: 20px; /* 他の要素との間隔 */
 }
+
+
+.controls {
+  display: flex;
+  justify-content: center; /* ボタン群を中央に配置 */
+  gap: 10px;               /* ボタン間のスペース */
+  margin: 20px 0;          /* 上下のマージン */
+}
+
+/* .controls 内のボタンのスタイル */
+/* components.css のグローバルな button スタイルを継承しつつ、
+   必要に応じて .controls 内でのみ適用したいスタイルをここに記述します。 */
+.controls button {
+  /* グローバルな button スタイル (margin: 10px 5px;) を上書きまたは調整 */
+  margin: 0 10px; /* ボタンの上下マージンを0にし、左右マージンを10pxに設定 */
+  min-width: 80px; /* ボタンの最小幅を設定 */
+  /* padding: 10px 20px; はグローバルなbuttonスタイルで定義済みのため、
+     変更がなければ記述不要 */
+}

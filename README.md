@@ -1,6 +1,6 @@
 # Another Hour Clock
 
-Another Hour Clock is a unique web-based application that redefines your perception of time. It primarily features a conceptual clock operating on a 23-hour day, achieved by running time slightly faster and incorporating an "Another Hour" (AH) period (the real-time 23rd hour). This project also includes an advanced World Clock, AH-aware time tools (Stopwatch, Timer), and an Admin Panel for configuration. The entire site defaults to a light theme, with the main clock page visually transitioning to a dark theme during its AH period.
+Another Hour Clock is a unique web-based application that redefines your perception of time. It operates on a unified "Another Hour" (AH) time scale where time runs approximately 4.17% faster than real time (1 AH second = 23/24 real seconds, or approximately 0.95833 real seconds). This effectively fits a standard 24-hour day into a conceptual 23-AH-hour day. The main clock features a special "Another Hour" period during the real-time 23rd hour. The project includes an advanced World Clock, Stopwatch, Timer (all AH-aware and using this unified scale), and an Admin Panel for configuration.
 
 ## Table of Contents
 
@@ -29,28 +29,25 @@ Another Hour Clock is a unique web-based application that redefines your percept
 ## Features
 
 * **Main Analog & Digital Clock:**
-    * Displays time based on the "Another Hour" concept (a 23-hour AH day cycle within a 24-hour real-time day).
+    * Displays time based on the unified "Another Hour" concept (a 23-hour AH day cycle within a 24-hour real-time day, where 1 AH sec $\approx$ 0.95833 real sec).
     * SVG-based 12-hour analog dial with a highlighted "AH Sector" indicating the Another Hour period (real-time 23:00-00:00).
     * Toggleable digital display showing both AH time and standard local time.
     * Timezone selection dropdown for the main clock.
     * Visual theme inverts to dark mode during the selected timezone's AH period.
 
 * **World Clock Page (`/pages/world-clock.html`):**
-    * Displays a grid of 24 analog and digital clocks for different timezones.
+    * Displays a grid of 24 analog and digital clocks for different timezones, all operating on the unified AH time scale.
     * Dynamically selects 24 distinct UTC offsets (from UTC-11 to UTC+12) at page load and assigns representative cities, considering current DST rules to ensure accurate real-time offsets.
     * Each clock item displays:
         * City name (and country/region).
-        * Digital AH time (calculated based on the 23-hour cycle concept).
+        * Digital AH time (calculated based on the unified 23-hour AH day cycle concept).
         * Digital standard local time for that city.
         * Fully functional analog clock with hands correctly representing the AH time.
-    * Timezones currently in their "Another Hour" (local standard time 23:00-00:00) are visually distinguished:
-        * The specific clock item inverts to a dark theme.
-        * A subtle blinking/pulsing effect is applied to the item.
-    * The overall page theme remains light, regardless of individual clock AH statuses.
+    * Timezones currently in their "Another Hour" (local standard time 23:00-00:00) are visually distinguished.
 
-* **Time Tools (AH-Aware):**
-    * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in AH units, where 1 AH second = 0.96 real seconds (based on a 25-hour day equivalent).
-    * **Timer (`/pages/timer.html`):** Allows setting a countdown duration in AH units (also based on the 0.96 AH_FACTOR).
+* **Time Tools (AH-Aware - Unified Scale):**
+    * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in AH units, consistent with the main clock's scale (1 AH sec $\approx$ 0.95833 real sec).
+    * **Timer (`/pages/timer.html`):** Allows setting a countdown duration in AH units, consistent with the main clock's scale.
 
 * **Admin Panel (`/admin`):**
     * Password-protected panel to manage application settings.
@@ -58,8 +55,8 @@ Another Hour Clock is a unique web-based application that redefines your percept
     * Adjust display preferences (e.g., show/hide AH time, show/hide actual time on the main clock).
 
 * **Visual Theme:**
-    * The application defaults to a light theme (bright background, dark text).
-    * The Main Clock page inverts to a dark theme specifically when the selected timezone enters its "Another Hour" (23:00-00:00 local time).
+    * The application defaults to a light theme.
+    * The Main Clock page inverts to a dark theme specifically when the selected timezone enters its "Another Hour."
     * Individual clock items on the World Clock page invert to a dark theme and apply a visual effect when their respective timezone is in its AH period.
 
 ## Live Demo
@@ -133,12 +130,13 @@ project/
 ### Configuration
 
 1.  **Create a `.env` file:**
-    Copy the example environment file `.env.example` to `.env` and edit its values:
+    If an `.env.example` file exists, copy it to `.env`:
     ```bash
     cp .env.example .env
     ```
+    Otherwise, create a new `.env` file.
     Then, open `.env` in a text editor and set the following variables:
-    * `SESSION_SECRET`: A long, random string for session encryption.
+    * `SESSION_SECRET`: A long, random string for session encryption (e.g., generated using a password manager or online tool).
     * `ADMIN_KEY`: A password to access the admin panel at `/admin`.
 
 ### Running the Application
@@ -147,7 +145,7 @@ project/
     ```bash
     npm start
     ```
-    This command runs `node server.js`.
+    This command typically runs `node server.js`.
 
 2.  Open your web browser and navigate to `http://localhost:3000` (or the port specified in `server.js`).
 
@@ -156,76 +154,69 @@ project/
 ### Main Clock
 
 * Accessible at the root path (`/`).
-* Displays the primary "Another Hour" analog clock for the selected timezone.
+* Displays the primary "Another Hour" analog clock for the selected timezone, operating on the unified AH scale.
 * Use the dropdown menu to change the timezone.
 * Click "Toggle Digital Display" to show/hide numerical AH time and standard time.
-* The page theme will invert to dark mode if the selected timezone is in its "Another Hour" (23:00-00:00 local).
+* The page theme will invert to dark mode if the selected timezone is in its "Another Hour" (23:00-00:00 local real time).
 * Click the "All Time Zone" button to navigate to the World Clock page.
 
 ### World Clock
 
 * Accessible via the "All Time Zone" button from the Main Clock page, or directly at `/pages/world-clock.html`.
-* Displays a grid of 24 clocks, each representing a distinct UTC offset from UTC-11 to UTC+12.
-* Representative cities are dynamically chosen for each offset at page load, considering current DST.
+* Displays a grid of 24 clocks, each representing a distinct UTC offset, all operating on the unified AH scale.
+* Representative cities are dynamically chosen for each offset.
 * Each clock item shows the city, digital AH time, digital standard time, and an analog AH clock.
-* Clock items for timezones currently in their "Another Hour" (23:00-00:00 local standard time) will invert to a dark theme and have a blinking/pulsing visual effect.
+* Clock items for timezones currently in their "Another Hour" will invert to a dark theme and have a visual effect.
 
 ### Stopwatch and Timer
 
 * Accessible at `/pages/stopwatch.html` and `/pages/timer.html` respectively.
-* These tools operate using "AH seconds" where 1 AH second = 0.96 real seconds (based on a 25-hour day concept, distinct from the main clock's 23-hour cycle).
+* These tools operate using the unified "Another Hour" time scale, where 1 AH second is approximately 0.95833 real seconds (or 23/24 real seconds).
 
 ### Admin Panel
 
 * Accessible at `/admin`.
 * Login using the `ADMIN_KEY` defined in the `.env` file.
-* Allows management of timezones selectable for the main clock and other application settings (like showing/hiding AH or actual time on the main clock).
+* Allows management of timezones selectable for the main clock and other application settings.
 
 ## Technical Details
 
 ### Another Hour (AH) Time Calculation
 
-This project features two distinct "Another Hour" time concepts, each tailored to specific functionalities:
+All time-related features in this project (Main Clock, World Clock, Stopwatch, and Timer) operate on a **unified "Another Hour" (AH) time scale**.
 
-1.  **Main Clock & World Clock (23-Hour AH Day Cycle):**
-    * **File:** `public/clock-core.js`
-    * **Concept:** The standard 24-hour real day is conceptually transformed into a 23-hour "Another Hour" (AH) day.
-    * **Mechanism:**
-        * For the first 23 real hours of a day (00:00 to 22:59 real time), AH time runs approximately 4.17% faster than real time. This is achieved using `SCALE_AH = 24 / 23`.
-        * The real-time hour from 23:00 to 23:59 is designated as the special "Another Hour" period.
-    * **Digital Display during AH Period:** AH time is shown as `24:xx` (e.g., real time 23:30 might be AH 24:30).
-    * **Analog Display during AH Period:** On the 12-hour analog dial, this "Another Hour" is visually represented by the hands moving through the 00:00 to 00:59 segment as if it's the start of a new cycle, but distinct from the normal scaled time. The hands are driven by real minutes and seconds during this hour.
-    * **Usage:** This logic applies to the main clock on `index.html` and all individual clocks on the `world-clock.html` page.
-
-2.  **Stopwatch & Timer (25-AH-Hour Day Equivalent):**
-    * **File:** `src/shared/ah-time.js`
-    * **Concept:** Time is measured in "AH units" where an AH second is shorter than a real second, leading to a 25-AH-hour equivalent within a 24-real-hour period.
-    * **Mechanism:**
-        * 1 AH second = 0.96 real seconds. This is defined by `AH_FACTOR = 0.96`.
-        * This means AH time for these tools runs approximately 4.17% faster than real time (`1 / 0.96 \approx 1.04167`).
-        * Consequently, 25 AH hours will elapse in 24 real hours (`24 real hours * (1 AH hour / 0.96 real hours) = 25 AH hours`).
-    * **Functions:** `toAhMillis()` converts real-time milliseconds to AH milliseconds, and `fromAhMillis()` converts AH milliseconds back to real-time.
-    * **Usage:** This calculation is exclusively used for the Stopwatch (`stopwatch.html`) and Timer (`timer.html`) utilities to provide a distinct time measurement experience.
+* **Core Concept**: The standard 24-hour real day is conceptually transformed into a 23-hour "Another Hour" (AH) day.
+* **Mechanism**:
+    * AH time runs approximately 4.17% faster than real time. This is achieved by defining 1 AH second as exactly **`23/24`** of a real second (which is approximately 0.95833 real seconds).
+    * Equivalently, 1 real second corresponds to **`24/23`** AH seconds.
+    * The `public/clock-core.js` file (for Main Clock and World Clock angular calculations) uses `SCALE_AH = 24/23`. This `SCALE_AH` represents the factor by which real time is multiplied to get AH time (e.g., `ah_ms = real_ms * SCALE_AH`).
+    * The `src/shared/ah-time.js` file (for Stopwatch and Timer millisecond conversions) defines `AH_SECOND_IN_REAL_SECONDS = 23/24`.
+        * `toAhMillis(realMs)` calculates `realMs / AH_SECOND_IN_REAL_SECONDS` (which is mathematically equivalent to `realMs * (24/23)`).
+        * `fromAhMillis(ahMs)` calculates `ahMs * AH_SECOND_IN_REAL_SECONDS`.
+    * Thus, both systems achieve the same time scaling consistent with the 23-hour AH day concept.
+* **"Another Hour" Period**:
+    * For the Main Clock and World Clock, the real-time period from 23:00:00 to 23:59:59.999 in the *selected local timezone* is designated as the special "Another Hour."
+    * During this period, while the underlying AH time continues to scale based on the `24/23` factor, the digital display for AH hours is often presented as `24:xx` (e.g., real time 23:30 might be displayed as AH 24:30). The analog clock hands also have specific behavior to represent this hour appropriately on a 12-hour dial.
+    * The Stopwatch and Timer, however, simply use the continuous scaled AH time derived from the `24/23` factor (or equivalently, the `23/24` definition of an AH second) without any special periodization for the "Another Hour." They measure durations in these consistent AH units.
 
 ### Frontend
 
 * Built with HTML5, CSS3, and Vanilla JavaScript (ES6 Modules).
 * **Moment.js** and **Moment Timezone** are used for robust date, time, and timezone manipulations.
-* SVG (Scalable Vector Graphics) is used for rendering all analog clock faces and hands, allowing for smooth animations and scalability.
-* Client-side logic handles all time calculations, clock updates, and dynamic DOM manipulations.
+* SVG (Scalable Vector Graphics) is used for rendering all analog clock faces and hands.
+* Client-side logic handles time calculations, clock updates, and dynamic DOM manipulations.
 
 ### Backend
 
 * Node.js with the Express.js framework.
-* Serves static frontend files from the `public` directory.
-* Provides a simple API endpoint for the Stopwatch (`/api/stopwatch/elapsed`).
-* Manages application settings (`settings.json`) via API endpoints (`/api/settings`) with admin authentication.
-* Uses `express-session` for session management (though currently minimal in its direct use for end-users beyond potential admin sessioning).
+* Serves static frontend files.
+* Provides API endpoints for settings and potentially for time tools if server-side logic were needed.
+* Uses `express-session` for session management (primarily for admin panel access).
 
 ### Theme
 
 * The application defaults to a light visual theme.
-* The main clock page dynamically switches to a dark theme when the displayed time enters the "Another Hour" (23:00 local time).
+* The Main Clock page dynamically switches to a dark theme when the displayed time for the selected timezone enters its "Another Hour" (23:00 local real time).
 * On the World Clock page, individual clock items switch to a dark theme and apply a visual effect when their respective timezone is in its "Another Hour."
 
 ## Contributing
@@ -244,6 +235,9 @@ The following outlines completed tasks and potential future improvements:
 * [x] Implement individual dark mode + blinking for AH-active world clocks.
 * [x] Ensure World Clock page defaults to light theme.
 
+**Time Scale Unification:**
+* [x] Unified all AH time calculations across Main Clock, World Clock, Stopwatch, and Timer to use the `24/23` scaling factor (where 1 AH sec = `23/24` real sec $\approx$ 0.95833 real sec).
+
 **Enhancements & Future Ideas:**
 * [ ] **World Clock:** Display a global message when any of the 24 world clocks are in their "Another Hour."
 * [ ] **World Clock:** Highlight the clock item corresponding to the user's local timezone.
@@ -254,7 +248,6 @@ The following outlines completed tasks and potential future improvements:
 * [ ] **General:** Performance optimization, especially for rendering many clocks.
 * [ ] **General:** Consider replacing Moment.js with a lighter library like Day.js (with necessary plugins) to reduce bundle size.
 * [ ] **General:** Progressive Web App (PWA) features for offline caching and "installability."
-* [ ] **General:** Further refine or unify the two "Another Hour" concepts, or clarify their distinct applications more prominently in the UI if they remain separate.
 * **Stretch Goals:**
     * [ ] watchOS companion app.
     * [ ] Customizable themes/skins for the entire application.

@@ -1,6 +1,54 @@
+.stopwatch-input {
+  margin: 20px 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.stopwatch-input input {
+  width: 60px;
+  padding: 8px;
+  font-size: 1.2em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.stopwatch-input input:focus {
+  outline: none;
+  border-color: #666;
+}
+.stopwatch-input {
+  margin: 20px 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.stopwatch-input input {
+  width: 60px;
+  padding: 8px;
+  font-size: 1.2em;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+}
+.stopwatch-input input:focus {
+  outline: none;
+  border-color: #666;
+}
+.timer-display {
+  font-family: monospace;
+  font-size: 2em;
+  margin: 20px 0;
+}
+
+
+
+
+
 
 /* Additional styles for stopwatch and timer */
-.stopwatch-display, .timer-display {
+/* .stopwatch-display, .timer-display {
   font-family: monospace;
   font-size: 2em;
   margin: 20px 0;
@@ -13,15 +61,6 @@ body.inverted .stopwatch-display,
 body.inverted .timer-display {
   background: #ccc;
 }
-
-.controls {
-  display: flex;
-  gap: 10px;
-  margin: 20px 0;
-}
-
-.controls button {
-  min-width: 80px;
-  margin: 0 10px;
-  padding: 10px 20px;
-}
+ */
+/* .controls と .controls button のスタイルは components.css に移動しました。 */
+/* stopwatch.html 固有のスタイルがあればここに記述します。 */
