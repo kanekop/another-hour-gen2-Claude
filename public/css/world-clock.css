@@ -132,6 +132,22 @@
   fill: #333;
 }
 
+/* ユーザーのローカルタイムゾーンの都市名のスタイル */
+.world-clock-item h3.user-local-timezone-city {
+  color: #D32F2F; /* 例: やや暗めの赤色 */
+  font-weight: bold;
+  /* 必要に応じて他のスタイルも追加できます */
+  /* 例: text-decoration: underline; */
+  /* 例: background-color: rgba(255, 0, 0, 0.1); padding: 2px 4px; border-radius: 3px; */
+}
+
+/* AH状態で背景が暗くなっている場合のローカルタイムゾーン都市名のスタイル */
+/* blinking-ah クラスを持つ親要素内の .user-local-timezone-city に適用 */
+.world-clock-item.blinking-ah h3.user-local-timezone-city {
+  color: #FF5252; /* 例: 明るめの赤色 (暗い背景で目立つように) */
+  /* font-weight: bold; は通常時と共通であれば再指定不要 */
+}
+
 /* body.inverted 時のスタイルは、もしサイト全体でダークモード切り替えを残す場合に必要になりますが、 */
 /* World Clockページでは body.inverted を操作しないため、以下のブロックは World Clockページでは直接効きません。 */
 /* ただし、他のページ (main clockなど) とCSSを共通化している部分がある場合は残しておきます。 */

@@ -5,6 +5,7 @@ import { SCALE_AH, getAngles } from '../clock-core.js';
 import { cityCandidatesByOffset } from './city-timezones.js'; 
 
 const container = document.getElementById('world-clocks-container');
+const userLocalTimezone = moment.tz.guess(); // ★ユーザーのローカルタイムゾーンを取得
 
 // ターゲットとするUTCオフセット（分単位）
 const targetUtcOffsetsInMinutes = [
@@ -96,6 +97,11 @@ function createClockElement(timezoneData) {
 
   const cityName = document.createElement('h3');
   cityName.textContent = timezoneData.city;
+
+  // ★ユーザーのローカルタイムゾーンと一致するか確認し、クラスを付与
+  if (timezoneData.timezone === userLocalTimezone) {
+    cityName.classList.add('user-local-timezone-city');
+  }
 
   const ahTimeDisplay = document.createElement('div');
   ahTimeDisplay.classList.add('ah-time-display-main');
