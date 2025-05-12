@@ -1,45 +1,37 @@
+// public/js/stopwatch-ui.js
+import { toAhMillis } from '/shared/ah-time.js';
 
 const display = document.querySelector('.stopwatch-display');
 const startBtn = document.getElementById('start');
 const stopBtn = document.getElementById('stop');
 const resetBtn = document.getElementById('reset');
 
-let startTime = null;       // real epoch when started (or resumed)
-let paused    = 0;          // accumulated real ms while paused
+let startTime = null;
+let paused = 0;
 let intervalId = null;
 
 function updateDisplay(ahMillis) {
   const seconds = Math.floor(ahMillis / 1000);
-  const tenths = Math.floor((ahMillis % 1000) / 100);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
-  
-  display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}.${tenths}`;
+
+  display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
 }
-
-
-import { toAhMillis } from '/shared/ah-time.js';
 
 function update() {
   const realElapsed = Date.now() - startTime;
   updateDisplay(toAhMillis(realElapsed));
 }
 
-
-
-
-
 startBtn.addEventListener('click', () => {
   if (!intervalId) {
-    startTime  = Date.now() - paused;
-    intervalId = setInterval(update, 80);   // 12.5 fps で十分滑らか
+    startTime = Date.now();
+    intervalId = setInterval(update, 100);
   }
-  
 });
 
-
 stopBtn.addEventListener('click', () => {
-  paused    = Date.now() - startTime;
+  paused = Date.now() - startTime;
   clearInterval(intervalId);
   intervalId = null;
 });
@@ -47,7 +39,7 @@ stopBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => {
   clearInterval(intervalId);
   intervalId = null;
-  startTime  = null;
-  paused     = 0;
+  startTime = null;
+  paused = 0;
   updateDisplay(0);
 });

@@ -1,4 +1,4 @@
-
+// public/js/timer-ui.js
 import { fromAhMillis } from '/shared/ah-time.js';
 
 const display = document.querySelector('.timer-display');
@@ -24,14 +24,15 @@ function start() {
   const hours = parseInt(hoursInput.value) || 0;
   const minutes = parseInt(minutesInput.value) || 0;
   const seconds = parseInt(secondsInput.value) || 0;
-  
+
   const ahMillis = (hours * 3600 + minutes * 60 + seconds) * 1000;
   const realMillis = fromAhMillis(ahMillis);
-  
+
   endTime = Date.now() + realMillis;
   update();
   intervalId = setInterval(update, 100);
 }
+
 
 function update() {
   remaining = Math.max(0, endTime - Date.now());
@@ -39,14 +40,14 @@ function update() {
     clearInterval(intervalId);
     alert('Time is up!');
   }
-  updateDisplay(remaining / 0.96);   // AH 秒で表示
-
+  updateDisplay(toAhMillis(remaining));  // AH時間に変換して表示
 }
 
 startBtn.addEventListener('click', start);
 stopBtn.addEventListener('click', () => {
   clearInterval(intervalId);
   remaining = Math.max(0, endTime - Date.now());
+  updateDisplay(remaining);
 });
 
 resetBtn.addEventListener('click', () => {
