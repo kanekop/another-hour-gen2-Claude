@@ -63,7 +63,7 @@ function updateMainClockCityName(timezoneName) {
     }
 }
 
-// 目盛り描画 (変更なし)
+// 目盛り描画
 function drawTicks() {
     ticks.innerHTML = '';
     for (let i = 0; i < 60; i++) {
@@ -73,7 +73,8 @@ function drawTicks() {
         const radius = 95;
         const length = isMajor ? 10 : 5;
 
-        line.setAttribute('class', `tick ${isMajor ? 'major' : ''}`);
+        // Add common classes
+        line.setAttribute('class', `tick common-clock-tick ${isMajor ? 'major common-clock-tick-major' : ''}`);
         line.setAttribute('x1', 100 + Math.sin(angle * Math.PI / 180) * (radius - length));
         line.setAttribute('y1', 100 - Math.cos(angle * Math.PI / 180) * (radius - length));
         line.setAttribute('x2', 100 + Math.sin(angle * Math.PI / 180) * radius);
@@ -98,7 +99,6 @@ function drawAhSector() {
 function updateClock() {
     const currentSelectedTimezone = timezoneSelect.value;
     if (!currentSelectedTimezone) {
-        // console.warn("No timezone selected, skipping update.");
         requestAnimationFrame(updateClock);
         return;
     }
@@ -117,84 +117,77 @@ function updateClock() {
     const mainAhTimeDiv = document.getElementById('main-ah-time');
     const mainNormalTimeDiv = document.getElementById('main-normal-time');
 
-    if (toggleCheckbox && toggleCheckbox.checked) {
-        digitalClockElement.classList.remove('hidden');
-        let digitalOutput = '';
+    // #digital-clock が表示されているか（visually-hidden クラスがないか）を確認
+    const isDigitalClockVisible = digitalClockElement && !digitalClockElement.classList.contains('visually-hidden');
+
+    if (isDigitalClockVisible) {
         const actualTimeFormatted = currentTime.format('HH:mm:ss');
         const ahTimeFormatted = `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
 
         if (settings.showAHTime && mainAhTimeDiv) {
             mainAhTimeDiv.textContent = `AH: ${ahTimeFormatted}`;
-            mainAhTimeDiv.classList.remove('hidden');
+            mainAhTimeDiv.style.display = 'block'; // 表示
         } else if (mainAhTimeDiv) {
-            mainAhTimeDiv.classList.add('hidden');
+            mainAhTimeDiv.style.display = 'none'; // 非表示
         }
 
         if (settings.showActualTime && mainNormalTimeDiv) {
             mainNormalTimeDiv.textContent = `Actual: ${actualTimeFormatted}`;
-            mainNormalTimeDiv.classList.remove('hidden');
+            mainNormalTimeDiv.style.display = 'block'; // 表示
         } else if (mainNormalTimeDiv) {
-            mainNormalTimeDiv.classList.add('hidden');
+            mainNormalTimeDiv.style.display = 'none'; // 非表示
         }
-
-
-    } else {
-        if (mainAhTimeDiv) mainAhTimeDiv.classList.add('hidden');
-        if (mainNormalTimeDiv) mainNormalTimeDiv.classList.add('hidden');
     }
+    // #digital-clock 自体が非表示の場合は、中の mainAhTimeDiv や mainNormalTimeDiv の
+    // textContent を更新する必要も、個別に表示/非表示を切り替える必要もありません。
+    // CSS (.visually-hidden) が #digital-clock 全体を非表示にしているためです。
 
     requestAnimationFrame(updateClock);
 }
 
+
 // --- 初期設定読み込みとイベントリスナー ---
 fetch('/api/settings')
-    .then(res => res.json())
-    .then(data => {
-        settings.showAHTime = data.showAHTime !== undefined ? data.showAHTime : true;
-        settings.showActualTime = data.showActualTime !== undefined ? data.showActualTime : true;
+.then(res => res.json())
+.then(data => {
+    settings.showAHTime = data.showAHTime !== undefined ? data.showAHTime : true;
+    settings.showActualTime = data.showActualTime !== undefined ? data.showActualTime : true;
 
-        initializeTimezoneSelect();
-        drawTicks();
-        drawAhSector();
+    initializeTimezoneSelect();
+    drawTicks();
+    drawAhSector();
 
-        // トグルスイッチの初期状態とイベントリスナー
-        if (toggleCheckbox) {
-            // settings.json に基づいてメインクロックのAH/Actual表示チェックボックスの初期状態を設定
-            // ここでは、どちらか一方でも表示設定がONならチェックを入れる仕様とします
-            const shouldBeCheckedByDefault = settings.showAHTime || settings.showActualTime;
-            toggleCheckbox.checked = shouldBeCheckedByDefault;
+    if (toggleCheckbox) {
+        const shouldBeCheckedByDefault = settings.showAHTime || settings.showActualTime;
+        toggleCheckbox.checked = shouldBeCheckedByDefault;
 
-            // main-ah-time と main-normal-time の初期表示/非表示
-            const mainAhTimeDiv = document.getElementById('main-ah-time');
-            const mainNormalTimeDiv = document.getElementById('main-normal-time');
-
-            if (mainAhTimeDiv) mainAhTimeDiv.classList.toggle('hidden', !(settings.showAHTime && shouldBeCheckedByDefault));
-            if (mainNormalTimeDiv) mainNormalTimeDiv.classList.toggle('hidden', !(settings.showActualTime && shouldBeCheckedByDefault));
-            if (digitalClockElement) digitalClockElement.classList.toggle('hidden', !shouldBeCheckedByDefault);
-
-
-            toggleCheckbox.addEventListener('change', () => {
-                const isChecked = toggleCheckbox.checked;
-                if (digitalClockElement) digitalClockElement.classList.toggle('hidden', !isChecked);
-                if (mainAhTimeDiv) mainAhTimeDiv.classList.toggle('hidden', !(settings.showAHTime && isChecked));
-                if (mainNormalTimeDiv) mainNormalTimeDiv.classList.toggle('hidden', !(settings.showActualTime && isChecked));
-                // updateClock(); // 表示内容を即時更新するために呼び出し
-            });
+        // #digital-clock の初期表示状態を設定
+        if (digitalClockElement) {
+            digitalClockElement.classList.toggle('visually-hidden', !shouldBeCheckedByDefault);
         }
-        updateClock(); // 初期描画とループ開始
-    })
-    .catch(error => {
-        console.error("Failed to load settings, using defaults:", error);
-        initializeTimezoneSelect();
-        drawTicks();
-        drawAhSector();
-        if (toggleCheckbox) { // フォールバックの場合もトグルは有効にしておく
-            toggleCheckbox.checked = true; // デフォルトでON
-            toggleCheckbox.dispatchEvent(new Event('change')); // 念のためchangeイベントを発火
-        }
-        updateClock();
-    });
 
+        toggleCheckbox.addEventListener('change', () => {
+            const isChecked = toggleCheckbox.checked;
+            if (digitalClockElement) {
+                digitalClockElement.classList.toggle('visually-hidden', !isChecked);
+            }
+            // updateClock() を呼ぶ必要はありません。次のフレームで自動更新されます。
+        });
+    }
+    updateClock(); // 初期描画とループ開始
+})
+.catch(error => {
+    console.error("Failed to load settings, using defaults:", error);
+    initializeTimezoneSelect();
+    drawTicks();
+    drawAhSector();
+    if (toggleCheckbox) {
+        toggleCheckbox.checked = true; // デフォルトでON
+        if (digitalClockElement) digitalClockElement.classList.remove('visually-hidden'); // 表示状態にする
+        toggleCheckbox.dispatchEvent(new Event('change'));
+    }
+    updateClock();
+});
 
 timezoneSelect.addEventListener('change', (event) => {
     selectedTimezone = event.target.value;

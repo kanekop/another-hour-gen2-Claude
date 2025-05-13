@@ -2,231 +2,140 @@
 
 #world-clocks-container {
   display: grid;
-  gap: 1vw; /* ビューポート幅に応じたgapで、より柔軟に */
+  gap: 1vw;
   width: 100%;
   margin-top: 20px;
-  padding: 1vw; /* コンテナにもビューポートに応じたパディング */
+  padding: 1vw;
   box-sizing: border-box;
-
-  /* デフォルト: 横6列。各列は利用可能なスペースを均等に分割 */
   grid-template-columns: repeat(6, minmax(0, 1fr));
 }
 
-
-/* デフォルト (ライトモード) の .world-clock-item スタイル */
 .world-clock-item {
-  border: 1px solid #ccc;
+  border: 1px solid #ccc; /* Light mode border */
   border-radius: 8px;
-  padding: 1.5vmin; /* アイテム内のパディングもビューポートの最小次元に応じて調整 */
-  background: #f0f0f0;
-  color: #1a1a1a;
+  padding: 1.5vmin;
+  background: #f0f0f0; /* Light mode background */
+  color: #1a1a1a; /* Light mode text */
   text-align: center;
   transition: box-shadow 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease;
-  overflow: hidden; /* 内容がはみ出るのを防ぐ */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-around; /* アイテム内の要素を均等配置 */
-  align-items: center; /* アイテム内の要素を中央揃え */
+  justify-content: space-around;
+  align-items: center;
 }
 
 .world-clock-item h3 {
   margin-top: 0;
-  font-size: clamp(0.75em, 2vmin, 1em); /* フォントサイズをレスポンシブに */
-  color: #c28000;
-  margin-bottom: 0.5vmin;
-  white-space: nowrap; /* 都市名が長い場合に改行させない (必要に応じて) */
-  overflow: hidden;    /* はみ出た部分は隠す */
-  text-overflow: ellipsis; /* はみ出た部分を ... で表示 */
-  max-width: 100%;     /* 親要素の幅を超えないように */
-}
-
-.ah-time-display-main {
-  font-size: clamp(0.9em, 2.5vmin, 1.3em); /* フォントサイズをレスポンシブに */
-  font-weight: bold;
-  color: #1a1a1a;
-  margin: 0.5vmin 0;
-  white-space: nowrap; /* ★改行防止のため、ベーススタイルに nowrap を追加 */
-}
-
-.normal-time-display-sub {
-  font-size: clamp(0.7em, 1.8vmin, 0.8em); /* フォントサイズをレスポンシブに */
-  color: #555;
+  font-size: clamp(0.75em, 2vmin, 1em);
+  font-weight: bold; /* Moved from user-local-timezone-city to apply to all city names by default if desired */
   margin-bottom: 0.5vmin;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
+/* Default city name color (light theme) */
+.world-clock-item:not(.blinking-ah) h3 {
+  color: #c28000;
+}
+/* City name color for blinking (dark theme) items */
+.world-clock-item.blinking-ah h3 {
+  color: #ffc107;
+}
+
+
+/* AH/Normal time display font sizes for world clock items */
+.world-clock-item .ah-time-display-main {
+  font-size: clamp(0.9em, 2.5vmin, 1.3em);
+  /* Common text colors handled by components.css */
+}
+.world-clock-item .normal-time-display-sub {
+  font-size: clamp(0.7em, 1.8vmin, 0.8em);
+  /* Common text colors handled by components.css */
+}
+
 
 /* --- AH状態の .world-clock-item の特別スタイル --- */
-/* これが Fernando de Noronha のようなAH時間帯のアイテムに適用される */
 .world-clock-item.blinking-ah {
-  background: #222;     /* ★ダークモードの背景色 */
-  border-color: #444;   /* ★ダークモードの境界線色 */
-  color: white;          /* ★ダークモードの基本文字色 */
-  animation: avanzado-ah-blink 2s ease-in-out infinite; /* ★新しいアニメーション名 (後述) */
+  background: #222; /* Dark mode background for item */
+  border-color: #444; /* Dark mode border for item */
+  color: white; /* Dark mode text for item */
+  animation: avanzado-ah-blink 2s ease-in-out infinite;
 }
+/* Styles for clock parts within .blinking-ah are now mostly handled by .common-clock-* classes in components.css */
+/* We only need specific overrides if components.css doesn't cover it or if .blinking-ah needs different dark theme than body.inverted */
 
-.world-clock-item.blinking-ah h3 {
-  color: #ffc107;     /* ダークモード時の都市名の色 (メインクロックのinverted時のah-sectorに近い黄色) */
-}
+/* .world-clock-item.blinking-ah h3 - color handled above */
+/* .world-clock-item.blinking-ah .ah-time-display-main - color handled by components.css */
+/* .world-clock-item.blinking-ah .normal-time-display-sub - color handled by components.css */
 
-.world-clock-item.blinking-ah .ah-time-display-main {
-  color: white;          /* ダークモード時のAH時間の色 */
-}
-
-.world-clock-item.blinking-ah .normal-time-display-sub {
-  color: #aaa;          /* ダークモード時の通常時間の色 */
-}
-
-/* AH状態のアイテム内のアナログ時計のスタイル */
+/* Analog clock styles within blinking item (if different from standard dark theme in components.css) */
 .world-clock-item.blinking-ah .analog-face-world {
-  fill: #333;           /* ダークモードの盤面 */
-  stroke: #555;         /* ダークモードの盤面枠線 */
+  fill: #333; /* Slightly different dark face for items */
+  stroke: #555;
 }
-.world-clock-item.blinking-ah .analog-ticks-world line {
-    stroke: #777;       /* ダークモードの目盛り */
-}
-.world-clock-item.blinking-ah .analog-hand-world.hour-world,
-.world-clock-item.blinking-ah .analog-hand-world.minute-world {
-  stroke: #e0e0e0;     /* ダークモードの時針・分針 */
-}
-.world-clock-item.blinking-ah .analog-hand-world.second-world {
-  stroke: #ff6b6b;     /* ダークモードの秒針 */
-}
-.world-clock-item.blinking-ah .analog-center-world {
-  fill: #e0e0e0;       /* ダークモードの中央ドット */
-}
-/* --- AH状態の .world-clock-item の特別スタイル END --- */
+/* Ticks, Hands, Center dot for .blinking-ah items should now pick up common dark styles from components.css */
 
 
-/* 点滅アニメーションの定義 (名前を変更して、opacity以外の効果も考慮できるように) */
 @keyframes avanzado-ah-blink {
   0%   { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); opacity: 1; }
-  50%  { box-shadow: 0 0 15px rgba(255, 193, 7, 0.7); opacity: 0.7; } /* 少し明るく、影も強調 */
+  50%  { box-shadow: 0 0 15px rgba(255, 193, 7, 0.7); opacity: 0.7; }
   100% { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); opacity: 1; }
 }
 
-
-/* --- メディアクエリによる列数調整 --- */
-/* ★新しいメディアクエリ: PCで幅を狭めたとき、6列を維持しつつAH時間の改行を防ぐための調整 */
-/* 例: ウィンドウ幅が1025pxから、元の4列になるブレークポイント(1024px)の直前まで */
-/* この値はご自身で特定した X と Y の値に置き換えてください */
-@media (min-width: 1025px) and (max-width: 1050px) { /* 仮のブレークポイント例: 1200pxまでは大きなフォント */
-                                                  /* 1025px～1199pxの間で調整が必要な場合 */
-  .ah-time-display-main {
-    font-size: clamp(0.8em, 2.2vmin, 1.1em); /* 例: 少しフォントを小さくする */
-    /* 他の要素も必要に応じて微調整 */
-  }
-}
-/* さらに細かい段階が必要な場合は、このようなメディアクエリを追加できます */
-/* @media (min-width: Ypx) and (max-width: X-1px) { ... } */
-
-
-/* 縦長の画面、または一般的なタブレット幅程度まで (横6列ではアイテムが小さくなりすぎる場合) */
-@media (max-width: 1024px) { /* ブレークポイントは適宜調整 */
+/* --- Media Queries for column adjustment --- */
+@media (max-width: 1024px) {
   #world-clocks-container {
-    grid-template-columns: repeat(4, minmax(0, 1fr)); /* 横4列 */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
-
-/* スマートフォンの縦持ちなど、さらに狭い画面 */
 @media (max-width: 767px) {
   #world-clocks-container {
-    grid-template-columns: repeat(3, minmax(0, 1fr)); /* 横3列 */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5vw;
   }
-  .world-clock-item {
-    padding: 1vmin;
-  }
+  .world-clock-item { padding: 1vmin; }
 }
-
-/* 非常に狭い画面 (例: 3列でも厳しい場合) */
 @media (max-width: 480px) {
   #world-clocks-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 横2列 */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 2vw;
   }
-  /* 2列の場合、アイテム内のフォントや時計サイズをさらに調整することも検討 */
-  .world-clock-item h3 {
-    font-size: clamp(0.7em, 2.5vmin, 0.9em);
-  }
-  .ah-time-display-main {
-    font-size: clamp(0.8em, 3vmin, 1.1em);
-  }
-  .normal-time-display-sub {
-    font-size: clamp(0.65em, 2vmin, 0.75em);
-  }
-  .analog-clock-world {
+  .world-clock-item h3 { font-size: clamp(0.7em, 2.5vmin, 0.9em); }
+  .world-clock-item .ah-time-display-main { font-size: clamp(0.8em, 3vmin, 1.1em); }
+  .world-clock-item .normal-time-display-sub { font-size: clamp(0.65em, 2vmin, 0.75em); }
+  .analog-clock-world { /* Size specific to world clock items */
     width: clamp(40px, 12vmin, 60px);
     height: clamp(40px, 12vmin, 60px);
   }
 }
 
 
-/* --- デフォルトのアナログ時計のスタイル (body が inverted でない場合) --- */
-.analog-clock-world {
-  width: clamp(50px, 10vmin, 70px);  /* アナログ時計のサイズをレスポンシブに */
+/* --- Default analog clock styles for world clock (sizing and minor adjustments) --- */
+.analog-clock-world { /* Container for each world clock SVG */
+  width: clamp(50px, 10vmin, 70px);
   height: clamp(50px, 10vmin, 70px);
   margin: 0.5vmin auto 0;
   display: block;
 }
+/* Basic face, hands, ticks, center styles are now in components.css via common classes */
+/* .analog-clock-world .analog-face-world { ... } */ /* REMOVE */
+/* .analog-clock-world .analog-ticks-world line { ... } */ /* REMOVE if covered by common-clock-tick-* */
+/* .analog-clock-world .analog-hand-world { ... } */ /* REMOVE */
+/* .analog-clock-world .analog-hand-world.hour-world { ... } */ /* REMOVE */
+/* .analog-clock-world .analog-hand-world.minute-world { ... } */ /* REMOVE */
+/* .analog-clock-world .analog-hand-world.second-world { ... } */ /* REMOVE */
+/* .analog-clock-world .analog-center-world { ... } */ /* REMOVE */
 
-.analog-clock-world .analog-face-world {
-  fill: #ddd;
-  stroke: #bbb;
-  stroke-width: 2;
-}
 
-.analog-clock-world .analog-ticks-world line {
-    stroke: #888;
-    stroke-width: 2;
-}
-
-.analog-clock-world .analog-hand-world {
-  stroke-linecap: round;
-  transform-origin: 100px 100px;
-}
-
-.analog-clock-world .analog-hand-world.hour-world {
-  stroke: #333;
-  stroke-width: 6;
-}
-
-.analog-clock-world .analog-hand-world.minute-world {
-  stroke: #333;
-  stroke-width: 4;
-}
-
-.analog-clock-world .analog-hand-world.second-world {
-  stroke: #c00000;
-  stroke-width: 2;
-}
-
-.analog-clock-world .analog-center-world {
-  fill: #333;
-}
-
-/* ユーザーのローカルタイムゾーンの都市名のスタイル */
+/* User's local timezone city name highlight */
 .world-clock-item h3.user-local-timezone-city {
-  color: #D32F2F; /* 例: やや暗めの赤色 */
-  font-weight: bold;
-  /* 必要に応じて他のスタイルも追加できます */
-  /* 例: text-decoration: underline; */
-  /* 例: background-color: rgba(255, 0, 0, 0.1); padding: 2px 4px; border-radius: 3px; */
+  font-weight: bold; /* Ensure boldness */
 }
-
-/* AH状態で背景が暗くなっている場合のローカルタイムゾーン都市名のスタイル */
-/* blinking-ah クラスを持つ親要素内の .user-local-timezone-city に適用 */
+.world-clock-item:not(.blinking-ah) h3.user-local-timezone-city {
+  color: #D32F2F; /* Red for light theme */
+}
 .world-clock-item.blinking-ah h3.user-local-timezone-city {
-  color: #FF5252; /* 例: 明るめの赤色 (暗い背景で目立つように) */
-  /* font-weight: bold; は通常時と共通であれば再指定不要 */
+  color: #FF5252; /* Brighter red for dark theme */
 }
-
-/* body.inverted 時のスタイルは、もしサイト全体でダークモード切り替えを残す場合に必要になりますが、 */
-/* World Clockページでは body.inverted を操作しないため、以下のブロックは World Clockページでは直接効きません。 */
-/* ただし、他のページ (main clockなど) とCSSを共通化している部分がある場合は残しておきます。 */
-/* もし World Clock専用のCSSであれば、body.inverted を前提としたスタイルは不要になるかもしれません。 */
-/* 今回は、AHアイテムの反転を .blinking-ah クラスで直接制御するため、 */
-/* body.inverted に依存しない形にしています。 */
-
-/* body.inverted .world-clock-item { ... } などのブロックは、 */
-/* 今回の .world-clock-item.blinking-ah で上書きされるか、 */
-/* あるいは World Clockページでは body.inverted にならないため影響しません。 */

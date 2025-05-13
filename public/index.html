@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Another Hour Clock</title>
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/main-clock.css">
-  <script src="https://momentjs.com/downloads/moment.min.js"></script>
-  <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+  <head>
+    <meta charset="UTF-8">
+    <title>Another Hour Clock</title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/main-clock.css">
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
   <body>
     <div class="main-clock-container">
 
@@ -26,17 +26,16 @@
         </div>
 
       <svg id="clock" viewBox="0 0 200 200">
-        <circle class="face" cx="100" cy="100" r="95"/>
-        <path id="ah-sector" class="ah-sector"/>
-        <g id="ticks"></g>
-        <line id="hour" class="hand hour" x1="100" y1="100" x2="100" y2="50"/>
-        <line id="minute" class="hand minute" x1="100" y1="100" x2="100" y2="40"/>
-        <line id="second" class="hand second" x1="100" y1="100" x2="100" y2="35"/>
-        <circle class="center" cx="100" cy="100" r="3"/>
-      </svg>
-
-      <div id="digital-clock" class="digital-clock hidden">  </div>
-
+        <circle class="face common-clock-face" cx="100" cy="100" r="95"/>
+        <path id="ah-sector" class="ah-sector"/> <g id="ticks">
+          </g>
+        <line id="hour" class="hand hour common-clock-hand common-clock-hand-hour" x1="100" y1="100" x2="100" y2="50"/>
+        <line id="minute" class="hand minute common-clock-hand common-clock-hand-minute" x1="100" y1="100" x2="100" y2="40"/>
+        <line id="second" class="hand second common-clock-hand common-clock-hand-second" x1="100" y1="100" x2="100" y2="35"/>
+        <circle class="center common-clock-center" cx="100" cy="100" r="3"/>
+      </svg> <div id="digital-clock" class="digital-clock visually-hidden"> <div id="main-ah-time" class="ah-time-display-main"></div>
+        <div id="main-normal-time" class="normal-time-display-sub"></div>
+      </div>
       <div class="display-settings-toggle-container">
         <label class="toggle-switch">
           <input type="checkbox" id="toggle-ah-actual-display" checked> <span class="slider"></span>

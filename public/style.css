@@ -1,74 +1,43 @@
-
 /* public/style.css */
 
-/* Global Styles */
+/* Global Styles - Keep only the most fundamental, application-wide defaults here */
 body {
-  display: flex;
+  display: flex; /* Main layout driver */
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #e5e5e5;
-  color: #1a1a1a;
-  padding: 20px;
+  background: #e5e5e5; /* Default light theme background */
+  color: #1a1a1a;     /* Default light theme text color */
+  padding: 20px;     /* Overall padding for the body */
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: sans-serif; /* Application-wide default font */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.inverted {
-  background: #1a1a1a;
-  color: white;
+  background: #1a1a1a; /* Default dark theme background */
+  color: white;       /* Default dark theme text color */
 }
 
-/* Global Form Elements */
-select,
-input[type="number"],
-input[type="text"] {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #bbb;
-  background-color: #f0f0f0;
-  color: #1a1a1a;
-  font-size: clamp(14px, 3vw, 16px);
-  margin: 5px 0;
-}
+/* Global Form Elements - Moved to components.css */
+/* select, input[type="number"], input[type="text"] { ... } */
+/* body.inverted select, ... { ... } */
+/* select:focus, ... { ... } */
+/* body.inverted select:focus, ... { ... } */
 
-body.inverted select,
-body.inverted input[type="number"],
-body.inverted input[type="text"] {
-  background: #333;
-  color: white;
-  border-color: #555;
-}
+/* Timezone Select styling for main page - specific, so should be in main-clock.css or components if truly generic */
+/* #timezone-select in main-clock.css now handles its specifics */
 
-select:focus,
-input[type="number"]:focus,
-input[type="text"]:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
 
-body.inverted select:focus,
-body.inverted input[type="number"]:focus,
-body.inverted input[type="text"]:focus {
-  border-color: #56a4ff;
-  box-shadow: 0 0 0 0.2rem rgba(86,164,255,.25);
-}
-
-/* Timezone Select */
-#timezone-select {
-  margin-top: min(15px, 3vh);
-  padding: 12px;
-  font-size: clamp(16px, 4vw, 20px);
-  width: min(400px, 95vw);
-}
-
-/* Media Queries */
+/* Media Queries for global body padding (example) */
 @media (max-width: 480px) {
   body {
     padding: 10px;
   }
 }
+
+/* Styles for .face, .hand, .second, .center, .tick, .ah-sector, .digital-clock, button,
+   .stopwatch-display, .timer-display etc. should now be in
+   main-clock.css, world-clock.css, or components.css */
