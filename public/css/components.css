@@ -19,7 +19,7 @@ body {
   color: var(--light-text);
   padding: 20px;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto Mono', monospace;
   transition: background-color var(--common-transition), color var(--common-transition);
 }
 
