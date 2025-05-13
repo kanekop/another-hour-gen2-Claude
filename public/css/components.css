@@ -1,6 +1,13 @@
-/* public/css/components.css */
+/* --- Global Variables --- */
+:root {
+  --light-bg: #e5e5e5;
+  --light-text: #1a1a1a;
+  --dark-bg: #1a1a1a;
+  --dark-text: #ffffff;
+  --common-transition: 0.3s ease;
+}
 
-/* --- Global Styles (from style.css or new) --- */
+/* --- Global Styles --- */
 body {
   display: flex;
   flex-direction: column;
@@ -8,20 +15,20 @@ body {
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #e5e5e5; /* Default light mode background */
-  color: #1a1a1a;     /* Default light mode text color */
+  background: var(--light-bg);
+  color: var(--light-text);
   padding: 20px;
   box-sizing: border-box;
   font-family: sans-serif;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--common-transition), color var(--common-transition);
 }
 
 body.inverted {
-  background: #1a1a1a; /* Default dark mode background */
-  color: white;       /* Default dark mode text color */
+  background: var(--dark-bg);
+  color: var(--dark-text);
 }
 
-/* Global Form Elements */
+/* --- Form Elements --- */
 select,
 input[type="number"],
 input[type="text"] {
@@ -29,7 +36,7 @@ input[type="text"] {
   border-radius: 6px;
   border: 1px solid #bbb;
   background-color: #f0f0f0;
-  color: #1a1a1a;
+  color: var(--light-text);
   font-size: clamp(14px, 3vw, 16px);
   margin: 5px 0;
 }
@@ -38,7 +45,7 @@ body.inverted select,
 body.inverted input[type="number"],
 body.inverted input[type="text"] {
   background: #333;
-  color: white;
+  color: var(--dark-text);
   border-color: #555;
 }
 
@@ -50,121 +57,75 @@ input[type="text"]:focus {
   box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
-body.inverted select:focus,
-body.inverted input[type="number"]:focus,
-body.inverted input[type="text"]:focus {
-  border-color: #56a4ff;
-  box-shadow: 0 0 0 0.2rem rgba(86,164,255,.25);
-}
-
-
-/* --- Analog Clock Common Components --- */
-/* Base styles for clock faces (used by main clock and world clocks) */
+/* --- Clock Common Components --- */
 .common-clock-face {
   stroke-width: 2;
 }
-/* Light theme for clock face */
-body:not(.inverted) .common-clock-face, /* For main clock default */
-.world-clock-item:not(.blinking-ah) .common-clock-face /* For world clock default */ {
+
+body:not(.inverted) .common-clock-face,
+.world-clock-item:not(.blinking-ah) .common-clock-face {
   fill: #ddd;
   stroke: #bbb;
 }
-/* Dark theme for clock face (inverted body OR blinking-ah world clock item) */
+
 body.inverted .common-clock-face,
 .world-clock-item.blinking-ah .common-clock-face {
-  fill: #222; /* Darker for main clock inverted */
+  fill: #222;
   stroke: #444;
 }
-.world-clock-item.blinking-ah .analog-face-world { /* Specific fill for world clock dark item */
-  fill: #333;
-  stroke: #555;
-}
 
-
-/* Base styles for clock hands */
 .common-clock-hand {
   stroke-linecap: round;
-  transform-origin: 100px 100px; /* Common center for 200x200 viewBox */
+  transform-origin: 100px 100px;
 }
+
 .common-clock-hand-hour { stroke-width: 6; }
 .common-clock-hand-minute { stroke-width: 4; }
 .common-clock-hand-second { stroke-width: 2; }
 
-/* Light theme for clock hands */
 body:not(.inverted) .common-clock-hand,
 .world-clock-item:not(.blinking-ah) .common-clock-hand {
-  stroke: #333; /* Default hand color */
+  stroke: #333;
 }
+
 body:not(.inverted) .common-clock-hand-second,
 .world-clock-item:not(.blinking-ah) .common-clock-hand-second {
-  stroke: #c00000; /* Default second hand color */
+  stroke: #c00000;
 }
 
-/* Dark theme for clock hands */
 body.inverted .common-clock-hand,
 .world-clock-item.blinking-ah .common-clock-hand {
-  stroke: #e0e0e0; /* Inverted/dark theme hand color */
+  stroke: #e0e0e0;
 }
+
 body.inverted .common-clock-hand-second,
 .world-clock-item.blinking-ah .common-clock-hand-second {
-  stroke: #ff6b6b; /* Inverted/dark theme second hand color */
+  stroke: #ff6b6b;
 }
 
-
-/* Base styles for clock center dot */
 .common-clock-center {
-  /* r attribute is set in SVG, fill is themed */
-}
-/* Light theme for clock center */
-body:not(.inverted) .common-clock-center,
-.world-clock-item:not(.blinking-ah) .common-clock-center {
   fill: #333;
 }
-/* Dark theme for clock center */
+
 body.inverted .common-clock-center,
 .world-clock-item.blinking-ah .common-clock-center {
   fill: #e0e0e0;
 }
 
-
-/* Base styles for clock ticks */
 .common-clock-tick {
-  /* stroke-width is handled by major/minor if needed or direct attribute */
+  stroke: #888;
 }
-/* Light theme for clock ticks */
-body:not(.inverted) .common-clock-tick,
-.world-clock-item:not(.blinking-ah) .common-clock-tick {
-  stroke: #888; /* Default for minor ticks */
-}
-body:not(.inverted) .common-clock-tick-major,
-.world-clock-item:not(.blinking-ah) .common-clock-tick-major {
-  stroke: #777; /* Default for major ticks */
+
+.common-clock-tick-major {
   stroke-width: 2;
 }
-/* Dark theme for clock ticks */
+
 body.inverted .common-clock-tick,
 .world-clock-item.blinking-ah .common-clock-tick {
-  stroke: #777; /* Default for minor ticks in dark mode */
-}
-body.inverted .common-clock-tick-major,
-.world-clock-item.blinking-ah .common-clock-tick-major {
-  stroke: #888; /* Default for major ticks in dark mode */
-  stroke-width: 2; /* Ensure major ticks are distinct in dark mode */
-}
-/* World clock specific tick overrides if needed (currently .analog-ticks-world line) */
-.world-clock-item.blinking-ah .analog-ticks-world line {
-    stroke: #777; /* Explicit for blinking world clock */
-}
-.world-clock-item:not(.blinking-ah) .analog-ticks-world line {
-    stroke: #888; /* Explicit for non-blinking world clock */
+  stroke: #777;
 }
 
-
-/* AH Sector - specific to main clock, so keep in main-clock.css */
-/* .ah-sector { ... } */
-
-
-/* --- Digital Time Displays Common Styles --- */
+/* --- Digital Time Displays --- */
 .ah-time-display-main,
 .normal-time-display-sub {
   font-family: monospace;
@@ -175,36 +136,46 @@ body.inverted .common-clock-tick-major,
 
 .ah-time-display-main {
   font-weight: bold;
-  /* Sizes are more specific, keep in page-specific CSS or adjust here if truly common */
+  color: var(--light-text);
 }
-/* Light theme for AH time */
-body:not(.inverted) .ah-time-display-main,
-.world-clock-item:not(.blinking-ah) .ah-time-display-main {
-  color: #1a1a1a;
-}
-/* Dark theme for AH time */
+
 body.inverted .ah-time-display-main,
 .world-clock-item.blinking-ah .ah-time-display-main {
-  color: white;
+  color: var(--dark-text);
 }
-
 
 .normal-time-display-sub {
-  /* Sizes are more specific, keep in page-specific CSS or adjust here if truly common */
-}
-/* Light theme for normal time */
-body:not(.inverted) .normal-time-display-sub,
-.world-clock-item:not(.blinking-ah) .normal-time-display-sub {
   color: #555;
 }
-/* Dark theme for normal time */
+
 body.inverted .normal-time-display-sub,
 .world-clock-item.blinking-ah .normal-time-display-sub {
   color: #aaa;
 }
 
+/* --- Digital Clock --- */
+.digital-clock {
+  margin-top: min(15px, 3vh);
+  padding: min(12px, 2.5vh) min(24px, 5vw);
+  border-radius: 8px;
+  text-align: center;
+  line-height: 1.6;
+  width: min(400px, 95vw);
+  font-family: monospace;
+  font-size: clamp(16px, 4.5vw, 24px);
+  transition: all var(--common-transition);
+  background: #f0f0f0;
+  color: var(--light-text);
+  border: 1px solid #ddd;
+}
 
-/* --- Buttons (Common Component - already well defined) --- */
+body.inverted .digital-clock {
+  background: #333;
+  color: var(--dark-text);
+  border-color: #444;
+}
+
+/* --- Buttons --- */
 button,
 .toggle-button {
   margin: 10px 5px;
@@ -215,53 +186,39 @@ button,
   border-radius: 6px;
   cursor: pointer;
   font-size: clamp(14px, 3.5vw, 16px);
-  transition: background-color 0.2s ease, opacity 0.2s ease;
+  transition: background-color var(--common-transition), opacity var(--common-transition);
   text-decoration: none;
   display: inline-block;
   text-align: center;
 }
+
 button:hover,
 .toggle-button:hover {
   background: #444;
   opacity: 0.9;
 }
-button:active,
-.toggle-button:active {
-  background: #333;
-}
-body.inverted button,
-body.inverted .toggle-button {
-  background: #3a3a3a;
-  color: white;
-}
-body.inverted button:hover,
-body.inverted .toggle-button:hover {
-  background: #4a4a4a;
-  opacity: 0.9;
-}
-body.inverted button:active,
-body.inverted .toggle-button:active {
-  background: #5a5a5a;
-}
 
-/* --- Toggle Switch (Common Component - from main-clock.css) --- */
+/* --- Toggle Switch --- */
 .display-settings-toggle-container {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-top: 15px;
 }
+
 .toggle-switch {
   position: relative;
   display: inline-block;
   width: 50px;
   height: 28px;
 }
+
 .toggle-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
+
 .slider {
   position: absolute;
   cursor: pointer;
@@ -269,10 +226,11 @@ body.inverted .toggle-button:active {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc; /* Light mode OFF */
-  transition: .4s;
+  background-color: #ccc;
+  transition: var(--common-transition);
   border-radius: 28px;
 }
+
 .slider:before {
   position: absolute;
   content: "";
@@ -281,183 +239,58 @@ body.inverted .toggle-button:active {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: var(--common-transition);
   border-radius: 50%;
 }
+
 input:checked + .slider {
-  background-color: #555; /* Light mode ON */
-}
-body.inverted .slider { /* Dark mode OFF */
   background-color: #555;
 }
+
+body.inverted .slider {
+  background-color: #555;
+}
+
 body.inverted input:checked + .slider {
-  background-color: #777; /* Dark mode ON */
+  background-color: #777;
 }
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+
 input:checked + .slider:before {
   transform: translateX(22px);
 }
-.toggle-label {
-  font-size: clamp(12px, 2vmin, 14px);
+
+/* --- Utilities --- */
+.visually-hidden {
+  visibility: hidden;
+  opacity: 0;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+  border: none !important;
+  transition: all var(--common-transition);
 }
 
-
-/* Digital Clock (for main page, stopwatch, timer displays if they share this exact structure) */
-.digital-clock { /* This class is used in index.html's digital clock area */
-  margin-top: min(15px, 3vh);
-  padding: min(12px, 2.5vh) min(24px, 5vw);
-  border-radius: 8px;
-  text-align: center;
-  line-height: 1.6;
-  width: min(400px, 95vw);
-  font-family: monospace;
-  font-size: clamp(16px, 4.5vw, 24px);
-}
-body:not(.inverted) .digital-clock {
-  background: #f0f0f0;
-  color: #1a1a1a;
-  border: 1px solid #ddd;
-}
-body.inverted .digital-clock {
-  background: #333;
-  color: white;
-  border-color: #444;
+.hidden {
+  display: none !important;
 }
 
-
-/* Stopwatch & Timer Display (specific for stopwatch.html and timer.html pages) */
-.stopwatch-display, /* Used in stopwatch.html */
-.timer-display {    /* Used in timer.html */
-  font-family: monospace;
-  font-size: clamp(2em, 8vw, 3em);
-  margin: 20px auto;
-  padding: 15px 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  letter-spacing: 1px;
-  text-align: center;
-  width: fit-content;
-  max-width: 90%;
-}
-body:not(.inverted) .stopwatch-display,
-body:not(.inverted) .timer-display {
-  background: #f0f0f0;
-  color: #1a1a1a;
-  border: 1px solid #ddd;
-}
-body.inverted .stopwatch-display,
-body.inverted .timer-display {
-  background: #2c2c2c;
-  color: white;
-  border-color: #444;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-}
-
-
-/* Back Button (world-clock.html で使用) */
-.back-button {
-  margin-bottom: 20px;
-}
-
+/* --- Controls --- */
 .controls {
   display: flex;
   justify-content: center;
   gap: 10px;
   margin: 20px 0;
 }
+
 .controls button {
   margin: 0 10px;
   min-width: 80px;
 }
 
-/* Hidden class utility */
-.hidden {
-  display: none !important;
-}
-
-
-.visually-hidden { /* 新しいクラス名 */
-  visibility: hidden;
-  opacity: 0;
-  height: 0; /* 高さを0にしてスペースを詰めるが、完全に display:none とは異なる */
-  overflow: hidden;
-  margin-top: 0 !important; /* マージンも0に */
-  margin-bottom: 0 !important;
-  padding-top: 0 !important; /* パディングも0に */
-  padding-bottom: 0 !important;
-  transition: opacity 0.3s ease, height 0.3s ease; /* スムーズな切り替えのため（任意） */
-}
-
-.digital-clock:not(.visually-hidden), /* .digital-clock が表示されるときのスタイル */
-#main-ah-time:not(.visually-hidden),
-#main-normal-time:not(.visually-hidden) {
-    visibility: visible;
-    opacity: 1;
-    /* height: auto; */ /* JS側で具体的な高さを保持・復元するか、min-heightを設定 */
-    /* もし固定の高さを持ちたい場合はここで指定 */
-}
-
-/* public/css/components.css */
-
-/* ... (既存の body, form elements, common clock parts スタイルはそのまま) ... */
-
-/* --- Digital Time Displays Common Styles --- */
-/* ... (ah-time-display-main, normal-time-display-sub のスタイルはそのまま) ... */
-
-
-/* --- Toggle Switch (Common Component - from main-clock.css) --- */
-/* ... (display-settings-toggle-container 以下のスタイルはそのまま) ... */
-
-
-/* Digital Clock (for main page) */
-.digital-clock {
-  margin-top: min(15px, 3vh);
-  padding: min(12px, 2.5vh) min(24px, 5vw); /* 表示時のパディング */
-  border-radius: 8px;
-  text-align: center;
-  line-height: 1.6;
-  width: min(400px, 95vw);
-  font-family: monospace;
-  font-size: clamp(16px, 4.5vw, 24px);
-  transition: opacity 0.3s ease, visibility 0.3s ease, height 0.3s ease, padding 0.3s ease, margin 0.3s ease; /* トランジションを追加 */
-}
-body:not(.inverted) .digital-clock {
-  background: #f0f0f0;
-  color: #1a1a1a;
-  border: 1px solid #ddd;
-}
-body.inverted .digital-clock {
-  background: #333;
-  color: white;
-  border-color: #444;
-}
-
-/* 既存の .digital-clock.hidden は削除またはコメントアウト */
-/*
-.digital-clock.hidden {
-  display: none !important;
-}
-*/
-
-/* --- Utilities --- */
-.visually-hidden {
-  visibility: hidden;
-  opacity: 0;
-  height: 0 !important; /* 表示領域を完全に潰す */
-  padding-top: 0 !important; /* パディングも0に */
-  padding-bottom: 0 !important;
-  margin-top: 0 !important; /* マージンも0に */
-  margin-bottom: 0 !important;
-  overflow: hidden; /* 内容のはみ出しを防ぐ */
-  border: none !important; /* 非表示時はボーダーも消す */
-}
-
-/* ... (Stopwatch & Timer Display, Back Button, Controls はそのまま) ... */
-
-/* 既存の .hidden クラスの定義がもしあれば、.visually-hidden と役割が重複しないか確認。
-   基本的には .visually-hidden を使う方針で統一します。 */
-.hidden { /* もし他の箇所で汎用的に display:none が必要なら残すが、今回のケースでは .visually-hidden を推奨 */
-  display: none !important;
+/* --- Media Queries --- */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
 }
