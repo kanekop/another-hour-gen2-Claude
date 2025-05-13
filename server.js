@@ -7,7 +7,8 @@ import { dirname, join } from 'path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const port = 3000;ware
+const port = 3000;
+
 const requireAdmin = (req, res, next) => {
   const adminKey = req.headers['x-admin-key'];
   if (adminKey === process.env.ADMIN_KEY) {
