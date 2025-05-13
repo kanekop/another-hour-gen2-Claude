@@ -75,6 +75,21 @@
   display: block;
 }
 
+/* Back button styles */
+.back-button {
+  text-decoration: none;
+  color: #555;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
 /* User's local timezone highlight */
 .world-clock-item h3.user-local-timezone-city {
   font-weight: bold;
