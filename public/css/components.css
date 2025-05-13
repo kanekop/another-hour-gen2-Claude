@@ -138,6 +138,7 @@ body.inverted .common-clock-tick,
 .ah-time-display-main {
   font-weight: bold;
   color: var(--light-text);
+  font-size: 1.3em;
 }
 
 body.inverted .ah-time-display-main,
@@ -147,6 +148,7 @@ body.inverted .ah-time-display-main,
 
 .normal-time-display-sub {
   color: #555;
+  font-size: 0.8em;
 }
 
 body.inverted .normal-time-display-sub,
