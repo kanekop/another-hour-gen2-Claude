@@ -174,16 +174,40 @@ function initializeApplication() {
       if (elements.toggleCheckbox) {
         const shouldBeCheckedByDefault = state.settings.showAHTime || state.settings.showActualTime;
         elements.toggleCheckbox.checked = shouldBeCheckedByDefault;
-
         if (elements.digitalClock) {
           elements.digitalClock.classList.toggle('visually-hidden', !shouldBeCheckedByDefault);
         }
 
+        // Set initial display state
+        const mainAhTimeDiv = document.getElementById('main-ah-time');
+        const mainNormalTimeDiv = document.getElementById('main-normal-time');
+        if (mainAhTimeDiv) mainAhTimeDiv.style.display = state.settings.showAHTime ? 'block' : 'none';
+        if (mainNormalTimeDiv) mainNormalTimeDiv.style.display = state.settings.showActualTime ? 'block' : 'none';
+
         elements.toggleCheckbox.addEventListener('change', () => {
           const isChecked = elements.toggleCheckbox.checked;
+          
+          // Toggle both time displays
           if (elements.digitalClock) {
             elements.digitalClock.classList.toggle('visually-hidden', !isChecked);
           }
+          
+          if (mainAhTimeDiv) {
+            state.settings.showAHTime = isChecked;
+            mainAhTimeDiv.style.display = isChecked ? 'block' : 'none';
+          }
+          
+          if (mainNormalTimeDiv) {
+            state.settings.showActualTime = isChecked;
+            mainNormalTimeDiv.style.display = isChecked ? 'block' : 'none';
+          }
+
+          // Save settings
+          fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(state.settings)
+          }).catch(err => console.error('Failed to save settings:', err));
         });
       }
 
