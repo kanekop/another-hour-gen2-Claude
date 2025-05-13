@@ -1,7 +1,14 @@
 import { SCALE_AH, getAngles } from './clock-core.js';
 
+// ★ 修正点: URLクエリからタイムゾーンを取得する関数を追加
+function getTargetTimezoneFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('timezone');
+}
+
 // Initialize timezone select
 const timezoneSelect = document.getElementById('timezone-select');
+const initialTimezoneFromURL = getTargetTimezoneFromURL();
 const userTimezone = moment.tz.guess();
 
 // Load settings
@@ -16,6 +23,10 @@ fetch('/api/settings')
     }
     initializeTimezoneSelect();
 
+    // ★ 修正点: initializeTimezoneSelect を呼び出す前に、
+    // timezoneSelect の値を確定させておく
+    initializeTimezoneSelect();    
+    
     // === 追加するコード（設定読み込み後）ここから ===
     if (toggleCheckbox && digitalClockElement) {
         // 設定に基づいてチェックボックスの初期状態を設定 (両方表示する設定ならチェック)
