@@ -1,6 +1,7 @@
 /* public/css/components.css */
 
 /* Digital Clock (共通コンポーネント) */
+/* Digital Clock (共通コンポーネント) */
 .digital-clock {
   margin-top: min(15px, 3vh);
   padding: min(12px, 2.5vh) min(24px, 5vw);
@@ -9,16 +10,26 @@
   line-height: 1.6;
   width: min(400px, 95vw);
   font-family: monospace;
-  font-size: clamp(16px, 4.5vw, 24px); /* フォントサイズ調整 */
-  display: none; /* 初期状態は非表示 */
-  background: #f0f0f0; /* ライトモードの背景 */
-  color: #1a1a1a;    /* ライトモードの文字色 */
-  border: 1px solid #ddd; /* ライトモードの境界線 */
+  font-size: clamp(16px, 4.5vw, 24px);
+  background: #f0f0f0;
+  color: #1a1a1a;
+  border: 1px solid #ddd;
+  /* display: none; を削除、または display: block; に変更して hidden クラスで制御 */
+  display: block; /* hidden でない場合のデフォルト表示状態 */
 }
 
+/* .digital-clock.visible セレクタを削除またはコメントアウト */
+/*
 .digital-clock.visible {
   display: block;
 }
+*/
+
+/* hidden クラスで非表示にするスタイルを追加 (もし既存でなければ) */
+.digital-clock.hidden {
+  display: none !important; /* !important を追加して確実に優先させるか、セレクタの詳細度を調整 */
+}
+
 
 body.inverted .digital-clock {
   background: #333;

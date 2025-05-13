@@ -68,7 +68,7 @@ function initializeTimezoneSelect() {
   // Draw tick marks
   const ticks = document.getElementById('ticks');
   ticks.innerHTML = '';
-  
+
   for (let i = 0; i < 60; i++) {
     const angle = i * 6;
     const isMajor = i % 5 === 0;
@@ -104,7 +104,7 @@ function updateClock() {
   const currentTime = moment().tz(timezone);
   const ahSector   = document.getElementById('ah-sector');
   const { hourAngle, minuteAngle, secondAngle, ahHours, ahMinutes, ahSeconds } = getAngles(currentTime.toDate(), timezone);
-  
+
   // Check if it's AH hour and toggle inverted colors
   const isAHHour = currentTime.hours() === 23;
   document.body.classList.toggle('inverted', isAHHour);

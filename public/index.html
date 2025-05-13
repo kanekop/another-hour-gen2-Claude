@@ -10,22 +10,47 @@
   <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-  <svg id="clock" viewBox="0 0 200 200">
-    <circle class="face" cx="100" cy="100" r="95"/>
-    <path id="ah-sector" class="ah-sector"/>
-    <g id="ticks"></g>
-    <line id="hour" class="hand hour" x1="100" y1="100" x2="100" y2="50"/>
-    <line id="minute" class="hand minute" x1="100" y1="100" x2="100" y2="40"/>
-    <line id="second" class="hand second" x1="100" y1="100" x2="100" y2="35"/>
-    <circle class="center" cx="100" cy="100" r="3"/>
-  </svg>
-  <select id="timezone-select"></select>
-  <button id="toggle-digital" class="toggle-button">Toggle Digital Display</button>
-  <div id="digital-clock" class="digital-clock hidden"></div>
+  <body>
+    <div class="main-clock-container">
 
-   <button id="all-time-zone-button" class="toggle-button">All Time Zone</button>
+      <div class="timezone-selector-container">
+        <h3 id="main-clock-city-name" class="main-clock-city">
+          </h3>
+        <select id="timezone-select"></select>
+      </div>
 
-  <script type="module" src="main.js"></script>
-</body>
+      <div id="main-ah-time" class="ah-time-display-main">
+        </div>
+
+      <div id="main-normal-time" class="normal-time-display-sub">
+        </div>
+
+      <svg id="clock" viewBox="0 0 200 200">
+        <circle class="face" cx="100" cy="100" r="95"/>
+        <path id="ah-sector" class="ah-sector"/>
+        <g id="ticks"></g>
+        <line id="hour" class="hand hour" x1="100" y1="100" x2="100" y2="50"/>
+        <line id="minute" class="hand minute" x1="100" y1="100" x2="100" y2="40"/>
+        <line id="second" class="hand second" x1="100" y1="100" x2="100" y2="35"/>
+        <circle class="center" cx="100" cy="100" r="3"/>
+      </svg>
+
+      <div id="digital-clock-container">
+          </div>
+
+      <div class="display-settings-toggle-container">
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-ah-actual-display" checked> <span class="slider"></span>
+        </label>
+        <span class="toggle-label">AH & Actual Time</span>
+      </div>
+
+      <button id="all-time-zone-button" class="toggle-button">All Time Zone</button>
+
+    </div>
+
+    <script type="module" src="main.js"></script>
+  </body>
+
+
 </html>
