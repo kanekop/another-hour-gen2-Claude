@@ -45,12 +45,14 @@
   font-weight: bold;
   color: #1a1a1a;
   margin: 0.5vmin 0;
+  white-space: nowrap; /* ★改行防止のため、ベーススタイルに nowrap を追加 */
 }
 
 .normal-time-display-sub {
   font-size: clamp(0.7em, 1.8vmin, 0.8em); /* フォントサイズをレスポンシブに */
   color: #555;
   margin-bottom: 0.5vmin;
+  white-space: nowrap;
 }
 
 /* --- AH状態の .world-clock-item の特別スタイル --- */
@@ -104,6 +106,19 @@
 
 
 /* --- メディアクエリによる列数調整 --- */
+/* ★新しいメディアクエリ: PCで幅を狭めたとき、6列を維持しつつAH時間の改行を防ぐための調整 */
+/* 例: ウィンドウ幅が1025pxから、元の4列になるブレークポイント(1024px)の直前まで */
+/* この値はご自身で特定した X と Y の値に置き換えてください */
+@media (min-width: 1025px) and (max-width: 1050px) { /* 仮のブレークポイント例: 1200pxまでは大きなフォント */
+                                                  /* 1025px～1199pxの間で調整が必要な場合 */
+  .ah-time-display-main {
+    font-size: clamp(0.8em, 2.2vmin, 1.1em); /* 例: 少しフォントを小さくする */
+    /* 他の要素も必要に応じて微調整 */
+  }
+}
+/* さらに細かい段階が必要な場合は、このようなメディアクエリを追加できます */
+/* @media (min-width: Ypx) and (max-width: X-1px) { ... } */
+
 
 /* 縦長の画面、または一般的なタブレット幅程度まで (横6列ではアイテムが小さくなりすぎる場合) */
 @media (max-width: 1024px) { /* ブレークポイントは適宜調整 */

@@ -238,14 +238,15 @@ The following outlines completed tasks and potential future improvements:
 * [x] Implement individual dark mode + blinking for AH-active world clocks.
 * [x] Ensure World Clock page defaults to light theme.
 * [x] Unified all AH time calculations across Main Clock, World Clock, Stopwatch, and Timer to use the `24/23` scaling factor (1 AH sec = `23/24` real sec $\approx$ 0.95833 real sec).
-* [x] World Clock: Default layout changed to a fixed grid (e.g., 6 columns, responsive) to display all 24 clocks.
-* [x] World Clock: User's local timezone city name is highlighted.
+* [x] World Clock: Default layout changed to a fixed grid (e.g., 6 columns, responsive to fewer columns on smaller screens) to display all 24 clocks.
+* [x] World Clock: User's local timezone city name is highlighted (e.g., in red and bold).
 
 **Enhancements & Future Ideas:**
 * [ ] **World Clock:** Display a global message when any of the 24 world clocks are in their "Another Hour."
 * [ ] **World Clock:** Refine the visual style of AH-active clock items (e.g., color scheme, AH sector display).
 * [ ] **World Clock:** Allow user customization of displayed timezones or grid layout.
-* [ ] **World Clock:** (Low Priority) Option to toggle between fixed grid and auto-fit responsive layout.
+* [ ] **World Clock:** (Low Priority) Option to toggle between fixed grid and the original `auto-fit` responsive layout.
+* [ ] **World Clock:** Fine-tune responsive behavior for tablets (like iPad) to better ensure desired column count (e.g., 6x4 or 4x6) while maintaining readability.
 * [ ] **Stopwatch & Timer:** UI/UX enhancements and (optional) persistence of lap times/timer settings.
 * [ ] **General:** Internationalization (i18n) for UI text (e.g., English/Japanese).
 * [ ] **General:** Performance optimization, especially for rendering many clocks.
