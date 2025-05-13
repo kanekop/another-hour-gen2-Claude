@@ -74,12 +74,13 @@ project/
 │   │   ├── components.css    # Common UI component styles
 │   │   ├── main-clock.css    # Main clock page styles
 │   │   ├── stopwatch.css     # Stopwatch page styles
-│   │   ├── style.css        # Global styles
 │   │   ├── timer.css        # Timer page styles
 │   │   └── world-clock.css  # World clock page styles
 │   ├── js/                  # Client-side JavaScript modules
+│   │   ├── city-timezones.js # Timezone data and utilities
 │   │   ├── stopwatch-ui.js  # Stopwatch functionality
 │   │   ├── timer-ui.js      # Timer functionality
+│   │   ├── timezone-manager.js # Timezone management utilities
 │   │   └── world-clock-ui.js # World clock functionality
 │   ├── pages/               # Additional HTML pages
 │   │   ├── stopwatch.html   # Stopwatch interface
@@ -88,24 +89,26 @@ project/
 │   ├── admin.css            # Admin panel styling
 │   ├── admin.html           # Admin interface
 │   ├── admin.js             # Admin panel logic
-│   ├── clock-core.js        # Core clock calculation logic for main/world clocks
+│   ├── clock-core.js        # Core clock calculation logic
 │   ├── index.html           # Main clock interface
-│   ├── main.js              # Main application logic for index.html
-│   └── style.css            # Legacy global styles (if any remaining, ideally merged)
+│   ├── main.js              # Main application logic
+│   ├── style.css           # Global styles
+│   └── tako.html           # Additional page
 ├── src/                     # Server-side source code
 │   ├── routes/              # Express route handlers
 │   │   ├── stopwatch.js     # Stopwatch API routes
-│   │   └── timer.js         # Timer API routes (if any, or future use)
+│   │   └── timer.js         # Timer API routes
 │   └── shared/              # Shared utilities
-│       └── ah-time.js       # Unified AH time conversion utilities
-├── .env                     # Environment variables (SESSION_SECRET, ADMIN_KEY) - Not in repo
-├── .env.example             # Example environment file
-├── .gitignore               # Git ignore configuration
-├── README.md                # Project documentation
-├── package-lock.json        # Node.js dependency lock
-├── package.json             # Node.js project configuration
-└── server.js                # Express server
-└── settings.json            # Application settings
+│       └── ah-time.js       # AH time conversion utilities
+├── .gitignore              # Git ignore configuration
+├── .replit                 # Replit configuration
+├── README.md               # Project documentation
+├── generated-icon.png      # Application icon
+├── index.js               # Node.js entry point
+├── package-lock.json       # Node.js dependency lock
+├── package.json           # Node.js project configuration
+├── server.js              # Express server
+└── settings.json          # Application settings
 ```
 
 ## Getting Started
