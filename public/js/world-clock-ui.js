@@ -1,30 +1,98 @@
+
 // public/js/world-clock-ui.js
 import { SCALE_AH, getAngles } from '../clock-core.js';
-// city-timezones.js の直接インポートを削除
-// import { cityCandidatesByOffset } from './city-timezones.js';
-// 新しい timezone-manager.js から必要な関数をインポート
-import { getDisplayTimezones, getUserLocalTimezone, getCityNameByTimezone } from './timezone-manager.js';
+import { getDisplayTimezones, getUserLocalTimezone } from './timezone-manager.js';
 
-const container = document.getElementById('world-clocks-container');
-const userLocalTimezone = getUserLocalTimezone(); // timezone-manager から取得
+// Constants
+const CLOCK_UPDATE_INTERVAL = 1000 / 60; // 60fps for smooth animation
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+const SVG_VIEW_BOX = "0 0 200 200";
 
-let worldTimezones = []; // ここで初期化
+// State
+const state = {
+  container: document.getElementById('world-clocks-container'),
+  worldTimezones: [],
+  userLocalTimezone: null,
+  animationFrameId: null
+};
 
-/**
- * World Clock表示用のデータを初期化します。
- * timezone-manager からタイムゾーンリストを取得します。
- */
-function initializeWorldClockDisplayData() {
-  worldTimezones = getDisplayTimezones(); // timezone-manager から取得
-
-  // デバッグログ（必要に応じて）
-  // console.log("World Timezones for Display:", worldTimezones.map(tz => tz.displayText));
+// SVG Creation Helpers
+function createSVGElement(type, attributes = {}) {
+  const element = document.createElementNS(SVG_NAMESPACE, type);
+  Object.entries(attributes).forEach(([key, value]) => {
+    element.setAttribute(key, value);
+  });
+  return element;
 }
 
-// 時計要素を生成する関数 (tzData の形式に注意)
-// tzData は { timezone: string, city: string, offset: number, offsetString: string, displayText: string } 形式
-// public/js/world-clock-ui.js
-// ... (import文や関数の冒頭はそのまま) ...
+function createAnalogClockFace(timezoneIdSuffix) {
+  const analogClockSVG = createSVGElement("svg", {
+    class: "analog-clock-world",
+    viewBox: SVG_VIEW_BOX
+  });
+
+  // Clock face circle
+  analogClockSVG.appendChild(createSVGElement("circle", {
+    class: "analog-face-world common-clock-face",
+    cx: "100",
+    cy: "100",
+    r: "95"
+  }));
+
+  // Tick marks
+  const ticksGroup = createSVGElement("g", { class: "analog-ticks-world" });
+  for (let i = 0; i < 12; i++) {
+    ticksGroup.appendChild(createSVGElement("line", {
+      class: "common-clock-tick common-clock-tick-major",
+      x1: "100",
+      y1: "15",
+      x2: "100",
+      y2: "25",
+      transform: `rotate(${i * 30}, 100, 100)`
+    }));
+  }
+  analogClockSVG.appendChild(ticksGroup);
+
+  // Clock hands
+  const hands = {
+    hour: createSVGElement("line", {
+      id: `hour-hand-${timezoneIdSuffix}`,
+      class: "analog-hand-world hour-world common-clock-hand common-clock-hand-hour",
+      x1: "100",
+      y1: "100",
+      x2: "100",
+      y2: "60"
+    }),
+    minute: createSVGElement("line", {
+      id: `minute-hand-${timezoneIdSuffix}`,
+      class: "analog-hand-world minute-world common-clock-hand common-clock-hand-minute",
+      x1: "100",
+      y1: "100",
+      x2: "100",
+      y2: "40"
+    }),
+    second: createSVGElement("line", {
+      id: `second-hand-${timezoneIdSuffix}`,
+      class: "analog-hand-world second-world common-clock-hand common-clock-hand-second",
+      x1: "100",
+      y1: "100",
+      x2: "100",
+      y2: "30"
+    })
+  };
+
+  Object.values(hands).forEach(hand => analogClockSVG.appendChild(hand));
+
+  // Center dot
+  analogClockSVG.appendChild(createSVGElement("circle", {
+    class: "analog-center-world common-clock-center",
+    cx: "100",
+    cy: "100",
+    r: "4"
+  }));
+
+  return analogClockSVG;
+}
 
 function createClockElement(tzData) {
   const clockItem = document.createElement('div');
@@ -33,7 +101,7 @@ function createClockElement(tzData) {
 
   const cityNameElement = document.createElement('h3');
   cityNameElement.textContent = tzData.city;
-  if (tzData.timezone === userLocalTimezone) {
+  if (tzData.timezone === state.userLocalTimezone) {
     cityNameElement.classList.add('user-local-timezone-city');
   }
 
@@ -45,75 +113,9 @@ function createClockElement(tzData) {
   normalTimeDisplay.classList.add('normal-time-display-sub');
   normalTimeDisplay.id = `time-${tzData.timezone.replace(/[\/\+\:]/g, '-')}`;
 
-  const svgNamespace = "http://www.w3.org/2000/svg";
-  const analogClockSVG = document.createElementNS(svgNamespace, "svg");
-  const timezoneIdSuffix = tzData.timezone.replace(/[\/\+\:]/g, '-');
+  const analogClockSVG = createAnalogClockFace(tzData.timezone.replace(/[\/\+\:]/g, '-'));
 
-  analogClockSVG.setAttribute("class", "analog-clock-world");
-  analogClockSVG.setAttribute("viewBox", "0 0 200 200");
-
-  const face = document.createElementNS(svgNamespace, "circle");
-  face.setAttribute("class", "analog-face-world common-clock-face");
-  face.setAttribute("cx", "100");
-  face.setAttribute("cy", "100");
-  face.setAttribute("r", "95");
-  analogClockSVG.appendChild(face);
-
-  const ticksGroup = document.createElementNS(svgNamespace, "g");
-  ticksGroup.setAttribute("class", "analog-ticks-world");
-  for (let i = 0; i < 12; i++) {
-    const angle = i * 30;
-    const tick = document.createElementNS(svgNamespace, "line");
-    tick.setAttribute("class", "common-clock-tick common-clock-tick-major");
-    tick.setAttribute("x1", "100");
-    tick.setAttribute("y1", "15");
-    tick.setAttribute("x2", "100");
-    tick.setAttribute("y2", "25");
-    tick.setAttribute("transform", `rotate(${angle}, 100, 100)`);
-    ticksGroup.appendChild(tick);
-  }
-  analogClockSVG.appendChild(ticksGroup);
-
-  const hourHand = document.createElementNS(svgNamespace, "line");
-  hourHand.setAttribute("id", `hour-hand-${timezoneIdSuffix}`);
-  hourHand.setAttribute("class", "analog-hand-world hour-world common-clock-hand common-clock-hand-hour");
-  hourHand.setAttribute("x1", "100");
-  hourHand.setAttribute("y1", "100");
-  hourHand.setAttribute("x2", "100");
-  hourHand.setAttribute("y2", "60");
-  analogClockSVG.appendChild(hourHand);
-
-  const minuteHand = document.createElementNS(svgNamespace, "line");
-  minuteHand.setAttribute("id", `minute-hand-${timezoneIdSuffix}`);
-  minuteHand.setAttribute("class", "analog-hand-world minute-world common-clock-hand common-clock-hand-minute");
-  minuteHand.setAttribute("x1", "100");
-  minuteHand.setAttribute("y1", "100");
-  minuteHand.setAttribute("x2", "100");
-  minuteHand.setAttribute("y2", "40");
-  analogClockSVG.appendChild(minuteHand);
-
-  const secondHand = document.createElementNS(svgNamespace, "line");
-  secondHand.setAttribute("id", `second-hand-${timezoneIdSuffix}`);
-  secondHand.setAttribute("class", "analog-hand-world second-world common-clock-hand common-clock-hand-second");
-  secondHand.setAttribute("x1", "100");
-  secondHand.setAttribute("y1", "100");
-  secondHand.setAttribute("x2", "100");
-  secondHand.setAttribute("y2", "30");
-  analogClockSVG.appendChild(secondHand);
-
-  const centerDot = document.createElementNS(svgNamespace, "circle");
-  centerDot.setAttribute("class", "analog-center-world common-clock-center");
-  centerDot.setAttribute("cx", "100");
-  centerDot.setAttribute("cy", "100");
-  centerDot.setAttribute("r", "4");
-  analogClockSVG.appendChild(centerDot);
-
-  // === ↓↓↓ 重要な修正箇所: ここから ↓↓↓ ===
-  clockItem.appendChild(cityNameElement);     // 都市名を追加
-  clockItem.appendChild(ahTimeDisplay);       // AH時間表示を追加
-  clockItem.appendChild(normalTimeDisplay);   // 通常時間表示を追加
-  clockItem.appendChild(analogClockSVG);      // SVGアナログ時計を追加
-  // === ↑↑↑ 重要な修正箇所: ここまで ↑↑↑ ===
+  clockItem.append(cityNameElement, ahTimeDisplay, normalTimeDisplay, analogClockSVG);
 
   clockItem.addEventListener('click', () => {
     window.location.href = `/?timezone=${encodeURIComponent(tzData.timezone)}`;
@@ -122,8 +124,6 @@ function createClockElement(tzData) {
   return clockItem;
 }
 
-// ... (getAhDigitalTime, updateWorldClockTime, updateAllClocksLoop, 初期化処理はそのまま) ...
-// AHデジタルタイム取得 (変更なし)
 function getAhDigitalTime(dateObject, timezone) {
   const localTime = moment(dateObject).tz(timezone);
   const hours = localTime.hours();
@@ -132,88 +132,90 @@ function getAhDigitalTime(dateObject, timezone) {
   const milliseconds = localTime.milliseconds();
 
   const isAHHourForThisTimezone = hours === 23;
-
   const totalMs = ((hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds);
   const scaledMs = isAHHourForThisTimezone ? totalMs : totalMs * SCALE_AH;
 
-  const ahSec = (scaledMs / 1000) % 60;
-  const ahMin = Math.floor((scaledMs / (1000 * 60)) % 60);
-  let ahHr = Math.floor((scaledMs / (1000 * 3600)) % 24);
-
-  if (isAHHourForThisTimezone) {
-    ahHr = 24;
-  }
-
   return {
-    ahHours: ahHr,
-    ahMinutes: ahMin,
-    ahSeconds: ahSec,
+    ahHours: isAHHourForThisTimezone ? 24 : Math.floor((scaledMs / (1000 * 3600)) % 24),
+    ahMinutes: Math.floor((scaledMs / (1000 * 60)) % 60),
+    ahSeconds: (scaledMs / 1000) % 60,
     isAHHour: isAHHourForThisTimezone
   };
 }
 
-
-// 時計更新関数 (変更なし)
-function updateWorldClockTime(timezoneData) {
-  const timezone = timezoneData.timezone;
+function updateWorldClockTime(tzData) {
   const now = new Date();
-  const timezoneIdSuffix = timezone.replace(/[\/\+\:]/g, '-');
+  const timezoneIdSuffix = tzData.timezone.replace(/[\/\+\:]/g, '-');
 
+  // Update digital displays
   const normalTimeEl = document.getElementById(`time-${timezoneIdSuffix}`);
   if (normalTimeEl) {
-    normalTimeEl.textContent = moment(now).tz(timezone).format('HH:mm:ss');
+    normalTimeEl.textContent = moment(now).tz(tzData.timezone).format('HH:mm:ss');
   }
 
-  const { ahHours, ahMinutes, ahSeconds, isAHHour } = getAhDigitalTime(now, timezone);
+  const { ahHours, ahMinutes, ahSeconds, isAHHour } = getAhDigitalTime(now, tzData.timezone);
   const ahTimeEl = document.getElementById(`ah-time-${timezoneIdSuffix}`);
   if (ahTimeEl) {
-    const ahTimeString =
-      `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
-    ahTimeEl.textContent = `AH: ${ahTimeString}`;
+    const ahTimeString = `AH: ${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
+    ahTimeEl.textContent = ahTimeString;
   }
 
-  const angles = getAngles(now, timezone);
+  // Update analog clock hands
+  const angles = getAngles(now, tzData.timezone);
+  ['hour', 'minute', 'second'].forEach(hand => {
+    const element = document.getElementById(`${hand}-hand-${timezoneIdSuffix}`);
+    if (element) {
+      element.style.transform = `rotate(${angles[`${hand}Angle`]}deg)`;
+    }
+  });
 
-  const hourHand = document.getElementById(`hour-hand-${timezoneIdSuffix}`);
-  if (hourHand) hourHand.style.transform = `rotate(${angles.hourAngle}deg)`;
-  const minuteHand = document.getElementById(`minute-hand-${timezoneIdSuffix}`);
-  if (minuteHand) minuteHand.style.transform = `rotate(${angles.minuteAngle}deg)`;
-  const secondHand = document.getElementById(`second-hand-${timezoneIdSuffix}`);
-  if (secondHand) secondHand.style.transform = `rotate(${angles.secondAngle}deg)`;
-
-  const clockItem = document.querySelector(`[data-timezone="${timezone}"]`);
+  // Update AH state
+  const clockItem = document.querySelector(`[data-timezone="${tzData.timezone}"]`);
   if (clockItem) {
     clockItem.classList.toggle('blinking-ah', isAHHour);
   }
 }
 
-// 全時計更新ループ (変更なし)
 function updateAllClocksLoop() {
-  worldTimezones.forEach(tzData => {
-    updateWorldClockTime(tzData);
-  });
-  requestAnimationFrame(updateAllClocksLoop);
+  state.worldTimezones.forEach(updateWorldClockTime);
+  state.animationFrameId = requestAnimationFrame(updateAllClocksLoop);
 }
 
-// --- 初期化処理 ---
-if (container) {
-  if (typeof moment !== 'undefined' && typeof moment.tz !== 'undefined') {
-    initializeWorldClockDisplayData(); // データを初期化
-    if (worldTimezones.length > 0) {
-      container.innerHTML = ''; // 既存の要素をクリア
-      worldTimezones.forEach(tzData => {
-        const clockEl = createClockElement(tzData);
-        container.appendChild(clockEl);
-      });
-      updateAllClocksLoop();
-    } else {
-      container.innerHTML = '<p>No timezones available to display.</p>';
-      console.error('World timezones list is empty after initialization.');
-    }
-  } else {
-    console.error("Moment.js and Moment Timezone are not loaded. World clocks cannot be initialized.");
-    container.innerHTML = '<p>Error: Time library not loaded. World clocks cannot be displayed.</p>';
+function initializeWorldClocks() {
+  if (!state.container) {
+    console.error('Error: world-clocks-container element not found in HTML.');
+    return;
   }
-} else {
-  console.error('Error: world-clocks-container element not found in HTML.');
+
+  if (typeof moment === 'undefined' || typeof moment.tz === 'undefined') {
+    console.error("Moment.js and Moment Timezone are not loaded. World clocks cannot be initialized.");
+    state.container.innerHTML = '<p>Error: Time library not loaded. World clocks cannot be displayed.</p>';
+    return;
+  }
+
+  state.userLocalTimezone = getUserLocalTimezone();
+  state.worldTimezones = getDisplayTimezones();
+
+  if (state.worldTimezones.length === 0) {
+    state.container.innerHTML = '<p>No timezones available to display.</p>';
+    console.error('World timezones list is empty after initialization.');
+    return;
+  }
+
+  state.container.innerHTML = '';
+  state.worldTimezones.forEach(tzData => {
+    state.container.appendChild(createClockElement(tzData));
+  });
+
+  updateAllClocksLoop();
 }
+
+// Cleanup function for animation frame
+window.addEventListener('unload', () => {
+  if (state.animationFrameId) {
+    cancelAnimationFrame(state.animationFrameId);
+  }
+});
+
+// Initialize the application
+initializeWorldClocks();
