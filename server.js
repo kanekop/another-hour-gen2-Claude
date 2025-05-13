@@ -5,21 +5,9 @@ import timerRouter from './src/routes/timer.js';  // 追加
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-import session from 'express-session';
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
-const port = 3000;
-
-// Use session middleware with secret from environment
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === 'production' }
-}));
-
-// Admin authentication middleware
+const port = 3000;ware
 const requireAdmin = (req, res, next) => {
   const adminKey = req.headers['x-admin-key'];
   if (adminKey === process.env.ADMIN_KEY) {

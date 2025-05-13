@@ -51,10 +51,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
     * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in AH units, consistent with the main clock's scale (1 AH sec $\approx$ 0.95833 real sec).
     * **Timer (`/pages/timer.html`):** Allows setting a countdown duration in AH units, consistent with the main clock's scale.
 
-* **Admin Panel (`/admin`):**
-    * Password-protected panel to manage application settings.
-    * Configure timezones available for the main clock.
-    * Adjust display preferences (e.g., show/hide AH time, show/hide actual time on the main clock).
+
 
 * **Visual Theme:**
     * The application defaults to a light theme.
