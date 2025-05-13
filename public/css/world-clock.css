@@ -6,6 +6,7 @@
   width: 100%;
   height: calc(100vh - 100px);
   margin-top: 10px;
+  margin-bottom: 30px;
   padding: 1vmin;
   box-sizing: border-box;
   grid-template-columns: repeat(6, minmax(0, 1fr));
