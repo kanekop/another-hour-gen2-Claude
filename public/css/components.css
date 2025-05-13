@@ -19,7 +19,7 @@ body {
   color: var(--light-text);
   padding: 20px;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: 'Inter', sans-serif;
   transition: background-color var(--common-transition), color var(--common-transition);
 }
 
@@ -39,6 +39,7 @@ input[type="text"] {
   color: var(--light-text);
   font-size: clamp(14px, 3vw, 16px);
   margin: 5px 0;
+  font-family: 'Inter', sans-serif;
 }
 
 body.inverted select,
@@ -128,7 +129,7 @@ body.inverted .common-clock-tick,
 /* --- Digital Time Displays --- */
 .ah-time-display-main,
 .normal-time-display-sub {
-  font-family: monospace;
+  font-family: 'Roboto Mono', monospace;
   text-align: center;
   width: 100%;
   margin-bottom: 5px;
@@ -161,7 +162,7 @@ body.inverted .normal-time-display-sub,
   text-align: center;
   line-height: 1.6;
   width: min(400px, 95vw);
-  font-family: monospace;
+  font-family: 'Roboto Mono', monospace;
   font-size: clamp(16px, 4.5vw, 24px);
   transition: all var(--common-transition);
   background: #f0f0f0;
@@ -190,6 +191,7 @@ button,
   text-decoration: none;
   display: inline-block;
   text-align: center;
+  font-family: 'Inter', sans-serif;
 }
 
 button:hover,
@@ -204,6 +206,7 @@ button:hover,
   align-items: center;
   gap: 10px;
   margin-top: 15px;
+  font-family: 'Inter', sans-serif;
 }
 
 .toggle-switch {
@@ -281,6 +284,7 @@ input:checked + .slider:before {
   justify-content: center;
   gap: 10px;
   margin: 20px 0;
+  font-family: 'Inter', sans-serif;
 }
 
 .controls button {
