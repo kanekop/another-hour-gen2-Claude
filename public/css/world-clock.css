@@ -11,13 +11,13 @@
 }
 
 .world-clock-item {
-  border: 1px solid #ccc; /* Light mode border */
+  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1.5vmin;
-  background: #f0f0f0; /* Light mode background */
-  color: #1a1a1a; /* Light mode text */
+  background: #f0f0f0;
+  color: #1a1a1a;
   text-align: center;
-  transition: box-shadow 0.2s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+  transition: box-shadow 0.2s ease-in-out, background-color 0.3s ease, color: 0.3s ease;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -26,57 +26,40 @@
 }
 
 .world-clock-item h3 {
-  margin-top: 0;
+  margin: 0 0 0.5vmin;
   font-size: clamp(0.75em, 2vmin, 1em);
-  font-weight: bold; /* Moved from user-local-timezone-city to apply to all city names by default if desired */
-  margin-bottom: 0.5vmin;
+  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
 }
-/* Default city name color (light theme) */
-.world-clock-item:not(.blinking-ah) h3 {
-  color: #c28000;
-}
-/* City name color for blinking (dark theme) items */
-.world-clock-item.blinking-ah h3 {
-  color: #ffc107;
-}
 
+/* City name colors */
+.world-clock-item:not(.blinking-ah) h3 { color: #c28000; }
+.world-clock-item.blinking-ah h3 { color: #ffc107; }
 
-/* AH/Normal time display font sizes for world clock items */
+/* AH/Normal time display font sizes */
 .world-clock-item .ah-time-display-main {
   font-size: clamp(0.9em, 2.5vmin, 1.3em);
-  /* Common text colors handled by components.css */
 }
 .world-clock-item .normal-time-display-sub {
   font-size: clamp(0.7em, 1.8vmin, 0.8em);
-  /* Common text colors handled by components.css */
 }
 
-
-/* --- AH状態の .world-clock-item の特別スタイル --- */
+/* AH state styles */
 .world-clock-item.blinking-ah {
-  background: #222; /* Dark mode background for item */
-  border-color: #444; /* Dark mode border for item */
-  color: white; /* Dark mode text for item */
+  background: #222;
+  border-color: #444;
+  color: white;
   animation: avanzado-ah-blink 2s ease-in-out infinite;
 }
-/* Styles for clock parts within .blinking-ah are now mostly handled by .common-clock-* classes in components.css */
-/* We only need specific overrides if components.css doesn't cover it or if .blinking-ah needs different dark theme than body.inverted */
 
-/* .world-clock-item.blinking-ah h3 - color handled above */
-/* .world-clock-item.blinking-ah .ah-time-display-main - color handled by components.css */
-/* .world-clock-item.blinking-ah .normal-time-display-sub - color handled by components.css */
-
-/* Analog clock styles within blinking item (if different from standard dark theme in components.css) */
+/* Analog clock face for blinking items */
 .world-clock-item.blinking-ah .analog-face-world {
-  fill: #333; /* Slightly different dark face for items */
+  fill: #333;
   stroke: #555;
 }
-/* Ticks, Hands, Center dot for .blinking-ah items should now pick up common dark styles from components.css */
-
 
 @keyframes avanzado-ah-blink {
   0%   { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); opacity: 1; }
@@ -84,58 +67,58 @@
   100% { box-shadow: 0 0 5px rgba(255, 193, 7, 0.3); opacity: 1; }
 }
 
-/* --- Media Queries for column adjustment --- */
-@media (max-width: 1024px) {
-  #world-clocks-container {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-@media (max-width: 767px) {
-  #world-clocks-container {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5vw;
-  }
-  .world-clock-item { padding: 1vmin; }
-}
-@media (max-width: 480px) {
-  #world-clocks-container {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2vw;
-  }
-  .world-clock-item h3 { font-size: clamp(0.7em, 2.5vmin, 0.9em); }
-  .world-clock-item .ah-time-display-main { font-size: clamp(0.8em, 3vmin, 1.1em); }
-  .world-clock-item .normal-time-display-sub { font-size: clamp(0.65em, 2vmin, 0.75em); }
-  .analog-clock-world { /* Size specific to world clock items */
-    width: clamp(40px, 12vmin, 60px);
-    height: clamp(40px, 12vmin, 60px);
-  }
-}
-
-
-/* --- Default analog clock styles for world clock (sizing and minor adjustments) --- */
-.analog-clock-world { /* Container for each world clock SVG */
+/* Analog clock sizing */
+.analog-clock-world {
   width: clamp(50px, 10vmin, 70px);
   height: clamp(50px, 10vmin, 70px);
   margin: 0.5vmin auto 0;
   display: block;
 }
-/* Basic face, hands, ticks, center styles are now in components.css via common classes */
-/* .analog-clock-world .analog-face-world { ... } */ /* REMOVE */
-/* .analog-clock-world .analog-ticks-world line { ... } */ /* REMOVE if covered by common-clock-tick-* */
-/* .analog-clock-world .analog-hand-world { ... } */ /* REMOVE */
-/* .analog-clock-world .analog-hand-world.hour-world { ... } */ /* REMOVE */
-/* .analog-clock-world .analog-hand-world.minute-world { ... } */ /* REMOVE */
-/* .analog-clock-world .analog-hand-world.second-world { ... } */ /* REMOVE */
-/* .analog-clock-world .analog-center-world { ... } */ /* REMOVE */
 
-
-/* User's local timezone city name highlight */
+/* User's local timezone highlight */
 .world-clock-item h3.user-local-timezone-city {
-  font-weight: bold; /* Ensure boldness */
+  font-weight: bold;
 }
 .world-clock-item:not(.blinking-ah) h3.user-local-timezone-city {
-  color: #D32F2F; /* Red for light theme */
+  color: #D32F2F;
 }
 .world-clock-item.blinking-ah h3.user-local-timezone-city {
-  color: #FF5252; /* Brighter red for dark theme */
+  color: #FF5252;
+}
+
+/* Responsive layout */
+@media (max-width: 1024px) {
+  #world-clocks-container {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  #world-clocks-container {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5vw;
+  }
+  .world-clock-item { 
+    padding: 1vmin; 
+  }
+}
+
+@media (max-width: 480px) {
+  #world-clocks-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2vw;
+  }
+  .world-clock-item h3 { 
+    font-size: clamp(0.7em, 2.5vmin, 0.9em); 
+  }
+  .world-clock-item .ah-time-display-main { 
+    font-size: clamp(0.8em, 3vmin, 1.1em); 
+  }
+  .world-clock-item .normal-time-display-sub { 
+    font-size: clamp(0.65em, 2vmin, 0.75em); 
+  }
+  .analog-clock-world {
+    width: clamp(40px, 12vmin, 60px);
+    height: clamp(40px, 12vmin, 60px);
+  }
 }
