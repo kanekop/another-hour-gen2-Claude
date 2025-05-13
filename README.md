@@ -160,11 +160,11 @@ project/
 * Use the dropdown menu to change the timezone.
 * Click "Toggle Digital Display" to show/hide numerical AH time and standard time.
 * The page theme will invert to dark mode if the selected timezone is in its "Another Hour" (23:00-00:00 local real time).
-* Click the "All Time Zone" button to navigate to the World Clock page.
+* Click the "World Clock" button to navigate to the World Clock page.
 
 ### World Clock
 
-* Accessible via the "All Time Zone" button from the Main Clock page, or directly at `/pages/world-clock.html`.
+* Accessible via the "World Clock" button from the Main Clock page, or directly at `/pages/world-clock.html`.
 * Displays a grid of 24 clocks, each representing a distinct UTC offset, all operating on the unified AH scale. The layout aims to show all 24 clocks simultaneously on larger screens, adjusting to fewer columns on smaller screens while ensuring all clocks remain accessible via scrolling if necessary.
 * The user's own timezone is highlighted for quick reference.
 * Representative cities are dynamically chosen for each offset.

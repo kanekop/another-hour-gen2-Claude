@@ -215,3 +215,43 @@ input:checked + .slider:before {
 .toggle-label {
   font-size: clamp(12px, 2vmin, 14px);
 }
+
+/* public/css/main-clock.css */
+
+/* ... 既存のスタイル ... */
+
+#main-ah-time,
+#main-normal-time {
+  text-align: center; /* 中央揃え */
+  width: 100%;       /* 横幅いっぱい */
+  margin-bottom: 5px; /* 下マージン */
+  font-family: monospace;
+}
+
+#main-ah-time {
+  font-size: clamp(1.1em, 3vmin, 1.4em); /* World Clockに合わせたフォントサイズ例 */
+  font-weight: bold;
+  /* color: #1a1a1a; /* 通常時の色 (bodyのcolorを継承) */
+}
+body.inverted #main-ah-time {
+  color: white; /* 反転時の色 */
+}
+
+#main-normal-time {
+  font-size: clamp(0.8em, 2.2vmin, 1.0em); /* World Clockに合わせたフォントサイズ例 */
+  color: #555; /* 通常時は少し薄めに */
+}
+body.inverted #main-normal-time {
+  color: #aaa; /* 反転時はさらに薄めに */
+}
+
+/* 既存の #digital-clock スタイルは、これが統合表示エリアとして機能する場合、
+   そのまま活かすか、あるいは不要であれば削除またはコメントアウト */
+/*
+.digital-clock { ... }
+*/
+
+/* .hidden クラスは components.css または style.css にある想定 */
+.hidden {
+  display: none !important;
+}

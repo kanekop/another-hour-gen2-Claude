@@ -3,56 +3,46 @@ import { SCALE_AH, getAngles } from '../clock-core.js';
 // city-timezones.js の直接インポートを削除
 // import { cityCandidatesByOffset } from './city-timezones.js';
 // 新しい timezone-manager.js から必要な関数をインポート
-import { getDisplayTimezones, getUserLocalTimezone, getCityNameByTimezone } from './timezone-manager.js'; // getCityNameByTimezone は現状未使用だが将来的に使う可能性
+import { getDisplayTimezones, getUserLocalTimezone, getCityNameByTimezone } from './timezone-manager.js';
 
 const container = document.getElementById('world-clocks-container');
-// userLocalTimezone は timezone-manager から取得する
-const userLocalTimezone = getUserLocalTimezone();
+const userLocalTimezone = getUserLocalTimezone(); // timezone-manager から取得
 
-// worldTimezones は getDisplayTimezones() から取得する形に変更
-let worldTimezones = [];
+let worldTimezones = []; // ここで初期化
 
 /**
- * 以前の initializeWorldTimezones は getDisplayTimezones にロジックが移管されたため、
- * ここでは getDisplayTimezones を呼び出すだけ、もしくは直接 worldTimezones に代入する。
- * ただし、getDisplayTimezones は既にソートされたリストを返す想定なので、
- * ここでの追加のソートやフィルタリングは不要になる。
+ * World Clock表示用のデータを初期化します。
+ * timezone-manager からタイムゾーンリストを取得します。
  */
 function initializeWorldClockDisplayData() {
-  // timezone-manager からワールドクロック表示用のタイムゾーンリストを取得
-  worldTimezones = getDisplayTimezones();
+  worldTimezones = getDisplayTimezones(); // timezone-manager から取得
 
-  // デバッグ用ログ（必要に応じて）
-  // console.log("Selected World Timezones for Display (from timezone-manager):", worldTimezones.map(tz => {
-  // return { city: tz.city, timezone: tz.timezone, currentOffset: moment.tz(tz.timezone).utcOffset() };
-  // }));
+  // デバッグログ（必要に応じて）
+  // console.log("World Timezones for Display:", worldTimezones.map(tz => tz.displayText));
 }
 
-// 時計要素を生成する関数 (tzData の形式が変更されたことに注意)
+// 時計要素を生成する関数 (tzData の形式に注意)
 // tzData は { timezone: string, city: string, offset: number, offsetString: string, displayText: string } 形式
 function createClockElement(tzData) {
   const clockItem = document.createElement('div');
   clockItem.classList.add('world-clock-item');
-  clockItem.dataset.timezone = tzData.timezone; // IANAタイムゾーン名を data属性に設定
+  clockItem.dataset.timezone = tzData.timezone;
 
-  const cityName = document.createElement('h3');
-  cityName.textContent = tzData.city; // timezone-manager が生成した都市名を使用
+  const cityNameElement = document.createElement('h3'); // cityNameElement に変更
+  cityNameElement.textContent = tzData.city; // timezone-manager が提供する city 名
 
-  // ユーザーのローカルタイムゾーンと一致するか確認し、クラスを付与
   if (tzData.timezone === userLocalTimezone) {
-    cityName.classList.add('user-local-timezone-city');
+    cityNameElement.classList.add('user-local-timezone-city');
   }
 
   const ahTimeDisplay = document.createElement('div');
   ahTimeDisplay.classList.add('ah-time-display-main');
-  // ID生成時のコロンをハイフンに置換 (以前のロジックを踏襲)
   ahTimeDisplay.id = `ah-time-${tzData.timezone.replace(/[\/\+\:]/g, '-')}`;
 
   const normalTimeDisplay = document.createElement('div');
   normalTimeDisplay.classList.add('normal-time-display-sub');
   normalTimeDisplay.id = `time-${tzData.timezone.replace(/[\/\+\:]/g, '-')}`;
 
-  // アナログ時計用のSVG要素 (変更なし)
   const svgNamespace = "http://www.w3.org/2000/svg";
   const analogClockSVG = document.createElementNS(svgNamespace, "svg");
   const timezoneIdSuffix = tzData.timezone.replace(/[\/\+\:]/g, '-');
@@ -60,6 +50,7 @@ function createClockElement(tzData) {
   analogClockSVG.setAttribute("class", "analog-clock-world");
   analogClockSVG.setAttribute("viewBox", "0 0 200 200");
 
+  // ... (SVG要素の生成部分は変更なし)
   const face = document.createElementNS(svgNamespace, "circle");
   face.setAttribute("class", "analog-face-world");
   face.setAttribute("cx", "100");
@@ -73,9 +64,9 @@ function createClockElement(tzData) {
     const angle = i * 30;
     const tick = document.createElementNS(svgNamespace, "line");
     tick.setAttribute("x1", "100");
-    tick.setAttribute("y1", "15");
+    tick.setAttribute("y1", "15"); // 目盛りの長さを調整 (以前は5)
     tick.setAttribute("x2", "100");
-    tick.setAttribute("y2", "25");
+    tick.setAttribute("y2", "25"); // 目盛りの長さを調整 (以前は15)
     tick.setAttribute("transform", `rotate(${angle}, 100, 100)`);
     ticksGroup.appendChild(tick);
   }
@@ -87,7 +78,7 @@ function createClockElement(tzData) {
   hourHand.setAttribute("x1", "100");
   hourHand.setAttribute("y1", "100");
   hourHand.setAttribute("x2", "100");
-  hourHand.setAttribute("y2", "60");
+  hourHand.setAttribute("y2", "60"); // 長さを調整
   analogClockSVG.appendChild(hourHand);
 
   const minuteHand = document.createElementNS(svgNamespace, "line");
@@ -96,7 +87,7 @@ function createClockElement(tzData) {
   minuteHand.setAttribute("x1", "100");
   minuteHand.setAttribute("y1", "100");
   minuteHand.setAttribute("x2", "100");
-  minuteHand.setAttribute("y2", "40");
+  minuteHand.setAttribute("y2", "40"); // 長さを調整
   analogClockSVG.appendChild(minuteHand);
 
   const secondHand = document.createElementNS(svgNamespace, "line");
@@ -105,34 +96,31 @@ function createClockElement(tzData) {
   secondHand.setAttribute("x1", "100");
   secondHand.setAttribute("y1", "100");
   secondHand.setAttribute("x2", "100");
-  secondHand.setAttribute("y2", "30");
+  secondHand.setAttribute("y2", "30"); // 長さを調整
   analogClockSVG.appendChild(secondHand);
 
   const centerDot = document.createElementNS(svgNamespace, "circle");
   centerDot.setAttribute("class", "analog-center-world");
   centerDot.setAttribute("cx", "100");
   centerDot.setAttribute("cy", "100");
-  centerDot.setAttribute("r", "4");
+  centerDot.setAttribute("r", "4"); // サイズ調整
   analogClockSVG.appendChild(centerDot);
+  // ... (SVG要素の生成部分は変更なし ここまで)
 
-  clockItem.appendChild(cityName);
+
+  clockItem.appendChild(cityNameElement); // cityNameElement を追加
   clockItem.appendChild(ahTimeDisplay);
   clockItem.appendChild(normalTimeDisplay);
   clockItem.appendChild(analogClockSVG);
 
-  // --- ここからクリックイベントリスナーを追加 ---
   clockItem.addEventListener('click', () => {
-    // クエリパラメータとしてタイムゾーンを付与してメインページに遷移
     window.location.href = `/?timezone=${encodeURIComponent(tzData.timezone)}`;
   });
-  // ダブルクリックにしたい場合は 'dblclick' に変更
-  // clockItem.addEventListener('dblclick', () => { ... });
-  // --- クリックイベントリスナーここまで ---
 
   return clockItem;
 }
 
-// getAhDigitalTime 関数は変更なし (前回のコードのまま)
+// AHデジタルタイム取得 (変更なし)
 function getAhDigitalTime(dateObject, timezone) {
   const localTime = moment(dateObject).tz(timezone);
   const hours = localTime.hours();
@@ -143,7 +131,6 @@ function getAhDigitalTime(dateObject, timezone) {
   const isAHHourForThisTimezone = hours === 23;
 
   const totalMs = ((hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds);
-  // clock-core.js の SCALE_AH (24/23) を使う
   const scaledMs = isAHHourForThisTimezone ? totalMs : totalMs * SCALE_AH;
 
   const ahSec = (scaledMs / 1000) % 60;
@@ -151,8 +138,6 @@ function getAhDigitalTime(dateObject, timezone) {
   let ahHr = Math.floor((scaledMs / (1000 * 3600)) % 24);
 
   if (isAHHourForThisTimezone) {
-    // clock-core.js の getAngles と同様のロジックでAH時間を表示
-    // getAngles は ahHours を 24 としているため、それに合わせる
     ahHr = 24;
   }
 
@@ -165,9 +150,9 @@ function getAhDigitalTime(dateObject, timezone) {
 }
 
 
-// updateWorldClockTime 関数 (tzData の形式変更に対応)
-function updateWorldClockTime(timezoneData) { // パラメータ名を timezoneData に変更
-  const timezone = timezoneData.timezone; // tzData.timezone を使用
+// 時計更新関数 (変更なし)
+function updateWorldClockTime(timezoneData) {
+  const timezone = timezoneData.timezone;
   const now = new Date();
   const timezoneIdSuffix = timezone.replace(/[\/\+\:]/g, '-');
 
@@ -176,7 +161,6 @@ function updateWorldClockTime(timezoneData) { // パラメータ名を timezoneD
     normalTimeEl.textContent = moment(now).tz(timezone).format('HH:mm:ss');
   }
 
-  // AH時刻の計算と表示 (getAhDigitalTime を使用)
   const { ahHours, ahMinutes, ahSeconds, isAHHour } = getAhDigitalTime(now, timezone);
   const ahTimeEl = document.getElementById(`ah-time-${timezoneIdSuffix}`);
   if (ahTimeEl) {
@@ -185,31 +169,24 @@ function updateWorldClockTime(timezoneData) { // パラメータ名を timezoneD
     ahTimeEl.textContent = `AH: ${ahTimeString}`;
   }
 
-  // アナログ時計の針の更新 (getAngles を使用)
-  const angles = getAngles(now, timezone); // getAngles は clock-core.js からインポート済み
+  const angles = getAngles(now, timezone);
 
   const hourHand = document.getElementById(`hour-hand-${timezoneIdSuffix}`);
-  if (hourHand) {
-    hourHand.style.transform = `rotate(${angles.hourAngle}deg)`;
-  }
+  if (hourHand) hourHand.style.transform = `rotate(${angles.hourAngle}deg)`;
   const minuteHand = document.getElementById(`minute-hand-${timezoneIdSuffix}`);
-  if (minuteHand) {
-    minuteHand.style.transform = `rotate(${angles.minuteAngle}deg)`;
-  }
+  if (minuteHand) minuteHand.style.transform = `rotate(${angles.minuteAngle}deg)`;
   const secondHand = document.getElementById(`second-hand-${timezoneIdSuffix}`);
-  if (secondHand) {
-    secondHand.style.transform = `rotate(${angles.secondAngle}deg)`;
-  }
+  if (secondHand) secondHand.style.transform = `rotate(${angles.secondAngle}deg)`;
 
   const clockItem = document.querySelector(`[data-timezone="${timezone}"]`);
   if (clockItem) {
-    clockItem.classList.toggle('blinking-ah', isAHHour); // isAHHour に基づいてクラスをトグル
+    clockItem.classList.toggle('blinking-ah', isAHHour);
   }
 }
 
-// updateAllClocksLoop 関数は変更なし
+// 全時計更新ループ (変更なし)
 function updateAllClocksLoop() {
-  worldTimezones.forEach(tzData => { // tzData を渡す
+  worldTimezones.forEach(tzData => {
     updateWorldClockTime(tzData);
   });
   requestAnimationFrame(updateAllClocksLoop);
@@ -217,15 +194,15 @@ function updateAllClocksLoop() {
 
 // --- 初期化処理 ---
 if (container) {
-  // Moment.jsがロードされていることを確認してから初期化
   if (typeof moment !== 'undefined' && typeof moment.tz !== 'undefined') {
-    initializeWorldClockDisplayData(); // データをまず初期化
+    initializeWorldClockDisplayData(); // データを初期化
     if (worldTimezones.length > 0) {
-      worldTimezones.forEach(tzData => { // tzData を使用
+      container.innerHTML = ''; // 既存の要素をクリア
+      worldTimezones.forEach(tzData => {
         const clockEl = createClockElement(tzData);
         container.appendChild(clockEl);
       });
-      updateAllClocksLoop(); // ループを開始
+      updateAllClocksLoop();
     } else {
       container.innerHTML = '<p>No timezones available to display.</p>';
       console.error('World timezones list is empty after initialization.');
@@ -233,7 +210,6 @@ if (container) {
   } else {
     console.error("Moment.js and Moment Timezone are not loaded. World clocks cannot be initialized.");
     container.innerHTML = '<p>Error: Time library not loaded. World clocks cannot be displayed.</p>';
-    // 必要であれば、Moment.jsのロードを待つ再試行ロジックなどをここにも追加
   }
 } else {
   console.error('Error: world-clocks-container element not found in HTML.');
