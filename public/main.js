@@ -15,6 +15,17 @@ fetch('/api/settings')
       settings.timezones = [userTimezone];
     }
     initializeTimezoneSelect();
+
+    // === 追加するコード（設定読み込み後）ここから ===
+    if (toggleCheckbox && digitalClockElement) {
+        // 設定に基づいてチェックボックスの初期状態を設定 (両方表示する設定ならチェック)
+        const shouldBeChecked = settings.showAHTime || settings.showActualTime;
+        toggleCheckbox.checked = shouldBeChecked;
+        // チェック状態に基づいてデジタル時計の初期表示を設定
+        digitalClockElement.classList.toggle('hidden', !shouldBeChecked);
+    }
+    // === 追加するコード（設定読み込み後）ここまで ===
+    
     updateClock();
   });
 
@@ -116,31 +127,59 @@ function updateClock() {
   document.getElementById('second').style.transform = `rotate(${secondAngle}deg)`;
 
   // Update digital clock
-  const actualTime = currentTime.format('HH:mm:ss');
-  const ahTime = `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
+  // デジタル時計の更新部分を修正
+  const digitalClockElement = document.getElementById('digital-clock'); // HTML修正後のID
+  if (digitalClockElement && toggleCheckbox) { // toggleCheckbox も存在するか確認
+      let digitalClockOutput = '';
+      // チェックボックスがチェックされている場合のみ表示内容を生成
+      if (toggleCheckbox.checked) {
+          const actualTime = currentTime.format('HH:mm:ss');
+          const ahTime = `${String(Math.floor(ahHours)).padStart(2, '0')}:${String(Math.floor(ahMinutes)).padStart(2, '0')}:${String(Math.floor(ahSeconds)).padStart(2, '0')}`;
 
-  let digitalClockOutput = '';
-  if (settings.showActualTime) {
-    digitalClockOutput += `Actual: ${actualTime}<br>`;
-  }
-  if (settings.showAHTime) {
-    digitalClockOutput += `AH Time: ${ahTime}`;
+          // 設定に基づいて表示する内容を決定
+          if (settings.showAHTime) {
+            digitalClockOutput += `AH Time: ${ahTime}<br>`;
+          }
+          if (settings.showActualTime) {
+            digitalClockOutput += `Actual: ${actualTime}`;
+          }
+                    // もし両方非表示設定でチェックボックスがONの場合はメッセージを表示するなど、必要に応じて調整
+          if (!settings.showActualTime && !settings.showAHTime) {
+              digitalClockOutput = '(Display toggled off in settings)';
+          }
+      }
+      // チェックされていない場合は digitalClockOutput は空のまま
+
+      digitalClockElement.innerHTML = digitalClockOutput;
+  } else {
+      // console.error("Digital clock element or toggle checkbox not found during update."); // デバッグ用
   }
 
-  document.getElementById('digital-clock').innerHTML = digitalClockOutput;
+  
   requestAnimationFrame(updateClock);
 }
 
 // Listen for timezone changes
 timezoneSelect.addEventListener('change', updateClock);
 
-// Digital clock toggle
-const toggleButton = document.getElementById('toggle-digital');
-const digitalClock = document.getElementById('digital-clock');
+// === 追加するコード ここから ===
+const toggleCheckbox = document.getElementById('toggle-ah-actual-display');
+const digitalClockElement = document.getElementById('digital-clock'); // HTML修正後のIDを使用
 
-toggleButton.addEventListener('click', () => {
-  digitalClock.classList.toggle('visible');ist.toggle('hidden');
-});
+if (toggleCheckbox && digitalClockElement) {
+  // 初期状態設定（設定読み込み後に行うのが望ましい - 下記参照）
+
+  toggleCheckbox.addEventListener('change', () => {
+    // チェックボックスの状態に応じて digitalClockElement の hidden クラスをトグル
+    digitalClockElement.classList.toggle('hidden', !toggleCheckbox.checked);
+    // 必要であれば、ここで updateClock を再度呼び出して表示内容を即時更新
+    // updateClock(); // <- すぐに反映させたい場合（ただし、requestAnimationFrame があるので通常は不要）
+  });
+} else {
+  console.error("Could not find toggle checkbox or digital clock element for event listener setup.");
+}
+// === 追加するコード ここまで ===
+
 
 // All Time Zone ボタンの処理
 const allTimeZoneButton = document.getElementById('all-time-zone-button');
