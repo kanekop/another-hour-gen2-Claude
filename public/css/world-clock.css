@@ -2,18 +2,21 @@
 
 #world-clocks-container {
   display: grid;
-  gap: 1vw;
+  gap: 1vmin;
   width: 100%;
-  margin-top: 20px;
-  padding: 1vw;
+  height: calc(100vh - 100px);
+  margin-top: 10px;
+  padding: 1vmin;
   box-sizing: border-box;
   grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: minmax(min-content, 1fr);
+  align-content: stretch;
 }
 
 .world-clock-item {
   border: 1px solid #ccc;
   border-radius: 8px;
-  padding: 1.5vmin;
+  padding: 1vmin;
   background: #f0f0f0;
   color: #1a1a1a;
   text-align: center;
@@ -21,8 +24,9 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
+  min-height: 0;
 }
 
 .world-clock-item h3 {
@@ -105,23 +109,26 @@
 @media (max-width: 1024px) {
   #world-clocks-container {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    height: calc(100vh - 80px);
   }
 }
 
 @media (max-width: 767px) {
   #world-clocks-container {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5vw;
+    gap: 1vmin;
+    height: calc(100vh - 70px);
   }
   .world-clock-item { 
-    padding: 1vmin; 
+    padding: 0.8vmin; 
   }
 }
 
 @media (max-width: 480px) {
   #world-clocks-container {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2vw;
+    gap: 1vmin;
+    height: calc(100vh - 60px);
   }
   .world-clock-item h3 { 
     font-size: clamp(0.7em, 2.5vmin, 0.9em); 
