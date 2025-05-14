@@ -68,6 +68,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
 project/
 ├── public/                   # Frontend assets and client-side code
 │   ├── css/                  # Stylesheets directory
+│   │   ├── admin.css        # Admin panel styles
 │   │   ├── components.css    # Common UI component styles
 │   │   ├── main-clock.css    # Main clock page styles
 │   │   ├── stopwatch.css     # Stopwatch page styles
@@ -83,7 +84,6 @@ project/
 │   │   ├── stopwatch.html   # Stopwatch interface
 │   │   ├── timer.html       # Timer interface
 │   │   └── world-clock.html # World clock interface
-│   ├── admin.css            # Admin panel styling
 │   ├── admin.html           # Admin interface
 │   ├── admin.js             # Admin panel logic
 │   ├── clock-core.js        # Core clock calculation logic
