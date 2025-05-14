@@ -5,6 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Another Hour Clock</title>
+  <style>
+    .back-link {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/main-clock.css">
@@ -13,6 +26,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
+  <a href="/" class="back-link">Back</a>
   <main class="main-clock-container">
     <header class="timezone-selector-container">
       <h3 id="main-clock-city-name" class="main-clock-city"></h3>
