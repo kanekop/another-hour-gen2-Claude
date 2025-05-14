@@ -1,43 +1,30 @@
 /* public/style.css */
 
-/* Global Styles - Keep only the most fundamental, application-wide defaults here */
+/* グローバルスタイル */
 body {
-  display: flex; /* Main layout driver */
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   margin: 0;
-  background: #e5e5e5; /* Default light theme background */
-  color: #1a1a1a;     /* Default light theme text color */
-  padding: 20px;     /* Overall padding for the body */
+  background: #e5e5e5;
+  color: #1a1a1a;
+  padding: 20px;
   box-sizing: border-box;
-  font-family: sans-serif; /* Application-wide default font */
+  font-family: sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body.inverted {
-  background: #1a1a1a; /* Default dark theme background */
-  color: white;       /* Default dark theme text color */
+  background: #1a1a1a;
+  color: white;
 }
 
-/* Global Form Elements - Moved to components.css */
-/* select, input[type="number"], input[type="text"] { ... } */
-/* body.inverted select, ... { ... } */
-/* select:focus, ... { ... } */
-/* body.inverted select:focus, ... { ... } */
-
-/* Timezone Select styling for main page - specific, so should be in main-clock.css or components if truly generic */
-/* #timezone-select in main-clock.css now handles its specifics */
-
-
-/* Media Queries for global body padding (example) */
-@media (max-width: 480px) {
-  body {
-    padding: 10px;
-  }
+/* その他のグローバルスタイル */
+button,
+.toggle-button {
+  /* ... */
 }
 
-/* Styles for .face, .hand, .second, .center, .tick, .ah-sector, .digital-clock, button,
-   .stopwatch-display, .timer-display etc. should now be in
-   main-clock.css, world-clock.css, or components.css */
+/* ... */
