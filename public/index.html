@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,46 +8,44 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="/css/main-clock.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
-  <script src="https://momentjs.com/downloads/moment.min.js"></script>
-  <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
-  <main class="main-clock-container">
-    <header class="timezone-selector-container">
-      <h3 id="main-clock-city-name" class="main-clock-city"></h3>
-      <select id="timezone-select" aria-label="Select timezone"></select>
-    </header>
+  <header class="global-header">
+    <nav class="global-nav">
+      <ul>
+        <li><a href="/">Top</a></li>
+        <li><a href="/pages/main-clock.html">Main Clock</a></li>
+        <li><a href="/pages/world-clock.html">World Clock</a></li>
+        <li><a href="/pages/stopwatch.html">Stopwatch</a></li>
+         <li><a href="/pages/timer.html">Timer</a></li>
+        </ul>
+    </nav>
+  </header>
 
-    <section id="clock-display" class="clock-display" aria-label="Analog clock">
-      <svg id="clock" viewBox="0 0 200 200" aria-hidden="true">
-        <circle class="face common-clock-face" cx="100" cy="100" r="95"/>
-        <path id="ah-sector" class="ah-sector"/>
-        <g id="ticks"></g>
-        <line id="hour" class="hand hour common-clock-hand common-clock-hand-hour" x1="100" y1="100" x2="100" y2="50"/>
-        <line id="minute" class="hand minute common-clock-hand common-clock-hand-minute" x1="100" y1="100" x2="100" y2="40"/>
-        <line id="second" class="hand second common-clock-hand common-clock-hand-second" x1="100" y1="100" x2="100" y2="35"/>
-        <circle class="center common-clock-center" cx="100" cy="100" r="3"/>
-      </svg>
-    </section>
+  <main class="landing-page-content">
+    <section class="welcome-section">
+      <h1>Welcome to Another Hour</h1>
+      <p>Discover a new way to experience time with our unique clock.</p>
+      </section>
 
-    <section id="digital-clock" class="digital-clock" aria-label="Digital clock">
-      <div id="main-ah-time" class="ah-time-display-main"></div>
-      <div id="main-normal-time" class="normal-time-display-sub"></div>
-    </section>
-
-    <footer class="clock-controls">
-      <div class="display-settings-toggle-container">
-        <label class="toggle-switch">
-          <input type="checkbox" id="toggle-ah-actual-display" checked aria-label="Toggle AH and Actual time display">
-          <span class="slider" aria-hidden="true"></span>
-        </label>
-        <span class="toggle-label">AH & Actual Time</span>
+    <section class="feature-links">
+      <div class="feature-card">
+        <a href="/pages/main-clock.html">
+          <h2>View Main Clock</h2>
+          <p>See the current time in Another Hour.</p>
+        </a>
       </div>
-
-      <button id="all-time-zone-button" class="toggle-button">World Clock</button>
-    </footer>
+      <div class="feature-card">
+        <a href="/pages/world-clock.html">
+          <h2>Explore World Clocks</h2>
+          <p>Check Another Hour time in different cities.</p>
+        </a>
+      </div>
+      </section>
   </main>
 
-  <script type="module" src="main.js"></script>
+  <footer class="global-footer">
+    <p>&copy; 2024 Another Hour</p>
+  </footer>
 </body>
 </html>

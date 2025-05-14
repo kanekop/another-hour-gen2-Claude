@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Another Hour Clock</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/main-clock.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
+  <script src="https://momentjs.com/downloads/moment.min.js"></script>
+  <script src="https://momentjs.com/downloads/moment-timezone-with-data.min.js"></script>
+</head>
+<body>
+  <main class="main-clock-container">
+    <header class="timezone-selector-container">
+      <h3 id="main-clock-city-name" class="main-clock-city"></h3>
+      <select id="timezone-select" aria-label="Select timezone"></select>
+    </header>
+
+    <section id="clock-display" class="clock-display" aria-label="Analog clock">
+      <svg id="clock" viewBox="0 0 200 200" aria-hidden="true">
+        <circle class="face common-clock-face" cx="100" cy="100" r="95"/>
+        <path id="ah-sector" class="ah-sector"/>
+        <g id="ticks"></g>
+        <line id="hour" class="hand hour common-clock-hand common-clock-hand-hour" x1="100" y1="100" x2="100" y2="50"/>
+        <line id="minute" class="hand minute common-clock-hand common-clock-hand-minute" x1="100" y1="100" x2="100" y2="40"/>
+        <line id="second" class="hand second common-clock-hand common-clock-hand-second" x1="100" y1="100" x2="100" y2="35"/>
+        <circle class="center common-clock-center" cx="100" cy="100" r="3"/>
+      </svg>
+    </section>
+
+    <section id="digital-clock" class="digital-clock" aria-label="Digital clock">
+      <div id="main-ah-time" class="ah-time-display-main"></div>
+      <div id="main-normal-time" class="normal-time-display-sub"></div>
+    </section>
+
+    <footer class="clock-controls">
+      <div class="display-settings-toggle-container">
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-ah-actual-display" checked aria-label="Toggle AH and Actual time display">
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+        <span class="toggle-label">AH & Actual Time</span>
+      </div>
+
+      <button id="all-time-zone-button" class="toggle-button">World Clock</button>
+    </footer>
+  </main>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
