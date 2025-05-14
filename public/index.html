@@ -9,114 +9,140 @@
   <link rel="stylesheet" href="/css/components.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
   <style>
-    .landing-page-content {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f5f5f5;
     }
 
-    .welcome-section {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .welcome-section h1 {
-      font-size: clamp(24px, 5vw, 36px);
-      margin-bottom: 15px;
-    }
-
-    .welcome-section p {
-      font-size: clamp(16px, 3vw, 18px);
-      color: #666;
-    }
-
-    .feature-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-      padding: 20px 0;
-    }
-
-    .feature-card {
+    .nav-header {
       background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
     }
 
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    .nav-list {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      justify-content: center;
     }
 
-    .feature-card a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .feature-card h2 {
-      font-size: clamp(18px, 4vw, 24px);
-      margin-bottom: 10px;
+    .nav-item a {
       color: #333;
+      text-decoration: none;
+      font-size: 1.1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background-color 0.3s;
     }
 
-    .feature-card p {
-      font-size: clamp(14px, 3vw, 16px);
-      color: #666;
+    .nav-item a:hover {
+      background-color: #f0f0f0;
     }
 
-    .global-footer {
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-      color: #666;
+    .nav-item a.active {
+      background-color: #e0e0e0;
+      font-weight: 500;
+    }
+
+    #content {
+      margin-top: 4rem;
+      padding: 1rem;
+      flex: 1;
     }
 
     @media (max-width: 768px) {
-      .landing-page-content {
-        padding: 15px;
+      .nav-list {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+      }
+
+      .nav-item {
+        flex: 1 1 auto;
+        text-align: center;
       }
     }
   </style>
 </head>
 <body>
-  <main class="landing-page-content">
-    <section class="welcome-section">
-      <h1>Welcome to Another Hour</h1>
-      <p>Experience time in a new way with our unique clock system</p>
-    </section>
+  <div class="app-container">
+    <header class="nav-header">
+      <nav>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="#main-clock" class="active">Main Clock</a></li>
+          <li class="nav-item"><a href="#world-clock">World Clock</a></li>
+          <li class="nav-item"><a href="#stopwatch">Stopwatch</a></li>
+          <li class="nav-item"><a href="#timer">Timer</a></li>
+        </ul>
+      </nav>
+    </header>
 
-    <section class="feature-links">
-      <div class="feature-card">
-        <a href="/pages/main-clock.html">
-          <h2>Main Clock</h2>
-          <p>View the current time in Another Hour format</p>
-        </a>
-      </div>
-      <div class="feature-card">
-        <a href="/pages/world-clock.html">
-          <h2>World Clock</h2>
-          <p>See Another Hour time across different time zones</p>
-        </a>
-      </div>
-      <div class="feature-card">
-        <a href="/pages/stopwatch.html">
-          <h2>Stopwatch</h2>
-          <p>Measure time intervals in Another Hour units</p>
-        </a>
-      </div>
-      <div class="feature-card">
-        <a href="/pages/timer.html">
-          <h2>Timer</h2>
-          <p>Set countdowns using Another Hour time</p>
-        </a>
-      </div>
-    </section>
-  </main>
+    <main id="content">
+      <!-- Content will be loaded here -->
+    </main>
+  </div>
 
-  <footer class="global-footer">
-    <p>&copy; 2024 Another Hour</p>
-  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const content = document.getElementById('content');
+      const navLinks = document.querySelectorAll('.nav-item a');
+      let currentPage = 'main-clock';
+
+      async function loadPage(pageName) {
+        try {
+          const response = await fetch(`/pages/${pageName}.html`);
+          const html = await response.text();
+          const tempDiv = document.createElement('div');
+          tempDiv.innerHTML = html;
+          
+          // Extract content between <body> tags
+          const bodyContent = tempDiv.querySelector('body').innerHTML;
+          content.innerHTML = bodyContent;
+
+          // Load and execute scripts
+          const scripts = tempDiv.querySelectorAll('script');
+          scripts.forEach(script => {
+            if (script.src) {
+              const newScript = document.createElement('script');
+              newScript.src = script.src;
+              newScript.type = script.type || 'text/javascript';
+              document.body.appendChild(newScript);
+            } else {
+              eval(script.textContent);
+            }
+          });
+
+          // Update active state
+          navLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === `#${pageName}`);
+          });
+
+          currentPage = pageName;
+        } catch (error) {
+          console.error('Error loading page:', error);
+        }
+      }
+
+      // Handle navigation
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const pageName = link.getAttribute('href').substring(1);
+          loadPage(pageName);
+        });
+      });
+
+      // Load initial page
+      loadPage(currentPage);
+    });
+  </script>
 </body>
 </html>
