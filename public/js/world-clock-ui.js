@@ -118,7 +118,7 @@ function createClockElement(tzData) {
   clockItem.append(cityNameElement, ahTimeDisplay, normalTimeDisplay, analogClockSVG);
 
   clockItem.addEventListener('click', () => {
-    window.location.href = `/?timezone=${encodeURIComponent(tzData.timezone)}`;
+    window.location.href = `/pages/main-clock.html?timezone=${encodeURIComponent(tzData.timezone)}`;
   });
 
   return clockItem;
