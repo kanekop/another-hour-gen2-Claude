@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,42 +7,112 @@
   <title>Another Hour Clock</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/main-clock.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
+  <style>
+    .landing-page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .welcome-section {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .welcome-section h1 {
+      font-size: clamp(24px, 5vw, 36px);
+      margin-bottom: 15px;
+    }
+
+    .welcome-section p {
+      font-size: clamp(16px, 3vw, 18px);
+      color: #666;
+    }
+
+    .feature-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .feature-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .feature-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .feature-card h2 {
+      font-size: clamp(18px, 4vw, 24px);
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .feature-card p {
+      font-size: clamp(14px, 3vw, 16px);
+      color: #666;
+    }
+
+    .global-footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
+      .landing-page-content {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header class="global-header">
-    <nav class="global-nav">
-      <ul>
-        <li><a href="/">Top</a></li>
-        <li><a href="/pages/main-clock.html">Main Clock</a></li>
-        <li><a href="/pages/world-clock.html">World Clock</a></li>
-        <li><a href="/pages/stopwatch.html">Stopwatch</a></li>
-         <li><a href="/pages/timer.html">Timer</a></li>
-        </ul>
-    </nav>
-  </header>
-
   <main class="landing-page-content">
     <section class="welcome-section">
       <h1>Welcome to Another Hour</h1>
-      <p>Discover a new way to experience time with our unique clock.</p>
-      </section>
+      <p>Experience time in a new way with our unique clock system</p>
+    </section>
 
     <section class="feature-links">
       <div class="feature-card">
         <a href="/pages/main-clock.html">
-          <h2>View Main Clock</h2>
-          <p>See the current time in Another Hour.</p>
+          <h2>Main Clock</h2>
+          <p>View the current time in Another Hour format</p>
         </a>
       </div>
       <div class="feature-card">
         <a href="/pages/world-clock.html">
-          <h2>Explore World Clocks</h2>
-          <p>Check Another Hour time in different cities.</p>
+          <h2>World Clock</h2>
+          <p>See Another Hour time across different time zones</p>
         </a>
       </div>
-      </section>
+      <div class="feature-card">
+        <a href="/pages/stopwatch.html">
+          <h2>Stopwatch</h2>
+          <p>Measure time intervals in Another Hour units</p>
+        </a>
+      </div>
+      <div class="feature-card">
+        <a href="/pages/timer.html">
+          <h2>Timer</h2>
+          <p>Set countdowns using Another Hour time</p>
+        </a>
+      </div>
+    </section>
   </main>
 
   <footer class="global-footer">

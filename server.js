@@ -19,6 +19,7 @@ const requireAdmin = (req, res, next) => {
 };
 
 app.use(express.static('public'));
+app.use('/pages', express.static('public/pages'));
 app.use('/css', express.static(join(__dirname, 'public/css')));
 app.use('/js', express.static(join(__dirname, 'public/js')));
 app.use('/pages', express.static(join(__dirname, 'public/pages')));
