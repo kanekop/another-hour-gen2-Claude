@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AH Time Converter</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
+  <style>
+    .converter-container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .converter-section {
+      margin-bottom: 2rem;
+    }
+
+    .converter-section h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f5f5f5;
+      border-radius: 4px;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .convert-button {
+      background: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .convert-button:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <main class="converter-container">
+    <h1>AH Time Converter</h1>
+    
+    <section class="converter-section">
+      <h2>Real Time to AH Time</h2>
+      <div class="input-group">
+        <input type="number" id="real-hours" class="input-field" placeholder="Hours" min="0" max="23">
+        <input type="number" id="real-minutes" class="input-field" placeholder="Minutes" min="0" max="59">
+        <input type="number" id="real-seconds" class="input-field" placeholder="Seconds" min="0" max="59">
+      </div>
+      <button onclick="convertToAH()" class="convert-button">Convert to AH</button>
+      <div id="ah-result" class="result"></div>
+    </section>
+
+    <section class="converter-section">
+      <h2>AH Time to Real Time</h2>
+      <div class="input-group">
+        <input type="number" id="ah-hours" class="input-field" placeholder="Hours" min="0" max="24">
+        <input type="number" id="ah-minutes" class="input-field" placeholder="Minutes" min="0" max="59">
+        <input type="number" id="ah-seconds" class="input-field" placeholder="Seconds" min="0" max="59">
+      </div>
+      <button onclick="convertToReal()" class="convert-button">Convert to Real Time</button>
+      <div id="real-result" class="result"></div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { SCALE_AH } from '/clock-core.js';
+
+    window.convertToAH = function() {
+      const hours = parseInt(document.getElementById('real-hours').value) || 0;
+      const minutes = parseInt(document.getElementById('real-minutes').value) || 0;
+      const seconds = parseInt(document.getElementById('real-seconds').value) || 0;
+
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      const ahTotalSeconds = totalSeconds * SCALE_AH;
+
+      const ahHours = Math.floor(ahTotalSeconds / 3600);
+      const ahMinutes = Math.floor((ahTotalSeconds % 3600) / 60);
+      const ahSeconds = Math.floor(ahTotalSeconds % 60);
+
+      document.getElementById('ah-result').textContent = 
+        `AH Time: ${String(ahHours).padStart(2, '0')}:${String(ahMinutes).padStart(2, '0')}:${String(ahSeconds).padStart(2, '0')}`;
+    };
+
+    window.convertToReal = function() {
+      const hours = parseInt(document.getElementById('ah-hours').value) || 0;
+      const minutes = parseInt(document.getElementById('ah-minutes').value) || 0;
+      const seconds = parseInt(document.getElementById('ah-seconds').value) || 0;
+
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      const realTotalSeconds = totalSeconds / SCALE_AH;
+
+      const realHours = Math.floor(realTotalSeconds / 3600);
+      const realMinutes = Math.floor((realTotalSeconds % 3600) / 60);
+      const realSeconds = Math.floor(realTotalSeconds % 60);
+
+      document.getElementById('real-result').textContent = 
+        `Real Time: ${String(realHours).padStart(2, '0')}:${String(realMinutes).padStart(2, '0')}:${String(realSeconds).padStart(2, '0')}`;
+    };
+  </script>
+</body>
+</html>
