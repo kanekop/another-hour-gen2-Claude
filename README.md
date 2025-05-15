@@ -50,6 +50,7 @@ Another Hour Clock is a unique web-based application that redefines your percept
 * **Time Tools (AH-Aware - Unified Scale):**
     * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in AH units, consistent with the main clock's scale (1 AH sec $\approx$ 0.95833 real sec).
     * **Timer (`/pages/timer.html`):** Allows setting a countdown duration in AH units, consistent with the main clock's scale.
+    * **Converter (`/pages/converter.html`):** Converts between standard time and AH time units, using the same unified scale (23/24 ratio) for precise time conversions.
 
 
 
@@ -68,7 +69,6 @@ Another Hour Clock is a unique web-based application that redefines your percept
 project/
 ├── public/                   # Frontend assets and client-side code
 │   ├── css/                  # Stylesheets directory
-│   │   ├── admin.css        # Admin panel styles
 │   │   ├── components.css    # Common UI component styles
 │   │   ├── main-clock.css    # Main clock page styles
 │   │   ├── stopwatch.css     # Stopwatch page styles
@@ -81,13 +81,13 @@ project/
 │   │   ├── timezone-manager.js # Timezone management utilities
 │   │   └── world-clock-ui.js # World clock functionality
 │   ├── pages/               # Additional HTML pages
+│   │   ├── converter.html   # Time converter interface
+│   │   ├── main-clock.html  # Main clock interface
 │   │   ├── stopwatch.html   # Stopwatch interface
 │   │   ├── timer.html       # Timer interface
 │   │   └── world-clock.html # World clock interface
-│   ├── admin.html           # Admin interface
-│   ├── admin.js             # Admin panel logic
 │   ├── clock-core.js        # Core clock calculation logic
-│   ├── index.html           # Main clock interface
+│   ├── index.html           # Landing page
 │   ├── main.js              # Main application logic
 │   ├── style.css           # Global styles
 │   └── tako.html           # Additional page
@@ -245,6 +245,7 @@ The following outlines completed tasks and potential future improvements:
 * [ ] **World Clock:** Display a global message when any of the 24 world clocks are in their "Another Hour."
 * [ ] **World Clock:** Refine the visual style of AH-active clock items (e.g., color scheme, AH sector display).
 * [ ] **World Clock:** Allow user customization of displayed timezones or grid layout.
+* [ ] **Customizable Clock:** Implement a clock that allows custom time scaling beyond the standard 23/24 ratio, with a user interface to modify the denominator (23) for different time compression ratios.
 * [ ] **World Clock:** (Low Priority) Option to toggle between fixed grid and the original `auto-fit` responsive layout.
 * [ ] **World Clock:** Fine-tune responsive behavior for tablets (like iPad) to better ensure desired column count (e.g., 6x4 or 4x6) while maintaining readability.
 * [ ] **Stopwatch & Timer:** UI/UX enhancements and (optional) persistence of lap times/timer settings.
