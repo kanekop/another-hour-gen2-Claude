@@ -14,12 +14,14 @@
   align-content: stretch;
 }
 
+
 .world-clock-item {
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1vmin;
   background: #f0f0f0;
   color: #1a1a1a;
+  color: 
   text-align: center;
   transition: box-shadow 0.2s ease-in-out, background-color 0.3s ease, color: 0.3s ease;
   overflow: hidden;

@@ -1,17 +1,21 @@
 // public/js/personalized-ah-clock-ui.js
 
-import { getCustomAhAngles } from '../clock-core.js';
+import { getCustomAhAngles } from '../clock-core.js'; // 修正: '../clock-core.js'
 import { getDisplayTimezones, getUserLocalTimezone, getCityNameByTimezone } from './timezone-manager.js';
 
 // DOM Elements
 const elements = {
   normalDurationSlider: document.getElementById('normal-duration-slider'),
-  normalDurationDisplay: document.getElementById('normal-duration-display'),
+  normalDurationDisplay: document.getElementById('normal-duration-display'), // 「Normal APH Day: X hours Y minutes」用
+  anotherHourDurationDisplay: document.getElementById('another-hour-duration-display'), // 「Another Personalized Hour Duration: ...」用
+  sliderRealTimeLabel: document.getElementById('slider-real-time-label'),     // ▲マーク下の HH:MM 表示用
+  sliderRealTimeIndicator: document.querySelector('.slider-real-time-indicator'), // ▲マークとテキストの親要素
+
   timezoneSelect: document.getElementById('timezone-select'),
   cityNameDisplay: document.getElementById('personalized-ah-city-name'),
   analogClock: document.getElementById('personalized-ah-analog-clock'),
   ahSector: document.getElementById('ah-personalized-sector'),
-  ahSectorIndicatorLine: document.getElementById('ah-personalized-sector-indicator'), // ★この行を追加
+  ahSectorIndicatorLine: document.getElementById('ah-personalized-sector-indicator'),
   ticks: document.getElementById('ticks-personalized'),
   hands: {
     hour: document.getElementById('hour-personalized'),
@@ -22,7 +26,7 @@ const elements = {
   digitalNormalTime: document.getElementById('personalized-normal-time'),
 };
 
-// Application State
+// Application State (変更なし)
 const state = {
   selectedTimezone: '',
   normalAphDayDurationMinutes: 1380, // Default to 23 hours (23 * 60)
@@ -30,27 +34,67 @@ const state = {
   animationFrameId: null,
 };
 
-// --- Utility Functions ---
+// --- Utility Functions --- (formatDuration は既存のものをそのまま使用)
 function formatDuration(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   return `${hours} hours ${minutes} minutes`;
 }
 
+
+// スライダー関連の表示を更新する専用関数
+function updateSliderRelatedDisplays() {
+  if (!elements.normalDurationSlider || !elements.anotherHourDurationDisplay || !elements.sliderRealTimeLabel || !elements.sliderRealTimeIndicator || !elements.normalDurationDisplay) {
+    return;
+  }
+
+  const normalAphDayMinutes = parseInt(elements.normalDurationSlider.value, 10); // 0 - 1440
+  const normalAphDayHours = normalAphDayMinutes / 60;
+
+  // 1. 「Normal APH Day: X hours Y minutes」の表示更新
+  elements.normalDurationDisplay.textContent = `Normal APH Day: ${formatDuration(normalAphDayMinutes)}`;
+
+  // 2. 「Another Personalized Hour Duration」の表示更新
+  const totalRealMinutesInDay = 24 * 60;
+  const aphDurationMinutes = totalRealMinutesInDay - normalAphDayMinutes;
+  elements.anotherHourDurationDisplay.textContent = `${formatDuration(aphDurationMinutes)}`;
+
+  // 3. スライダーの▲マーク下のリアルタイム表示 (HH:MM)
+  // normalAphDayMinutes がリアルタイムの何分にあたるか。これがAPHの開始時刻（リアルタイム）。
+  const realTimeHourEquivalent = Math.floor(normalAphDayMinutes / 60);
+  const realTimeMinuteEquivalent = normalAphDayMinutes % 60;
+  elements.sliderRealTimeLabel.textContent = `${String(realTimeHourEquivalent).padStart(2, '0')}:${String(realTimeMinuteEquivalent).padStart(2, '0')}`;
+
+  // 4. ▲マークとリアルタイム表示の位置更新
+  const sliderMin = parseInt(elements.normalDurationSlider.min, 10);
+  const sliderMax = parseInt(elements.normalDurationSlider.max, 10);
+  const thumbPositionRatio = (normalAphDayMinutes - sliderMin) / (sliderMax - sliderMin);
+
+  // CSSカスタムプロパティでつまみの位置をCSSに渡す
+  elements.sliderRealTimeIndicator.style.setProperty('--slider-thumb-position', `${thumbPositionRatio * 100}%`);
+
+  // 5. スライダーのトラックのグラデーション更新
+  elements.normalDurationSlider.style.setProperty('--slider-progress-percent', `${thumbPositionRatio * 100}%`);
+}
+
+
 // --- Initialization Functions ---
-
 function initializeSlider() {
-  if (!elements.normalDurationSlider || !elements.normalDurationDisplay) return;
+  if (!elements.normalDurationSlider) return;
 
-  // デフォルト値を23時間 (1380分) に設定し直すか、HTMLのvalueに合わせる
-  elements.normalDurationSlider.value = state.normalAphDayDurationMinutes.toString(); // stateの値で初期化
-  elements.normalDurationDisplay.textContent = formatDuration(state.normalAphDayDurationMinutes);
+  elements.normalDurationSlider.value = state.normalAphDayDurationMinutes.toString();
+  // 初期表示のために呼び出し
+  updateSliderRelatedDisplays(); 
 
-  elements.normalDurationSlider.addEventListener('input', (event) => {
-    state.normalAphDayDurationMinutes = parseInt(event.target.value, 10);
-    elements.normalDurationDisplay.textContent = formatDuration(state.normalAphDayDurationMinutes);
+  elements.normalDurationSlider.addEventListener('input', () => {
+    state.normalAphDayDurationMinutes = parseInt(elements.normalDurationSlider.value, 10);
+    updateSliderRelatedDisplays();
+    // updatePersonalizedClock(); // スライダー変更時に時計も即時更新する場合
   });
 }
+
+// initializeTimezoneSelect, updateCityNameDisplay, drawTicks は変更なし (前回提示のままとします)
+// ただし、getCustomAhAngles の import パスは確認してください。
 
 function initializeTimezoneSelect() {
   if (!elements.timezoneSelect) return;
@@ -80,6 +124,7 @@ function initializeTimezoneSelect() {
   elements.timezoneSelect.addEventListener('change', (event) => {
     state.selectedTimezone = event.target.value;
     updateCityNameDisplay(state.selectedTimezone);
+    // updatePersonalizedClock(); // タイムゾーン変更時に時計も即時更新
   });
 }
 
@@ -89,7 +134,7 @@ function updateCityNameDisplay(timezoneName) {
   }
 }
 
-function drawTicks() {
+function drawTicks() { // `public/js/personalized-ah-clock-ui.js` にある前提
   if (!elements.ticks) return;
   elements.ticks.innerHTML = '';
   for (let i = 0; i < 60; i++) {
@@ -109,9 +154,9 @@ function drawTicks() {
     if (isMajor) {
         const hourNumber = (i / 5 === 0) ? 12 : i / 5;
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        text.setAttribute('x', (100 + Math.sin(angle * Math.PI / 180) * (radius - length - 10)).toString());
-        text.setAttribute('y', (100 - Math.cos(angle * Math.PI / 180) * (radius - length - 10) + 4).toString());
-        text.setAttribute('class', 'hour-number');
+        text.setAttribute('x', (100 + Math.sin(angle * Math.PI / 180) * (radius - length - 10)).toString()); // 数値を少し内側に
+        text.setAttribute('y', (100 - Math.cos(angle * Math.PI / 180) * (radius - length - 10) + 4).toString()); // Y軸微調整
+        text.setAttribute('class', 'hour-number'); // components.css でスタイル定義想定
         text.setAttribute('text-anchor', 'middle');
         text.textContent = hourNumber.toString();
         elements.ticks.appendChild(text);
@@ -119,62 +164,39 @@ function drawTicks() {
   }
 }
 
-// public/js/personalized-ah-clock-ui.js
-
-// ... (elements と state は変更なし) ...
-// ... (formatDuration, initializeSlider, initializeTimezoneSelect, updateCityNameDisplay, drawTicks は変更なし) ...
-
+// drawAhPersonalizedSector 関数 (変更なし、前回提示のまま)
 function drawAhPersonalizedSector(startAngleDegrees, originalSweepAngleDegrees) {
   if (!elements.ahSector || !elements.ahSectorIndicatorLine) return;
 
   const radius = 95;
   const cx = 100;
   const cy = 100;
-
-  // パイ自体の描画は最大360度（わずかに小さくして完全な円との不具合を避ける）
   const displaySweepAngleDegrees = Math.min(originalSweepAngleDegrees, 359.999);
 
-  if (displaySweepAngleDegrees <= 0.001) { // スイープ角度がほぼ0なら何も描画しない
+  if (displaySweepAngleDegrees <= 0.001) {
     elements.ahSector.setAttribute("d", "");
     elements.ahSectorIndicatorLine.style.display = 'none';
     return;
   }
 
-  // SVGの角度系に変換 (x軸右方向が0度、時計回りが正)
-  // 我々の角度は12時方向が0度、時計回りが正。SVGのarcコマンドの角度は-90度オフセット。
-  const svgStartAngle = (startAngleDegrees - 90); // startAngleDegrees は常に0のはず
+  const svgStartAngle = (startAngleDegrees - 90);
   const svgDisplayEndAngle = svgStartAngle + displaySweepAngleDegrees;
-
   const startRad = svgStartAngle * Math.PI / 180;
   const endRad = svgDisplayEndAngle * Math.PI / 180;
-
   const x1 = cx + radius * Math.cos(startRad);
   const y1 = cy + radius * Math.sin(startRad);
   const x2 = cx + radius * Math.cos(endRad);
   const y2 = cy + radius * Math.sin(endRad);
-
   const largeArcFlag = displaySweepAngleDegrees > 180 ? 1 : 0;
+  const d_sector = [ `M ${cx},${cy}`, `L ${x1},${y1}`, `A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2}`, "Z" ].join(" ");
+  elements.ahSector.setAttribute("d", d_sector);
 
-  // SVGパスデータを生成
-  const d_sector = [
-    `M ${cx},${cy}`,         // Move to center
-    `L ${x1},${y1}`,         // Line to arc start point
-    `A ${radius},${radius} 0 ${largeArcFlag} 1 ${x2},${y2}`, // Arc to end point
-    "Z"                     // Close path (back to center)
-  ].join(" ");
-  elements.ahSector.setAttribute("d", d_sector); // パスを設定して扇形を描画
-
-  // 12時間を超える場合のインジケーター線を描画
   if (originalSweepAngleDegrees > 360) {
-    const indicatorAngleDegrees = originalSweepAngleDegrees % 360; // 2周目以降の角度
-    // startAngleDegrees は常に0なので、svgIndicatorAngle の計算で考慮する
-    const svgIndicatorAngle = (0 + indicatorAngleDegrees - 90); // 12時基点なので startAngleDegrees(0) を足す
-
+    const indicatorAngleDegrees = originalSweepAngleDegrees % 360;
+    const svgIndicatorAngle = (indicatorAngleDegrees - 90);
     const indicatorRad = svgIndicatorAngle * Math.PI / 180;
-
     const indicatorX = cx + radius * Math.cos(indicatorRad);
     const indicatorY = cy + radius * Math.sin(indicatorRad);
-
     elements.ahSectorIndicatorLine.setAttribute('x1', cx.toString());
     elements.ahSectorIndicatorLine.setAttribute('y1', cy.toString());
     elements.ahSectorIndicatorLine.setAttribute('x2', indicatorX.toString());
@@ -185,6 +207,7 @@ function drawAhPersonalizedSector(startAngleDegrees, originalSweepAngleDegrees) 
   }
 }
 
+
 // --- Clock Update Function ---
 function updatePersonalizedClock() {
   if (!state.selectedTimezone || !elements.hands.hour) {
@@ -192,21 +215,22 @@ function updatePersonalizedClock() {
     return;
   }
 
+  // スライダーの値を state から読み込む
+  const currentNormalAphDayDurationMinutes = state.normalAphDayDurationMinutes;
+
   const now = new Date();
   const {
     hourAngle, minuteAngle, secondAngle,
     aphHours, aphMinutes, aphSeconds,
-    ahSectorStartAngleDegrees, // 常に0が渡される
-    ahSectorSweepAngleDegrees, // 360を超える可能性のある値が渡される
+    ahSectorStartAngleDegrees,
+    ahSectorSweepAngleDegrees,
     isPersonalizedAhPeriod
-  } = getCustomAhAngles(now, state.selectedTimezone, state.normalAphDayDurationMinutes);
+  } = getCustomAhAngles(now, state.selectedTimezone, currentNormalAphDayDurationMinutes);
 
-  // アナログ針の更新 (変更なし)
   elements.hands.hour.style.transform = `rotate(${hourAngle}deg)`;
   elements.hands.minute.style.transform = `rotate(${minuteAngle}deg)`;
   elements.hands.second.style.transform = `rotate(${secondAngle}deg)`;
 
-  // デジタル表示の更新 (変更なし)
   if (elements.digitalAphTime) {
     elements.digitalAphTime.textContent = `APH Time: ${String(aphHours).padStart(2, '0')}:${String(aphMinutes).padStart(2, '0')}:${String(Math.floor(aphSeconds)).padStart(2, '0')}`;
   }
@@ -214,28 +238,22 @@ function updatePersonalizedClock() {
     elements.digitalNormalTime.textContent = `Actual: ${moment(now).tz(state.selectedTimezone).format('HH:mm:ss')}`;
   }
 
-  // AHセクターとインジケーターの更新 (APH期間中に表示)
-  if (elements.ahSector) { // elements.ahSectorIndicatorLine のチェックは drawAhPersonalizedSector 内で行う
+  if (elements.ahSector) {
     if (isPersonalizedAhPeriod) {
-      drawAhPersonalizedSector(ahSectorStartAngleDegrees, ahSectorSweepAngleDegrees); // ★ahSectorSweepAngleDegrees をそのまま渡す
+      drawAhPersonalizedSector(ahSectorStartAngleDegrees, ahSectorSweepAngleDegrees);
       elements.ahSector.style.display = 'block';
     } else {
       elements.ahSector.style.display = 'none';
-      if (elements.ahSectorIndicatorLine) { // APH期間外ならインジケーターも消す
+      if (elements.ahSectorIndicatorLine) {
           elements.ahSectorIndicatorLine.style.display = 'none';
       }
     }
   }
 
-  // テーマ更新 (APH期間中にダークモード)
   document.body.classList.toggle('inverted', isPersonalizedAhPeriod);
-
   state.animationFrameId = requestAnimationFrame(updatePersonalizedClock);
 }
 
-
-
-// ... (他の部分はそのまま) ...
 // --- Main Initialization ---
 function initialize() {
   if (typeof moment === 'undefined' || typeof moment.tz === 'undefined') {
@@ -244,18 +262,16 @@ function initialize() {
     return;
   }
 
-  initializeSlider();
-  initializeTimezoneSelect();
-  drawTicks();
+  initializeTimezoneSelect(); // タイムゾーンを先に初期化
+  initializeSlider();       // 次にスライダー（表示にタイムゾーン情報を使わないため順不同でも可）
+  drawTicks();              // 目盛り描画
 
   if (state.animationFrameId) cancelAnimationFrame(state.animationFrameId);
-  updatePersonalizedClock(); // Start the loop
+  updatePersonalizedClock(); // 時計の更新ループを開始
 }
 
-// Run initialization when the script loads
 initialize();
 
-// Cleanup on unload
 window.addEventListener('unload', () => {
   if (state.animationFrameId) {
     cancelAnimationFrame(state.animationFrameId);

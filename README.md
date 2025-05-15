@@ -317,12 +317,12 @@ The following outlines completed tasks and potential future improvements:
 * [x] Implemented Personalized AH Clock (APH Clock) with customizable normal day duration.
 * [x] APH Clock: Time scaling during normal period, normal speed during APH period.
 * [x] APH Clock: Digital display accumulates hours beyond 24 during APH period.
-* **[x] APH Clock: Analog APH sector visualizes APH period duration, starting from 12 o'clock.**
-* **[x] APH Clock: Indicator line for APH periods exceeding 12 hours.**
-* **[x] APH Clock: Dark theme during APH period.**
-* **[x] APH Clock: Settings (slider, timezone) moved to bottom of page.**
-* **[x] APH Clock: Slider range adjusted to 0-24 hours.**
-* **[x] Added link to Personalized AH Clock on Landing Page.**
+* [x] APH Clock: Analog APH sector visualizes APH period duration, starting from 12 o'clock.
+* [x] APH Clock: Indicator line for APH periods exceeding 12 hours.
+* [x] APH Clock: Dark theme during APH period.
+* [x] APH Clock: Settings (slider, timezone) moved to bottom of page.
+* [x] APH Clock: Slider range adjusted to 0-24 hours.
+* [x] Added link to Personalized AH Clock on Landing Page.
 
 **Enhancements & Future Ideas:**
 * [ ] **Personalized AH Clock:** Refine UI/UX for slider, perhaps add direct minute input alongside.
