@@ -14,8 +14,8 @@
 
 /* Settings area at the top */
 .clock-settings-container {
-  margin-top: min(15px, 3vh);
-  padding: min(12px, 2.5vh) min(24px, 5vw);
+  margin-top: min(5px, 3vh);
+  padding: min(2px, 0.2vh) min(24px, 5vw);
   border-radius: 8px;
   text-align: center;
   line-height: 1.6;
@@ -290,4 +290,14 @@ body.inverted .ah-sector-indicator-line {
     /* stroke: rgba(100, 100, 100, 0.8); */
     stroke: rgba(255, 160, 0, 5.0);
     stroke-width: 1;
+}
+
+.controls-toggle-settings button { /* または #toggle-settings-panel-btn */
+  /* 必要に応じて .toggle-button とは異なるスタイルをここに記述 */
+  /* 例: margin-top: 10px; */
+}
+
+/* public/css/components.css または personalized-ah-clock.css */
+.view-hidden {
+  display: none !important; /* !important は必要に応じて */
 }
