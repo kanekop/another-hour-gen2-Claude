@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,19 +12,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 </head>
 <body>
-  <nav>
-    <a href="/" class="back-link">Back to Home</a>
-  </nav>
+  <a href="/" class="back-link">Back to Home</a>
   <main class="personalized-ah-clock-container">
     <header class="clock-settings-container">
-      <h1>Personalized AH Clock</h1>
+      <h2>Personalized AH Clock</h2>
     </header>
 
-    <section class="clock-display" aria-label="Analog Personalized AH Clock">
+    <section id="clock-display" class="clock-display" aria-label="Analog Personalized AH Clock">
+      
       <svg id="personalized-ah-analog-clock" viewBox="0 0 200 200" aria-hidden="true">
         <circle class="face common-clock-face" cx="100" cy="100" r="95"/>
         <path id="ah-personalized-sector" class="ah-sector"/> 
-        <line id="ah-personalized-sector-indicator" class="ah-sector-indicator-line" />
+        <line id="ah-personalized-sector-indicator" class="ah-sector-indicator-line" /> <!-- Optional: for visualizing sector start/end -->
         <g id="ticks-personalized"></g>
 
         <line id="hour-personalized" class="hand hour common-clock-hand common-clock-hand-hour" x1="100" y1="100" x2="100" y2="50"/>
@@ -35,16 +33,16 @@
       </svg>
     </section>
 
-    <section class="clock-digital-display" aria-label="Digital Personalized AH Clock">
-      <time id="personalized-aph-time" class="ah-time-display-main">APH Time: 00:00:00</time>
-      <time id="personalized-normal-time" class="normal-time-display-sub">Actual: 00:00:00</time>
+    <section id="digital-clock-personalized" class="digital-clock" aria-label="Digital Personalized AH Clock">
+      <div id="personalized-aph-time" class="ah-time-display-main">APH Time: 00:00:00</div>
+      <div id="personalized-normal-time" class="normal-time-display-sub">Actual: 00:00:00</div>
     </section>
 
-    <section class="clock-settings" aria-label="Clock Settings">
-      <div class="duration-control">
-        <label for="another-hour-duration-display">Adjust the slider to set your Another Hour duration:</label>
+    <section class="clock-settings-container">
+      <div class="setting-group">
+        <label for="another-hour-duration-display">Adjust the slider to set your Another Hour duration:        </label>
 
-        <div class="slider-container">
+        <div class="slider-wrapper">
           <input type="range" id="normal-duration-slider" min="0" max="1440" value="1380">
           <div class="slider-real-time-indicator">
             <span class="slider-real-time-text" id="slider-real-time-label">23:00</span>
@@ -52,17 +50,19 @@
         </div>
         
         <label for="normal-duration-slider">APH Duration: 
-          <output id="another-hour-duration-display">1 hours 0 minutes</output>
+          <span id="another-hour-duration-display"> 1 hours 0 minutes</span>
         </label>
-        <output id="normal-duration-display">Normal APH Day: 23 hours 0 minutes</output>
-      </div>
-      <div class="timezone-control">
-        <h2 id="personalized-ah-city-name" class="personalized-ah-city"></h2>
+        <span id="normal-duration-display" style="display: block;">Normal APH Day: 23 hours 0 minutes</span> </div>
+      <div class="setting-group">
+        <h4 id="personalized-ah-city-name" class="personalized-ah-city"></h4>
         <select id="timezone-select" aria-label="Select timezone"></select>
       </div>
     </section>
+
+    
+    <footer class="clock-controls">
+      </footer>
   </main>
 
-  <script type="module" src="/js/personalized-ah-clock-ui.js"></script>
-</body>
+  <script type="module" src="/js/personalized-ah-clock-ui.js"></script> </body>
 </html>
