@@ -2,7 +2,7 @@
 
 Another Hour Clock is a unique web-based application that redefines your perception of time. It initially operates on a unified "Another Hour" (AH) time scale where time runs approximately 4.17% faster than real time (1 AH second = 23/24 real seconds). This fits a standard 24-hour day into a conceptual 23-AH-hour day, featuring a special "Another Hour" period. The project has now been enhanced with a **Personalized AH Clock (APH Clock)**, allowing users to define their own custom "Another Personalized Hour" (APH) duration and explore varied time scales.
 
-The application includes the original Main Clock, an advanced World Clock, Stopwatch, Timer (all AH-aware based on the 23/24 scale), an AH Time Converter, the new Personalized AH Clock, and an Admin Panel for configuration.
+The application includes the original Main Clock, an advanced World Clock, Stopwatch, Timer (all AH-aware based on the 23/24 scale), an AH Time Converter, and the new Personalized AH Clock.
 
 ## Table of Contents
 
@@ -21,7 +21,6 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
     * [World Clock (Standard AH)](#world-clock-standard-ah)
     * [Stopwatch and Timer (Standard AH Scale)](#stopwatch-and-timer-standard-ah-scale)
     * [AH Time Converter (Standard AH Scale)](#ah-time-converter-standard-ah-scale)
-    * [Admin Panel](#admin-panel)
 6.  [Technical Details](#technical-details)
     * [Time Calculation Concepts](#time-calculation-concepts)
         * [Standard Another Hour (AH) Time Calculation](#standard-another-hour-ah-time-calculation)
@@ -167,7 +166,6 @@ project/
     Otherwise, create a new `.env` file.
     Then, open `.env` in a text editor and set the following variables:
     * `SESSION_SECRET`: A long, random string for session encryption (e.g., generated using a password manager or online tool).
-    * `ADMIN_KEY`: A password to access the admin panel at `/admin`.
 
 ### Running the Application
 
@@ -280,11 +278,11 @@ This project now incorporates two distinct "Another Hour" time concepts:
 * Node.js with the Express.js framework.
 * Serves static frontend files.
 * Provides API endpoints:
-    * `/api/settings`: (GET) Retrieves current application settings from `settings.json`. (POST) Updates `settings.json` (requires admin authentication via `ADMIN_KEY` header). These settings include selected timezones for the main clock and display preferences for AH/Actual time.
+    * `/api/settings`: (GET) Retrieves current application settings from `settings.json`. (POST) Updates `settings.json`. These settings include selected timezones for the main clock and display preferences for AH/Actual time.
     * `/api/stopwatch/elapsed`: (GET) Calculates elapsed AH time for the stopwatch.
     * `/api/timer/remaining`: (GET) Calculates remaining AH time for the timer.
-* Uses `express-session` for session management (primarily for admin panel access, though current auth is via `ADMIN_KEY` header for settings POST).
-* The `settings.json` file stores user-configurable settings managed via the Admin Panel.
+* Uses `express-session` for session management.
+* The `settings.json` file stores user-configurable settings.
 
 ### Theme
 
