@@ -9,21 +9,27 @@
   width: 100%;
   max-width: 600px; /* Adjust as needed */
   margin: 0 auto;
-  padding: 20px;
+  padding: 5px;
 }
 
 /* Settings area at the top */
 .clock-settings-container {
-  margin-bottom: 20px;
-  width: 100%;
-  padding: 15px;
-  border: 1px solid #ddd;
+  margin-top: min(15px, 3vh);
+  padding: min(12px, 2.5vh) min(24px, 5vw);
   border-radius: 8px;
-  background-color: #f9f9f9;
+  text-align: center;
+  line-height: 1.6;
+  width: min(400px, 95vw);
+  font-family: 'Roboto Mono', monospace;
+  font-size: clamp(12px, 4.5vw, 16px);
+  transition: all var(--common-transition);
+  background: #f0f0f0;
+  color: var(--light-text);
+  border: 1px solid #ddd;
 }
 
 body.inverted .clock-settings-container {
-  background-color: #2a2a2a;
+  background-color: #2c2c2c;
   border-color: #444;
 }
 

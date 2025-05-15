@@ -42,14 +42,13 @@ function formatDuration(totalMinutes) {
 function initializeSlider() {
   if (!elements.normalDurationSlider || !elements.normalDurationDisplay) return;
 
-  // スライダーの初期値をstateに反映し、表示も更新
-  state.normalAphDayDurationMinutes = parseInt(elements.normalDurationSlider.value, 10);
+  // デフォルト値を23時間 (1380分) に設定し直すか、HTMLのvalueに合わせる
+  elements.normalDurationSlider.value = state.normalAphDayDurationMinutes.toString(); // stateの値で初期化
   elements.normalDurationDisplay.textContent = formatDuration(state.normalAphDayDurationMinutes);
 
   elements.normalDurationSlider.addEventListener('input', (event) => {
     state.normalAphDayDurationMinutes = parseInt(event.target.value, 10);
     elements.normalDurationDisplay.textContent = formatDuration(state.normalAphDayDurationMinutes);
-    // 時計の更新はrequestAnimationFrameのループに任せる
   });
 }
 

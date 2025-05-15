@@ -6,7 +6,8 @@
   <title>Personalized AH Clock - Another Hour</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/css/components.css">
-  <link rel="stylesheet" href="/css/personalized-ah-clock.css"> <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="/css/personalized-ah-clock.css"> 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.43/moment-timezone-with-data.min.js"></script>
 </head>
@@ -14,15 +15,7 @@
   <a href="/" class="back-link">Back to Home</a>
   <main class="personalized-ah-clock-container">
     <header class="clock-settings-container">
-      <h1>Personalized AH Clock</h1>
-      <div class="setting-group">
-        <label for="normal-duration-slider">Normal APH Day Duration:</label>
-        <input type="range" id="normal-duration-slider" min="1" max="1439" value="1380"> <span id="normal-duration-display">23 hours 0 minutes</span>
-      </div>
-      <div class="setting-group">
-        <h3 id="personalized-ah-city-name" class="personalized-ah-city"></h3>
-        <select id="timezone-select" aria-label="Select timezone"></select>
-      </div>
+      <h2>Personalized AH Clock</h2>
     </header>
 
     <section id="clock-display" class="clock-display" aria-label="Analog Personalized AH Clock">
@@ -45,6 +38,19 @@
       <div id="personalized-normal-time" class="normal-time-display-sub">Actual: 00:00:00</div>
     </section>
 
+    <section class="clock-settings-container">
+      <div class="setting-group">
+        <label for="normal-duration-slider">Normal APH Day Duration:</label>
+        <input type="range" id="normal-duration-slider" min="0" max="1440" value="1380"> 
+        <span id="normal-duration-display">23 hours 0 minutes</span>
+      </div>
+      <div class="setting-group">
+        <h4 id="personalized-ah-city-name" class="personalized-ah-city"></h3>
+        <select id="timezone-select" aria-label="Select timezone"></select>
+      </div>
+    </section>
+
+    
     <footer class="clock-controls">
       </footer>
   </main>

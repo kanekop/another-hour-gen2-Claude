@@ -97,7 +97,12 @@ export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
     };
   }
 
-  normalAphDayDurationMinutes = Math.max(1, Math.min(normalAphDayDurationMinutes, (24 * 60) - 1));
+
+  // スライダーの範囲が 0 から 1440 になったことによる調整
+  // normalAphDayDurationMinutes が 0 の場合、APH期間は丸1日 (24時間)
+  // normalAphDayDurationMinutes が 1440 の場合、APH期間は 0分
+  normalAphDayDurationMinutes = Math.max(0, Math.min(normalAphDayDurationMinutes, 1440)); // kaneko
+  // normalAphDayDurationMinutes = Math.max(1, Math.min(normalAphDayDurationMinutes, (24 * 60) - 1));
 
   const localTime = moment(date).tz(timezone);
   const realHours = localTime.hours();
@@ -108,10 +113,23 @@ export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
   const realMillisecondsInDay = (realHours * 3600 + realMinutes * 60 + realSeconds) * 1000 + realMilliseconds;
   const normalAphDayDurationMs = normalAphDayDurationMinutes * 60 * 1000;
 
-  const normalAphDayDurationHours = normalAphDayDurationMinutes / 60;
+  // normalAphDayDurationHours の計算と scaleFactor の計算でゼロ除算を避ける
+  let normalAphDayDurationHours = normalAphDayDurationMinutes / 60;
   // scaleFactor は通常期間の時間の進み方を調整するために使用
-  const scaleFactor = 24 / normalAphDayDurationHours;
+  let scaleFactor;
 
+  if (normalAphDayDurationHours === 0) { // 通常時間が0分の場合
+    scaleFactor = Infinity; // 実質、常にAPH期間として扱う (またはエラー処理)
+                           // この場合、通常期間の時間は一瞬で終わり、即座にAPH期間へ
+                           // APH期間中は通常スピードなので、実質24時間通常の時計
+  } else if (normalAphDayDurationHours === 24) { // 通常時間が24時間の場合 (APH期間なし)
+    scaleFactor = 1; // スケールなし、常に通常期間と同じ
+  } else {
+    scaleFactor = 24 / normalAphDayDurationHours;
+  }
+
+
+  
   let aphHoursDigital, aphMinutesDigital, aphSecondsFloat;
   const isPersonalizedAhPeriod = realMillisecondsInDay >= normalAphDayDurationMs;
 
