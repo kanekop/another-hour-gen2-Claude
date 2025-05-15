@@ -19,6 +19,25 @@ app.use('/api/stopwatch', stopwatchRouter);
 app.use('/api/timer', timerRouter);  // 追加
 app.use(express.json());
 
+// Settings endpoints
+app.get('/api/settings', (req, res) => {
+  try {
+    const settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
+    res.json(settings);
+  } catch (error) {
+    res.json({ showAHTime: true, showActualTime: true });
+  }
+});
+
+app.post('/api/settings', (req, res) => {
+  try {
+    fs.writeFileSync('settings.json', JSON.stringify(req.body));
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to save settings' });
+  }
+});
+
 // Health check route
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
