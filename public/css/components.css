@@ -300,3 +300,15 @@ input:checked + .slider:before {
     padding: 10px;
   }
 }
+
+body.inverted #personalized-normal-time {
+  /* APH期間中の実時間のスタイル */
+  font-size: 1.0em; /* 少しだけ標準的に */
+}
+
+body.inverted #personalized-aph-remaining {
+  /* APH期間中の残り時間のスタイル */
+  font-size: 1.2em; /* 少し強調 */
+  font-weight: bold;
+}
+
