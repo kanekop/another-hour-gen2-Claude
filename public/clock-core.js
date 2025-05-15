@@ -82,6 +82,10 @@ export function getAngles(date, timezone) {
  * - {number} ahSectorSweepAngleDegrees - Sweep angle for the AH sector (degrees, max 360).
  * - {boolean} isPersonalizedAhPeriod - True if the current time is within the "Another Personalized Hour(s)" period.
  */
+// public/clock-core.js
+
+// ... (SCALE_AH と getAngles 関数はそのまま) ...
+
 export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
   if (typeof moment === 'undefined' || typeof moment.tz === 'undefined') {
     console.error("Moment.js and Moment Timezone are not loaded. Cannot calculate custom AH angles.");
@@ -105,41 +109,89 @@ export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
   const normalAphDayDurationMs = normalAphDayDurationMinutes * 60 * 1000;
 
   const normalAphDayDurationHours = normalAphDayDurationMinutes / 60;
+  // scaleFactor は通常期間の時間の進み方を調整するために使用
   const scaleFactor = 24 / normalAphDayDurationHours;
 
   let aphHoursDigital, aphMinutesDigital, aphSecondsFloat;
   const isPersonalizedAhPeriod = realMillisecondsInDay >= normalAphDayDurationMs;
 
   if (isPersonalizedAhPeriod) {
-    aphHoursDigital = 24;
-    const elapsedAphMsInPeriod = (realMillisecondsInDay - normalAphDayDurationMs) * scaleFactor;
-    aphMinutesDigital = Math.floor((elapsedAphMsInPeriod / (60 * 1000)) % 60);
-    aphSecondsFloat = (elapsedAphMsInPeriod / 1000) % 60;
-  } else {
+    // APH期間中は通常の時間スピードで進む
+    const elapsedRealMsInAphPeriod = realMillisecondsInDay - normalAphDayDurationMs;
+
+    const elapsedAphHoursInPeriod = Math.floor(elapsedRealMsInAphPeriod / (3600 * 1000));
+    const elapsedAphMinutesInPeriod = Math.floor((elapsedRealMsInAphPeriod / (60 * 1000)) % 60);
+    const elapsedAphSecondsInPeriodFloat = (elapsedRealMsInAphPeriod / 1000) % 60;
+
+    aphHoursDigital = 24 + elapsedAphHoursInPeriod; // 24時から時間を積み上げ
+    aphMinutesDigital = elapsedAphMinutesInPeriod;
+    aphSecondsFloat = elapsedAphSecondsInPeriodFloat;
+
+  } else { // 通常期間
     const scaledMs = realMillisecondsInDay * scaleFactor;
     aphHoursDigital = Math.floor(scaledMs / (3600 * 1000));
     aphMinutesDigital = Math.floor((scaledMs / (60 * 1000)) % 60);
     aphSecondsFloat = (scaledMs / 1000) % 60;
   }
 
-  let hourAngle;
-  if (isPersonalizedAhPeriod) {
-    // During APH period, hour hand represents progression from 0 (like 12 o'clock)
-    // based on scaled minutes/seconds of the APH "24th" hour.
-    const minutesForHourAngle = aphMinutesDigital + (aphSecondsFloat / 60);
-    hourAngle = (minutesForHourAngle / 60) * 30; // Each hour on a 12h dial is 30 degrees. This maps 60 APH minutes to 30 degrees.
-  } else {
-    const displayAphHoursAnalog = aphHoursDigital % 12;
-    const minutesForHourAngle = aphMinutesDigital + (aphSecondsFloat / 60);
-    hourAngle = (displayAphHoursAnalog * 30) + (minutesForHourAngle * 0.5);
+  // アナログ針の角度計算 (12時間制文字盤)
+  let displayAnalogHours = aphHoursDigital;
+  if (aphHoursDigital >= 12) { // 12時以上は剰余を取る (例: 13時は1時、24時は12時(0時として扱う場合あり))
+      displayAnalogHours = aphHoursDigital % 12;
+  }
+  if (displayAnalogHours === 0 && aphHoursDigital > 0) { // 12時、24時などは12として扱う
+      displayAnalogHours = 12;
   }
 
-  const minuteAngle = (aphMinutesDigital * 6) + (aphSecondsFloat * 0.1); // aphSecondsFloat * (6/60)
-  const secondAngle = aphSecondsFloat * 6;
 
-  const ahSectorStartAngleDegrees = (normalAphDayDurationMinutes / (24 * 60)) * 360;
-  const aphPeriodDurationMinutes = (24 * 60) - normalAphDayDurationMinutes;
-  const ahSectorSweepAngleDegrees = Math.min((aphPeriodDurationMinutes / (12 * 60)) * 360, 360);
+  // APH期間中の時針の計算を修正: APH 24時は12時(0時)位置から始まり、実時間の分秒で進む
+  let hourAngle;
+  if (isPersonalizedAhPeriod) {
+      // APH期間の開始を0時として、そこからの実時間の分・秒で時針を動かす (メインクロックのAH時の挙動に合わせる)
+      // aphHoursDigital は24, 25, ... となるので、アナログ表示用の「時」は (aphHoursDigital - 24) % 12 などとする
+      const hoursIntoAphPeriod = Math.floor((realMillisecondsInDay - normalAphDayDurationMs) / (3600 * 1000));
+      const minutesIntoAphHour = Math.floor(((realMillisecondsInDay - normalAphDayDurationMs) % (3600 * 1000)) / (60 * 1000));
+      const secondsForAphHourHand = ((realMillisecondsInDay - normalAphDayDurationMs) % (60 * 1000)) / 1000;
+
+      // displayAnalogHours は (24 + hoursIntoAphPeriod) % 12 とする (0時は12)
+      let analogHourBase = (24 + hoursIntoAphPeriod);
+      if (analogHourBase >= 12) analogHourBase %=12;
+      if (analogHourBase === 0) analogHourBase = 12;
+
+      hourAngle = (analogHourBase * 30) + (minutesIntoAphHour * 0.5) + (secondsForAphHourHand * (0.5/60));
+
+  } else { // 通常期間
+      // 通常期間はスケールされたAPH時間に基づいて針を動かす
+      let analogHourBaseScaled = aphHoursDigital;
+      if (analogHourBaseScaled >=12) analogHourBaseScaled %=12;
+      if (analogHourBaseScaled === 0 && aphHoursDigital >0) analogHourBaseScaled =12; // 0時でない限り
+
+      hourAngle = (analogHourBaseScaled * 30) + (aphMinutesDigital * 0.5) + (aphSecondsFloat * (0.5/60));
+  }
+
+
+  // 分針・秒針は期間によらず、計算された aphMinutesDigital, aphSecondsFloat を使う
+  // ただし、APH期間中は実時間の分秒を使うという考え方もある (メインクロックのAH時)
+  // ここでは、デジタル表示と一貫性を持たせるため、計算されたAPH分秒を使う
+  let minuteAngle, secondAngle;
+  if (isPersonalizedAhPeriod) {
+      // APH期間中は実時間の分・秒で針を動かす (メインクロックのAH時の挙動に合わせる)
+      const realMinutesForHands = realMinutes;
+      const realSecondsForHands = realSeconds + realMilliseconds / 1000;
+      minuteAngle = (realMinutesForHands * 6) + (realSecondsForHands * 0.1);
+      secondAngle = realSecondsForHands * 6;
+  } else {
+      minuteAngle = (aphMinutesDigital * 6) + (aphSecondsFloat * 0.1);
+      secondAngle = aphSecondsFloat * 6;
+  }
+
+  // AHセクターの角度計算 - APH期間を示し、12時基点とする
+  const ahSectorStartAngleDegrees = 0; // パイは常に12時の位置から開始
+
+  // セクターの掃引角度は、APH期間の長さ（実時間ベース）を角度に変換したもの
+  // 12時間を超える場合も、その角度をそのまま計算する (例: 13時間なら390度)
+  const aphPeriodActualDurationMinutes = (24 * 60) - normalAphDayDurationMinutes;
+  const ahSectorSweepAngleDegrees = (aphPeriodActualDurationMinutes / (12 * 60)) * 360; // 360度でクリップしない
 
   return {
     hourAngle,
@@ -148,8 +200,8 @@ export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
     aphHours: aphHoursDigital,
     aphMinutes: aphMinutesDigital,
     aphSeconds: aphSecondsFloat,
-    ahSectorStartAngleDegrees,
-    ahSectorSweepAngleDegrees,
+    ahSectorStartAngleDegrees,    // 常に0
+    ahSectorSweepAngleDegrees,    // 360を超える可能性あり
     isPersonalizedAhPeriod,
   };
 }

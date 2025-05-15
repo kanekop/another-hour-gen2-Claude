@@ -1,0 +1,157 @@
+/* public/css/personalized-ah-clock.css */
+
+/* Container for the personalized clock page */
+.personalized-ah-clock-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  max-width: 600px; /* Adjust as needed */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Settings area at the top */
+.clock-settings-container {
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+body.inverted .clock-settings-container {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+.setting-group {
+  margin-bottom: 15px;
+}
+
+.setting-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+#normal-duration-slider {
+  width: 80%;
+  max-width: 400px;
+  margin-top: 5px;
+}
+
+#normal-duration-display {
+  display: block;
+  margin-top: 5px;
+  font-style: italic;
+  color: #555;
+}
+
+body.inverted #normal-duration-display {
+  color: #bbb;
+}
+
+#timezone-select {
+  margin-top: 5px;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.personalized-ah-city {
+  margin-bottom: 5px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+/* Analog clock specific styling if needed beyond common components */
+#personalized-ah-analog-clock {
+  width: clamp(250px, 65vmin, 380px); /* Same as main clock */
+  height: clamp(250px, 65vmin, 380px);
+  margin: 10px auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* AH Sector for personalized clock */
+#ah-personalized-sector {
+  fill: rgba(255, 193, 7, 0.1); /* Color for NORMAL duration sector */
+  stroke: rgba(255, 160, 0, 0.5);
+  stroke-width: 1;
+  /* transition: fill 0.3s ease, stroke 0.3s ease; /* Optional: for smooth color changes if you implement them */
+}
+
+body.inverted #ah-personalized-sector {
+  /* This style might not be hit if display is 'none' during inverted (APH period) */
+  /* If you want a different sector style for APH period AND display it, adjust JS logic */
+  stroke: rgba(255, 160, 0, 0.5);
+  stroke-width: 1;
+  
+  /* fill: rgba(75, 75, 75, 0.4); 
+  stroke: rgba(100, 100, 100, 0.5); */
+}
+
+
+/* Digital clock section for personalized clock */
+#digital-clock-personalized {
+  /* Uses .digital-clock class from components.css, add overrides if needed */
+  margin-top: 15px;
+}
+
+#personalized-aph-time,
+#personalized-normal-time {
+  /* Uses .ah-time-display-main and .normal-time-display-sub from components.css */
+}
+
+/* Style for hour numbers on the analog clock */
+.hour-number {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 10px; /* Adjust size as needed */
+  fill: #333; /* Color for light mode */
+}
+
+body.inverted .hour-number {
+  fill: #ccc; /* Color for dark mode */
+}
+
+.back-link {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-decoration: none;
+  color: #333; /* Adjust color as needed */
+  font-weight: 500;
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+body.inverted .back-link {
+    color: #ccc;
+    background-color: #333;
+    border-color: #555;
+}
+
+.back-link:hover {
+  background-color: #e0e0e0;
+  text-decoration: underline;
+}
+body.inverted .back-link:hover {
+    background-color: #444;
+}
+
+/* ... */
+.ah-sector-indicator-line {
+  stroke: rgba(100, 100, 100, 0.8);
+  stroke-width: 2;
+  stroke-linecap: round;
+  display: none; /* 通常は非表示 */
+}
+
+body.inverted .ah-sector-indicator-line {
+    /* stroke: rgba(100, 100, 100, 0.8); */
+    stroke: rgba(255, 160, 0, 5.0);
+    stroke-width: 1;
+}
