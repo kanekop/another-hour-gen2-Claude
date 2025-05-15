@@ -34,9 +34,6 @@ body.inverted .clock-settings-container {
 }
 
 /* スライダー修正 */
-/* public/css/personalized-ah-clock.css */
-
-/* ... 既存の .personalized-ah-clock-container や .clock-settings-container スタイル ... */
 
 .setting-group {
   margin-bottom: 15px;
@@ -120,7 +117,6 @@ input[type="range"]#normal-duration-slider::-moz-range-thumb {
 }
 
 /* リアルタイム表示用インジケーター (▲ + テキスト) */
-/* リアルタイム表示用インジケーター (▼ + テキスト) */
 .slider-real-time-indicator {
   position: absolute;
   /* top: -28px; */ /* この行を削除またはコメントアウト */
