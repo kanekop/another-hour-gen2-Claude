@@ -75,26 +75,26 @@ Another Hour Clock is a unique web-based application that redefines your percept
 project/
 ├── public/                   # Frontend assets and client-side code
 │   ├── css/                  # Stylesheets directory
-│   │   ├── admin.css         # Admin panel styles
 │   │   ├── components.css    # Common UI component styles
 │   │   ├── main-clock.css    # Main clock page styles
+│   │   ├── personalized-ah-clock.css # Personalized AH clock styles
 │   │   ├── stopwatch.css     # Stopwatch page styles
 │   │   ├── timer.css         # Timer page styles
 │   │   └── world-clock.css   # World clock page styles
 │   ├── js/                   # Client-side JavaScript modules
 │   │   ├── city-timezones.js   # Timezone data and utilities
+│   │   ├── personalized-ah-clock-ui.js # Personalized AH clock functionality
 │   │   ├── stopwatch-ui.js   # Stopwatch functionality
 │   │   ├── timer-ui.js       # Timer functionality
 │   │   ├── timezone-manager.js # Timezone management utilities
 │   │   └── world-clock-ui.js # World clock functionality
 │   ├── pages/                # HTML pages for specific features
+│   │   ├── converter.html    # AH Time Converter interface
 │   │   ├── main-clock.html   # Main clock interface
-│   │   ├── world-clock.html  # World clock interface
+│   │   ├── personalized-ah-clock.html # Personalized AH clock interface
 │   │   ├── stopwatch.html    # Stopwatch interface
 │   │   ├── timer.html        # Timer interface
-│   │   └── converter.html    # AH Time Converter interface
-│   ├── admin.html            # Admin interface
-│   ├── admin.js              # Admin panel logic
+│   │   └── world-clock.html  # World clock interface
 │   ├── clock-core.js         # Core clock calculation logic for main/world clocks
 │   ├── index.html            # Landing page linking to all features
 │   ├── main.js               # Main application logic (for main-clock.html)
