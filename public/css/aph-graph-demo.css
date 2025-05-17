@@ -149,19 +149,6 @@ body {
 }
 
 
-/* 動作確認後、削除
-.real-hours-graph-container .axis-labels {
-    position: absolute;
-    left: -35px; 
-    top: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column-reverse; 
-    justify-content: space-between;
-    font-size: 0.75em;
-    color: #555;
-}
-*/ 
 
 .real-hours-graph-container .real-hours-axis-labels span {
     white-space: nowrap;
@@ -171,15 +158,6 @@ body {
 .real-hours-graph-container .real-hours-axis-labels span:first-child { transform: translateY(0%);} /* 0を上端に */
 .real-hours-graph-container .real-hours-axis-labels span:last-child { transform: translateY(-100%);} /* 24を下端に (コンテナの高さが基準になるので注意) */
 
-
-/* 動作確認後、削除
-.real-hours-graph-container .axis-labels span {
-    white-space: nowrap;
-    transform: translateY(50%); 
-}
-.real-hours-graph-container .axis-labels span:first-child { transform: translateY(0%);} 
-.real-hours-graph-container .axis-labels span:last-child { transform: translateY(100%);} 
- */
 
 /* Y-Axis Labels for APH (Right) */
 .aph-graph-container .axis-labels {
