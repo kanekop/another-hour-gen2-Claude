@@ -1,0 +1,329 @@
+/* public/css/aph-graph-demo.css */
+body {
+    font-family: 'Roboto Mono', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0; /* Light grey background */
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.demo-container {
+    background-color: #fff;
+    padding: 20px 30px 30px 50px; /* Increased left padding for Y-axis labels */
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    width: 100%;
+    max-width: 750px; /* Slightly wider */
+}
+.demo-container h1 {
+    margin-bottom: 25px;
+    font-size: 1.6em;
+    color: #333;
+}
+
+.graph-area {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    height: 450px; /* Slightly reduced height */
+    position: relative; /* For absolute positioning of the line */
+    /* border: 1px solid #eee; */ /* Optional: to see boundaries */
+}
+
+.graph-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* For child .axis-labels */
+    height: 100%; /* Take full height of graph-area */
+    /* margin: 0 15px; */ /* Reduced space */
+}
+
+
+.graph-title {
+    font-size: 0.85em;
+    color: #555;
+    margin-bottom: 8px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.graph-bar {
+    width: 90px;
+    height: 100%;
+    background-color: #e9ecef;
+    border: 1px solid #d1d1d1;
+    border-radius: 3px;
+    display: flex;
+    /* 修正依頼1: グラフ本体の数字の並びを上から下へ (昇順) */
+    flex-direction: column; /* column-reverse から column へ変更 */
+    overflow: hidden;
+}
+
+.real-hours-bar .bar-segment { /* Targeting segments only in real-hours-bar */
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.7em; /* Adjusted font size */
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+    /* border-top: 1px solid rgba(0,0,0,0.03); */
+    flex-grow: 1;
+    /* border-top を border-bottom に変更するかも (flex-direction: column の場合) */
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    border-top: none;
+
+    background-color: #0c58bb
+
+
+}
+.real-hours-bar .bar-segment:first-child {
+    border-top: none;
+}
+.real-hours-bar .bar-segment:last-child { /* 最後のセグメントの下線は不要 */
+    border-bottom: none;
+}
+
+.aph-graph-container .bar-segment-block {
+    width: 100%;
+    display: flex;
+    align-items: center; /* Vertically center content like "Another Hour" */
+    justify-content: center; /* Horizontally center content */
+    color: white;
+    font-weight: bold;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* For the orange block that contains hour labels オレンジブロックのスタイル*/
+.aph-graph-container .bar-segment-block[style*="rgb(240, 173, 78)"] {
+    display: flex; /* For labels to use flex-grow */
+    flex-direction: column; /* 修正依頼1 & 3: ラベルを上から下に配置 */
+    justify-content: flex-start;
+}
+.aph-graph-container .bar-segment-block[style*="rgb(240, 173, 78)"] .segment-hour-label:last-child {
+    /* border-bottom: none; */
+}
+
+.aph-graph-container .segment-hour-label {
+    width: 100%;
+    text-align: center;
+    font-size: 0.7em;
+    color: white;
+    box-sizing: border-box;
+    padding: 0; /* Remove padding if not needed */
+    line-height: 1.2; /* Adjust line height for tight packing */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Distribute space equally if parent is flex */
+    /* 修正依頼3: 各ラベルが均等にsqueezeされるように */
+    min-height: 0; /* squeezeされるときに高さが0になることを許容 <= 10pxから変更*/
+    /* border-bottom: 1px dotted rgba(255,255,255,0.3); */ /* 状況に応じて調整 */
+}
+
+/* Y-Axis Labels for Real Hours (Left) */
+/* Y-Axis Labels for Real Hours (Left) */
+.real-hours-graph-container .real-hours-axis-labels { /* クラス名変更を反映 */
+    position: absolute;
+    left: -35px;
+    top: 0;
+    height: 100%;
+    display: flex;
+    /* 修正依頼2: ラベルの並びを上から下へ (昇順) */
+    flex-direction: column; /* column-reverse から column へ変更 */
+    justify-content: space-between;
+    font-size: 0.75em;
+    color: #555;
+}
+
+
+/* 動作確認後、削除
+.real-hours-graph-container .axis-labels {
+    position: absolute;
+    left: -35px; 
+    top: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column-reverse; 
+    justify-content: space-between;
+    font-size: 0.75em;
+    color: #555;
+}
+*/ 
+
+.real-hours-graph-container .real-hours-axis-labels span {
+    white-space: nowrap;
+    /* 修正依頼2: translateYの調整 (flex-direction: column の場合、50%で中央揃えは難しいので、各要素の高さを考慮するか、単純に配置) */
+    /* transform: translateY(-50%); /* 上端基準にするならこれ */
+}
+.real-hours-graph-container .real-hours-axis-labels span:first-child { transform: translateY(0%);} /* 0を上端に */
+.real-hours-graph-container .real-hours-axis-labels span:last-child { transform: translateY(-100%);} /* 24を下端に (コンテナの高さが基準になるので注意) */
+
+
+/* 動作確認後、削除
+.real-hours-graph-container .axis-labels span {
+    white-space: nowrap;
+    transform: translateY(50%); 
+}
+.real-hours-graph-container .axis-labels span:first-child { transform: translateY(0%);} 
+.real-hours-graph-container .axis-labels span:last-child { transform: translateY(100%);} 
+ */
+
+/* Y-Axis Labels for APH (Right) */
+.aph-graph-container .axis-labels {
+    position: absolute;
+    right: -35px; /* Space from the bar */
+    top: 0;
+    height: 100%;
+    font-size: 0.75em;
+    color: #555;
+    /* Container for JS-added labels */
+    /* 修正依頼2: こちらも top を基準に配置するように JS側で変更予定 */
+}
+
+.dynamic-aph-axis-label {
+    position: absolute; /* Set by JS */
+    font-size: 0.7em;   /* Base size, JS might override */
+    white-space: nowrap;
+    color: #333;
+    padding: 1px 2px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 2px;
+    z-index: 6;
+    /* 修正依頼2: JSで top と transform を調整 */
+
+}
+
+.aph-start-indicator-line {
+    position: absolute; /* Set by JS relative to graph-area */
+    border-top: 2px solid #d9534f; /* Solid red line */
+    z-index: 5;
+    height:0px; /* Ensure it's just a line */
+    /* 修正依頼2: JSで top と transform を調整 */
+    transform: translateY(-50%); /* For vertical centering of the line itself */
+}
+
+
+.controls-area {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+/* Slider styles (mostly unchanged, ensure they are loaded) */
+.slider-wrapper {
+  position: relative;
+  width: 90%; /* Wider slider */
+  max-width: 500px;
+  margin: 15px auto 35px auto;
+}
+/* ... (rest of slider styles are assumed to be okay as per previous versions) ... */
+#normal-duration-value-display, #another-hour-duration-display {
+    font-weight: 500;
+    margin-top: 3px;
+    font-size: 0.85em;
+}
+#another-hour-duration-display {
+    color: #444;
+}
+
+input[type="range"]#normal-duration-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px; /* Slightly thinner track */
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+}
+
+input[type="range"]#normal-duration-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(to right,
+    var(--slider-normal-color, #6e8bc4) 0%,
+    var(--slider-normal-color, #6e8bc4) var(--slider-progress-percent, 95.83%),
+    var(--slider-aph-color, #ffc107) var(--slider-progress-percent, 95.83%),
+    var(--slider-aph-color, #ffc107) 100%
+  );
+  border-radius: 5px;
+}
+input[type="range"]#normal-duration-slider::-moz-range-track {
+  width: 100%;
+  height: 10px;
+   background: linear-gradient(to right,
+    var(--slider-normal-color, #6e8bc4) 0%,
+    var(--slider-normal-color, #6e8bc4) var(--slider-progress-percent, 95.83%),
+    var(--slider-aph-color, #ffc107) var(--slider-progress-percent, 95.83%),
+    var(--slider-aph-color, #ffc107) 100%
+  );
+  border-radius: 5px;
+  border: none;
+}
+
+input[type="range"]#normal-duration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid #222; /* Darker border for thumb */
+  height: 20px; /* Thumb size adjustment */
+  width: 10px;
+  border-radius: 2px;
+  background: #b30000; /* Darker red for thumb */
+  margin-top: -5px; /* (thumb height - track height) / 2 */
+  position: relative;
+  z-index: 2;
+}
+input[type="range"]#normal-duration-slider::-moz-range-thumb {
+  border: 1px solid #222;
+  height: 20px;
+  width: 10px;
+  border-radius: 2px;
+  background: #b30000;
+  position: relative;
+  z-index: 2;
+}
+
+.slider-real-time-indicator {
+  position: absolute;
+  bottom: -30px; /* Indicator position */
+  left: var(--slider-thumb-position, 50%);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.slider-real-time-indicator::before { /* Triangle */
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid #b30000; /* Match thumb color */
+  margin-bottom: 2px;
+}
+
+.slider-real-time-text {
+  font-size: 0.8em;
+  color: #b30000;
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 1px 4px;
+  border-radius: 2px;
+  white-space: nowrap;
+  font-weight: bold;
+}

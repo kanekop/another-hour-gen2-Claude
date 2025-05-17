@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Personalized Another Hour vs Real Hours Graph Demo</title>
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="../css/components.css" />
+        <link rel="stylesheet" href="../css/aph-graph-demo.css" />
+        <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap"
+        />
+    </head>
+    <body>
+        <div class="demo-container">
+            <h1>Another Hour vs 実時間 比較縦棒グラフ</h1>
+
+            <div class="graph-area">
+                <div class="graph-bar-container real-hours-graph-container">
+                    <div class="graph-title">実時間<br />(24 Real Hours)</div>
+                    <div class="graph-bar real-hours-bar">
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%;"
+                            data-label="0"
+                        >
+                            0
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="1"
+                        >
+                            1
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="2"
+                        >
+                            2
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="3"
+                        >
+                            3
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="4"
+                        >
+                            4
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="5"
+                        >
+                            5
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="6"
+                        >
+                            6
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="7"
+                        >
+                            7
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="8"
+                        >
+                            8
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="9"
+                        >
+                            9
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="10"
+                        >
+                            10
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="11"
+                        >
+                            11
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="12"
+                        >
+                            12
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="13"
+                        >
+                            13
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="14"
+                        >
+                            14
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="15"
+                        >
+                            15
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="16"
+                        >
+                            16
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="17"
+                        >
+                            17
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="18"
+                        >
+                            18
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="19"
+                        >
+                            19
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="20"
+                        >
+                            20
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="21"
+                        >
+                            21
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="22"
+                        >
+                            22
+                        </div>
+                        <div
+                            class="bar-segment"
+                            style="height: 4.166%; "
+                            data-label="23"
+                        >
+                            23
+                        </div>
+                    </div>
+<!-- 動作確認後、削除
+                    <div class="axis-labels">
+                        <span>0</span><span>6</span><span>12</span
+                        ><span>18</span><span>23</span><span>24</span>
+                    </div>
+                     -->
+                </div>
+
+                <div class="graph-bar-container aph-graph-container">
+                    <div class="graph-title">
+                        Another Hour 時間<br />(23+1 AH Cycle)
+                    </div>
+                    <div class="graph-bar aph-bar" id="aphGraphBar"></div>
+                    <div class="axis-labels aph-axis-labels"></div>
+                </div>
+            </div>
+
+            <div class="controls-area">
+                <label for="normal-duration-slider"
+                    >Normal APH Day Duration (<span
+                        id="normal-duration-value-display"
+                        >23 hours 0 minutes</span
+                    >):</label
+                >
+                <div class="slider-wrapper">
+                    <input
+                        type="range"
+                        id="normal-duration-slider"
+                        min="0"
+                        max="1440"
+                        value="1380"
+                    />
+                    <div class="slider-real-time-indicator">
+                        <span
+                            class="slider-real-time-text"
+                            id="slider-real-time-label"
+                            >23:00</span
+                        >
+                    </div>
+                </div>
+                <div id="another-hour-duration-display">
+                    Another Hour Duration: 1 hours 0 minutes
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+        <script type="module" src="../js/aph-graph-demo.js"></script>
+    </body>
+</html>
