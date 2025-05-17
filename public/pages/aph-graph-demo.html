@@ -14,11 +14,15 @@
     </head>
     <body>
         <div class="demo-container">
-            <h1>Another Hour vs 実時間 比較縦棒グラフ</h1>
-
-            <div class="graph-area">
+                <h1>Another Hour vs 実時間 比較縦棒グラフ</h1>
+    
+                <div class="graph-titles">
+                    <div class="graph-title real">実時間<br />(24 Real Hours)</div>
+                    <div class="graph-title aph">Another Hour 時間<br />(23+1 AH Cycle)</div>
+                </div>
+    
+                <div class="graph-area">
                 <div class="graph-bar-container real-hours-graph-container">
-                    <div class="graph-title">実時間<br />(24 Real Hours)</div>
                     <div class="graph-bar real-hours-bar">
                         <div
                             class="bar-segment"
@@ -192,9 +196,7 @@
                 </div>
 
                 <div class="graph-bar-container aph-graph-container">
-                    <div class="graph-title">
-                        Another Hour 時間<br />(23+1 AH Cycle)
-                    </div>
+<!-- -                    <div class="graph-title">Another Hour 時間<br />(23+1 AH Cycle) </div> -->
                     <div class="graph-bar aph-bar" id="aphGraphBar"></div>
                     <div class="axis-labels aph-axis-labels"></div>
                 </div>
