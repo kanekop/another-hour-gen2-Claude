@@ -27,32 +27,51 @@ body {
 }
 
 .graph-area {
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    margin-top: 20px;
+    display: grid;
+    grid-template-columns: min-content min-content; /* 実時間グラフとAPHグラフ用の2つの列 */
+    justify-content: center;
+    grid-template-rows: auto 450px;  /* 1行目: タイトル用に高さを自動調整, 2行目: グラフバーの高さ */
+    gap: 0 20px; /* 列間の隙間（必要に応じて調整、例: グラフ間のスペース） */
+                               /* 上下の隙間は0 */
+    /* align-items: start; */ /* グラフタイトルとグラフコンテナの上端を揃える */
+    /* height プロパティは削除または auto にして、内容によって決まるようにします */
+    margin-top: 30px; /* タイトル表示スペースを考慮して調整、または .demo-container の padding で調整 */
     margin-bottom: 30px;
-    height: 450px; /* Slightly reduced height */
-    position: relative; /* For absolute positioning of the line */
-    /* border: 1px solid #eee; */ /* Optional: to see boundaries */
+    position: relative; /* Y軸ラベルや補助線のため */
+    /* justify-items: center; */ /* 列内でアイテムを中央寄せにする場合 */
 }
 
+
 .graph-bar-container {
+    grid-row: 2; /* グリッドの2行目に配置 */
+    height: 450px; /* UX仕様書で定義されたグラフの高さ */
+    /* 既に設定されているスタイル */
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative; /* For child .axis-labels */
-    height: 100%; /* Take full height of graph-area */
-    /* margin: 0 15px; */ /* Reduced space */
+    position: relative; /* Y軸ラベルのため */
+    /* width: 90px; */ /* グラフバーの幅は .graph-bar で指定されているので、ここでは不要な場合が多い */
 }
 
 
 .graph-title {
+    /* position, left, top, right の絶対指定スタイルはHTMLから削除済みであることを確認 */
+    grid-row: 1; /* グリッドの1行目に配置 */
+    text-align: center; /* 各グリッドセル内でテキストを中央揃え */
+    margin-bottom: 8px; /* タイトルとその下のグラフバーとの間のマージン */
     font-size: 0.85em;
     color: #555;
-    margin-bottom: 8px;
     font-weight: 500;
     white-space: nowrap;
+    /* width: 100%; */ /* 必要に応じて */
+}
+
+.graph-title.real {
+    grid-column: 1; /* グリッドの1列目に配置 */
+}
+
+.graph-title.aph {
+    grid-column: 2; /* グリッドの2列目に配置 */
 }
 
 .graph-bar {
@@ -173,7 +192,7 @@ body {
 
 .dynamic-aph-axis-label {
     position: absolute; /* Set by JS */
-    font-size: 0.7em;   /* Base size, JS might override */
+    font-size: 1.4em;   /* Base size, JS might override */
     white-space: nowrap;
     color: #333;
     padding: 1px 2px;
@@ -184,16 +203,19 @@ body {
 
 }
 
+
+
 .aph-start-indicator-line {
-    position: absolute; /* Set by JS relative to graph-area */
-    border-top: 2px solid #d9534f; /* Solid red line */
-    z-index: 5;
-    height:0px; /* Ensure it's just a line */
-    /* 修正依頼2: JSで top と transform を調整 */
-    transform: translateY(-50%); /* For vertical centering of the line itself */
+    position: absolute; /* 親コンテナ (.aph-graph-container) を基準 */
+    /* top: はJSで設定 */
+    /* left: はJSで設定 (0) */
+    /* width: はJSで設定 (100%) */
+    height: 0px; /* 線なので高さは0 */
+    border-top: 2px solid #d9534f; /* 線のスタイル */
+    z-index: 5; /* 他の要素との重なり順を調整 (グラフバーより手前、ラベルより奥など) */
+    box-sizing: border-box; /* width: 100% が padding や border を含まないように */
+    transform: translateY(-1px); /* 線の太さ(2px)の半分だけ上にずらして中央に */
 }
-
-
 .controls-area {
     margin-top: 30px;
     padding: 15px;
@@ -304,4 +326,12 @@ input[type="range"]#normal-duration-slider::-moz-range-thumb {
   border-radius: 2px;
   white-space: nowrap;
   font-weight: bold;
+}
+
+.real-hours-graph-container {
+    grid-column: 1; /* グリッドの1列目に配置 */
+}
+
+.aph-graph-container {
+    grid-column: 2; /* グリッドの2列目に配置 */
 }

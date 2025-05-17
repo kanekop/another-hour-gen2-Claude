@@ -126,6 +126,7 @@ function drawAphGraph(normalAphDayMinutes) {
 // public/js/aph-graph-demo.js
 
 // (drawAphGraph およびその他の関数は変更なし)
+// public/js/aph-graph-demo.js
 
 function updateAphAxisLabels(normalAphDayMinutes, totalRealMinutesInDay) {
     const aphAxisLabelContainer = document.querySelector('.aph-graph-container .axis-labels');
@@ -133,64 +134,60 @@ function updateAphAxisLabels(normalAphDayMinutes, totalRealMinutesInDay) {
         console.error("APH Axis Label Container not found!");
         return;
     }
-    aphAxisLabelContainer.innerHTML = ''; // Clear existing labels
+    aphAxisLabelContainer.innerHTML = ''; // Clear existing labels in APH axis
 
-    const graphArea = document.querySelector('.graph-area');
-    const realHoursGraphContainer = document.querySelector('.real-hours-graph-container');
-    const aphGraphContainer = document.querySelector('.aph-graph-container');
+    const aphGraphContainer = document.querySelector('.aph-graph-container'); // APHグラフコンテナを取得
+    // const graphArea = document.querySelector('.graph-area'); // graphArea はもう不要
 
-    if (!graphArea || !realHoursGraphContainer || !aphGraphContainer) {
-        console.error("Graph containers not found for axis label positioning.");
+    if (!aphGraphContainer) { // graphArea と realHoursGraphContainer のチェックも文脈に応じて調整
+        console.error("APH graph container not found for axis label positioning.");
         return;
     }
 
-    const aphDurationMinutes = totalRealMinutesInDay - normalAphDayMinutes;
-    let normalPartPercent = (normalAphDayMinutes / totalRealMinutesInDay) * 100;
-    // let aphPartPercent = (aphDurationMinutes / totalRealMinutesInDay) * 100; // aphPartPercentの計算はここでも行う
+    const normalPartPercent = (normalAphDayMinutes / totalRealMinutesInDay) * 100;
+    const ah24PositionInGraphArea = normalPartPercent;
 
-    if (normalAphDayMinutes <= 0) {
-        normalPartPercent = 0;
-        // aphPartPercent = 100;
-    } else if (aphDurationMinutes <= 0) {
-        normalPartPercent = 100;
-        // aphPartPercent = 0;
-    }
-    // Ensure sum is 100 if both are > 0 and there are floating point issues
-    // if (normalPartPercent > 0 && aphPartPercent > 0 && (normalPartPercent + aphPartPercent !== 100)) {
-    //     aphPartPercent = 100 - normalPartPercent;
-    // }
-
-
-    // --- AH 24 Indicator Line and Label ---
-    const ah24PositionTop = normalPartPercent;
-
+    // --- AH 24 Indicator Label (これは aphAxisLabelContainer 内なので変更なし) ---
     const ah24Label = document.createElement('div');
     ah24Label.classList.add('dynamic-aph-axis-label');
     ah24Label.textContent = 'AH 24';
     ah24Label.style.position = 'absolute';
-    ah24Label.style.top = `${ah24PositionTop}%`;
-    ah24Label.style.left = `calc(100% + 5px)`;
+    ah24Label.style.top = `${ah24PositionInGraphArea}%`;
+    ah24Label.style.left = `calc(100% + 5px)`; // aphAxisLabelContainerの右外側
     ah24Label.style.transform = 'translateY(-50%)';
     ah24Label.style.color = '#d9534f';
     aphAxisLabelContainer.appendChild(ah24Label);
 
-    const existingGlobalLine = graphArea.querySelector('.aph-start-indicator-line');
+    // --- Horizontal Line (これを aphGraphContainer の子として追加) ---
+    // 古い線を削除 (もしあれば) - 削除対象の親要素も変更
+    const existingGlobalLine = aphGraphContainer.querySelector('.aph-start-indicator-line');
     if (existingGlobalLine) existingGlobalLine.remove();
 
     const globalLine = document.createElement('div');
     globalLine.classList.add('aph-start-indicator-line');
     globalLine.style.position = 'absolute';
-    globalLine.style.top = `${ah24PositionTop}%`;
-    const lineLeftEdge = realHoursGraphContainer.offsetLeft - (realHoursGraphContainer.querySelector('.real-hours-axis-labels')?.offsetWidth || 35);
-    const lineRightEdge = aphGraphContainer.offsetLeft + aphGraphContainer.offsetWidth + (aphAxisLabelContainer.offsetWidth || 35) + 10;
-    globalLine.style.left = `${lineLeftEdge}px`;
-    globalLine.style.width = `${lineRightEdge - lineLeftEdge}px`;
-    globalLine.style.height = '2px';
-    globalLine.style.transform = 'translateY(-50%)';
-    graphArea.appendChild(globalLine);
+    globalLine.style.top = `${ah24PositionInGraphArea}%`; // aphGraphContainer の高さに対するパーセンテージ
+    globalLine.style.left = '0'; // aphGraphContainer の左端から開始
+    globalLine.style.width = '100%'; // aphGraphContainer の全幅
+    // globalLine.style.height = '2px'; // CSSで border-top を使うなら不要
+    // globalLine.style.transform = 'translateY(-1px)'; // CSSで調整する方が良い場合も
 
+    // aphGraphContainer.appendChild(globalLine); // axis-labels と同じレベルか、bar の上かなど検討
+    // UXを考慮し、グラフバーのコンテナ(.aph-graph-container)直下、
+    // ただし軸ラベル(.aph-axis-labels)よりは手前(DOM構造上次)か、
+    // もしくは軸ラベルコンテナ(.aph-axis-labels)の子要素にするのが管理しやすいかもしれません。
+    // ここでは、ひとまず aphGraphContainer の直下に追加し、CSSでz-indexを調整することを想定します。
+    // もし .aph-axis-labels の中に描画したいなら、aphAxisLabelContainer.appendChild(globalLine); とします。
+    // 今回は、APHグラフバーの上端を示す線なので、.aph-graph-container の子要素で、.graph-bar と同じレベルが良いでしょう。
+    // ただし、.aph-graph-container は display:flex, flex-direction:column なので、
+    // 単純に追加するとレイアウトが崩れる可能性があります。
+    // そのため、.aph-graph-container の中の .graph-bar の兄弟としてではなく、
+    // .aph-graph-container 自体を基準に絶対配置するのが適切です。
+    // .aph-graph-container に position: relative が必要です（これは既に .graph-bar-container に設定されています）。
 
-    // --- Labels for AH 0, 6, 12, 18 ---
+    aphGraphContainer.insertBefore(globalLine, aphGraphContainer.firstChild); // .aph-graph-container の最初の子要素として挿入
+
+    // --- Labels for AH 0, 6, 12, 18 (within aphAxisLabelContainer) ---
     const aphMilestones = [
         { aphHour: 0, text: "AH 0" },
         { aphHour: 6, text: "AH 6" },
@@ -200,31 +197,17 @@ function updateAphAxisLabels(normalAphDayMinutes, totalRealMinutesInDay) {
 
     aphMilestones.forEach(milestone => {
         let percentTop;
-
         if (milestone.aphHour === 0) {
-            // **修正点**: "AH 0" ラベルを実時間グラフの0の高さ (グラフエリアの最上部) に合わせる。
             percentTop = 0;
         } else {
-            // AH 6, 12, 18 の位置計算:
-            // これらの補助ラベルは、Normal APH Day Duration (オレンジのブロック) の中で
-            // 各APH時間が実時間のどの位置に対応するかを示す。
-            if (normalAphDayMinutes === 0) return; // オレンジブロックがなければAH6なども表示しない
-
-            // `milestone.aphHour` (e.g., 6) が、オレンジブロックが表す概念的な23 APH時間の中で
-            // どの割合の位置にあるか。
+            if (normalAphDayMinutes === 0) { // Normal part is 0
+                return; // AH 6, 12, 18 は表示しない
+            }
             const relativePositionInConceptualNormalAph = milestone.aphHour / 23;
-
-            // その割合を、オレンジブロックが占める実際の時間 (normalAphDayMinutes) に適用して、
-            // 実時間スケールでの位置を計算する。
             const correspondingRealMinutes = relativePositionInConceptualNormalAph * normalAphDayMinutes;
-
-            // 計算された実時間の位置を、グラフ全体の高さに対するパーセンテージに変換。
             percentTop = (correspondingRealMinutes / totalRealMinutesInDay) * 100;
 
-            // このラベルがオレンジブロックの範囲（normalPartPercentの高さ）を超える場合は表示しない
-            // （ただし、AH0は除く、AH0は常にグラフ上端基準で表示するため）
-            if (percentTop > normalPartPercent + 0.1) { // 0.1は許容誤差
-                // console.log(`Milestone ${milestone.text} (at ${percentTop.toFixed(1)}%) is outside orange block (ends at ${normalPartPercent.toFixed(1)}%), not drawing.`);
+            if (percentTop > normalPartPercent + 0.1) {
                 return;
             }
         }
@@ -234,7 +217,7 @@ function updateAphAxisLabels(normalAphDayMinutes, totalRealMinutesInDay) {
         labelElement.textContent = milestone.text;
         labelElement.style.position = 'absolute';
         labelElement.style.top = `${percentTop}%`;
-        labelElement.style.left = `calc(100% + 5px)`; // aphGraphContainerの右側
+        labelElement.style.left = `calc(100% + 5px)`;
         labelElement.style.transform = 'translateY(-50%)';
         aphAxisLabelContainer.appendChild(labelElement);
     });

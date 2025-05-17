@@ -79,6 +79,30 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
 * **AH Time Converter (Standard AH Scale) (`/pages/converter.html`):**
     * Converts between real-time and **standard AH time** ($24/23$ scale).
 
+* **APH Graph Demo (`/pages/aph-graph-demo.html`):**
+* **Purpose:** A visual tool to demonstrate and compare the concept of "Personalized Another Hour" (APH) time allocation against standard real-time.
+* **Dual Bar Graphs:**
+    * **Real-Time Graph (Left):** Displays a fixed 24-hour representation of actual time. Each hour (0-23) is shown as a distinct segment. Y-axis labels indicate major hour marks (0, 6, 12, 18, 24).
+    * **Another Hour Graph (APH Graph) (Right):** Dynamically illustrates the APH time distribution based on the user-set "Normal APH Day Duration."
+        * **Normal Period (Orange Block):** Represents the user-defined "normal" part of the APH day. Its height adjusts proportionally. Contains conceptual APH hour labels (0-22) distributed evenly within this block. This block disappears if "Normal APH Day Duration" is set to 0.
+        * **APH Period (Red Block):** Represents the "Another Hour" duration. Its height is inversely proportional to the Normal Period. If "Normal APH Day Duration" is 0, this block fills the entire graph.
+* **Dynamic Y-Axis Helper Labels (APH Graph):** Labels such as "AH 0", "AH 6", "AH 12", "AH 18", and "AH 24" mark significant APH time points.
+    * "AH 0" is always aligned with the top of the APH graph (equivalent to the 0-hour mark of the Real-Time graph).
+    * "AH 24" indicates the boundary between the Normal Period and APH Period. If the Normal Period is 0, "AH 24" aligns with "AH 0" at the top of the graph.
+    * "AH 6", "AH 12", "AH 18" are displayed within the Normal Period block if it exists and is tall enough, proportionally positioned.
+    * The font size of these Y-axis labels has been increased for better readability.
+* **Horizontal Helper Line (Red):** A red line extends across the width of the APH graph at the "AH 24" level, visually marking the transition from the Normal Period to the APH Period.
+* **Interactive Slider Control:**
+    * Allows users to adjust the "Normal APH Day Duration" from 0 minutes to 24 hours (1440 minutes).
+    * Changes to the slider instantly update:
+        * The textual display of "Normal APH Day Duration" and "Another Hour Duration."
+        * The relative heights of the orange and red blocks in the APH graph.
+        * The positions of the "AH 24" label and the red horizontal helper line.
+        * The visibility and positioning of "AH 6", "AH 12", "AH 18" labels.
+* **Layout:** The two graphs are positioned closely together for easier comparison, and the overall layout is managed using CSS Grid.
+
+
+
 * **Visual Theme:**
     * The application defaults to a light theme.
     * The Main Clock page and the Personalized AH Clock page dynamically switch to a dark theme when their respective clocks enter their "Another Hour" or "Another Personalized Hour" period.
@@ -231,6 +255,21 @@ project/
     * **Analog Display:** The hands move at normal speed. The yellow APH sector (pie) appears, starting from the 12 o'clock mark, indicating the total duration of the APH period. If this period exceeds 12 hours, a red indicator line will show the "final" end point on the 12-hour dial.
     * **Theme:** The page switches to a dark theme.
 * **Timezone:** Select your desired timezone to base all calculations on its local real time.
+
+### APH Graph Demo (Visualizing Personalized Another Hour)
+* **Access:** Navigate to `/pages/aph-graph-demo.html` (also accessible via a link on the landing page, if added).
+* **Objective:** This demo page provides a side-by-side visual comparison of a standard 24-hour real-time day (left graph) and a dynamically adjustable "Another Hour" (APH) day (right graph). It helps in understanding how the user-defined "Normal APH Day Duration" impacts the allocation of time between the "Normal Period" and the "APH Period."
+* **How to Use:**
+    1.  Locate the slider labeled "Normal APH Day Duration" at the bottom of the page.
+    2.  Drag the slider to set the desired length for the normal part of the APH day (from 0 minutes to 24 hours).
+    3.  Observe the real-time changes:
+        * The text readouts for "Normal APH Day Duration" and the resulting "Another Hour Duration" will update.
+        * The APH graph (right side) will dynamically adjust the heights of its orange (Normal Period) and red (APH Period) blocks.
+        * The Y-axis helper labels ("AH 0", "AH 6", etc.) and the red horizontal line on the APH graph will shift to reflect the new APH day structure.
+* **Key Observations:**
+    * Setting "Normal APH Day Duration" to 0 will make the entire APH graph red (all APH Period), with the "AH 24" line ryzy the top, aligned with "AH 0".
+    * The Y-axis labels ("AH 0", etc.) are now larger for improved clarity.
+    * The spacing between the two graphs has been reduced to facilitate a closer comparison.
 
 
 ## Technical Details
