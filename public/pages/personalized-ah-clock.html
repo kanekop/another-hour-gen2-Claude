@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/css/components.css" />
     <link rel="stylesheet" href="/css/personalized-ah-clock.css" />
+    <link rel="stylesheet" href="/css/aph-graph-demo.css" />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600&display=swap"
@@ -37,9 +38,7 @@
               id="ah-personalized-sector-indicator"
               class="ah-sector-indicator-line"
             />
-            <!-- Optional: for visualizing sector start/end -->
             <g id="ticks-personalized"></g>
-
             <line
               id="hour-personalized"
               class="hand hour common-clock-hand common-clock-hand-hour"
@@ -99,11 +98,24 @@
         id="aph-settings-panel"
         style="display: none"
       >
+        <div class="graph-area personalized-clock-graph-area">
+            <div class="graph-title real">実時間</div>
+            <div class="graph-title aph">Another Hour 時間</div>
+
+            <div class="graph-bar-container real-hours-graph-container" id="personalizedRealHoursGraphContainer">
+                <div class="graph-bar real-hours-bar" id="personalizedRealHoursBar">
+                    </div>
+                </div>
+            <div class="graph-bar-container aph-graph-container" id="personalizedAphGraphContainer">
+                <div class="graph-bar aph-bar" id="personalizedAphGraphBar"></div>
+                <div class="axis-labels aph-axis-labels" id="personalizedAphAxisLabels"></div>
+            </div>
+        </div>
+      </div>
         <div class="setting-group">
           <label for="another-hour-duration-display"
             >Another Hour Duration Adjuster:
           </label>
-
           <div class="slider-wrapper">
             <input
               type="range"
@@ -118,7 +130,6 @@
               >
             </div>
           </div>
-
           <label for="normal-duration-slider"
             >APH Duration:
             <span id="another-hour-duration-display"> 1 hours 0 minutes</span>
@@ -131,7 +142,6 @@
           <h4 id="personalized-ah-city-name" class="personalized-ah-city"></h4>
           <select id="timezone-select" aria-label="Select timezone"></select>
         </div>
-        
       </section>
       <div
         class="controls-toggle-settings"
@@ -141,10 +151,8 @@
           Show Settings
         </button>
       </div>
-
       <footer class="clock-controls"></footer>
     </main>
-
     <script type="module" src="/js/personalized-ah-clock-ui.js"></script>
   </body>
 </html>

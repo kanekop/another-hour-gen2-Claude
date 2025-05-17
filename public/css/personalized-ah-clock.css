@@ -301,3 +301,71 @@ body.inverted .ah-sector-indicator-line {
 .view-hidden {
   display: none !important; /* !important は必要に応じて */
 }
+
+/* public/css/personalized-ah-clock.css */
+
+/* ... 既存のスタイル ... */
+
+#personalized-aph-graph-display-area {
+  margin-top: 20px; /* スライダーグループとの間隔調整 */
+  margin-bottom: 20px; /* スライダーグループとの間隔調整 */
+  padding: 10px;
+  border: 1px solid #e0e0e0; /* 任意: グラフエリアを囲む場合 */
+  border-radius: 6px;       /* 任意 */
+  background-color: #f9f9f9; /* 任意: グラフエリアの背景色 */
+}
+
+body.inverted #personalized-aph-graph-display-area {
+    border-color: #444;
+    background-color: #2a2a2a; /* ダークモード時の背景色 */
+}
+
+
+#personalized-aph-graph-display-area h4 {
+    margin-bottom: 15px;
+    font-size: 1em;
+    color: var(--light-text);
+}
+body.inverted #personalized-aph-graph-display-area h4 {
+    color: var(--dark-text);
+}
+
+/* Personalized AH Clock 内のグラフエリアのサイズ調整 */
+.personalized-clock-graph-area {
+  /* APH Graph Demo の .graph-area のスタイルを参考にしつつ、
+     Personalized AH Clock の Settings パネルに合うように調整 */
+  /* grid-template-columns: min-content; */ /* ← 1列指定をコメントアウトまたは変更 */
+  grid-template-columns: min-content min-content; /* ← 2列指定に変更 */
+  grid-template-rows: auto 300px; /* タイトルとグラフバーの高さ。元のAPH Graph Demoより少し小さくする例 */
+  gap: 0 20px; /* グラフ間の隙間 (今回は1つなので主に列間の意味は薄い) */
+  justify-content: center; /* グラフを中央に配置 */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  /* 高さや幅を固定値にするか、親要素に追従させるかはデザイン次第 */
+}
+
+
+
+
+/* Personalized AH Clock 内のグラフバーコンテナの調整 */
+#personalizedAphGraphContainer {
+    /* 必要に応じて APH Graph Demo の .aph-graph-container からスタイルを継承または上書き */
+    /* 例: width: 70px; など、バーの幅を調整 */
+}
+
+/* Personalized AH Clock 内のグラフバーの幅を調整する場合 */
+#personalizedAphGraphBar {
+    width: 70px; /* 例: APH Graph Demoの90pxより少し細く */
+}
+
+
+/* Personalized AH Clock 内のY軸ラベルの位置調整などが必要な場合 */
+#personalizedAphAxisLabels .dynamic-aph-axis-label {
+    /* font-size: 0.9em; */ /* 例: 少し小さくする */
+}
+
+/*
+  注意: aph-graph-demo.css 内のスタイルがグローバルに適用されすぎている場合、
+  Personalized AH Clock 専用のクラス (例: .personalized-clock-graph-area) を使って
+  スコープを限定するか、カスケーディングを利用して上書きする必要があるかもしれません。
+*/

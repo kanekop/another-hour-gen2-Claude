@@ -2,7 +2,7 @@
 
 Another Hour Clock is a unique web-based application that redefines your perception of time. It initially operates on a unified "Another Hour" (AH) time scale where time runs approximately 4.17% faster than real time (1 AH second = 23/24 real seconds). This fits a standard 24-hour day into a conceptual 23-AH-hour day, featuring a special "Another Hour" period. The project has now been enhanced with a **Personalized AH Clock (APH Clock)**, allowing users to define their own custom "Another Personalized Hour" (APH) duration and explore varied time scales.
 
-The application includes the original Main Clock, an advanced World Clock, Stopwatch, Timer (all AH-aware based on the 23/24 scale), an AH Time Converter, and the new Personalized AH Clock.
+The application includes the original Main Clock, an advanced World Clock, Stopwatch, Timer (all AH-aware based on the 23/24 scale), an AH Time Converter, the new Personalized AH Clock, and an APH Graph Demo.
 
 ## Table of Contents
 
@@ -21,6 +21,7 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
     * [World Clock (Standard AH)](#world-clock-standard-ah)
     * [Stopwatch and Timer (Standard AH Scale)](#stopwatch-and-timer-standard-ah-scale)
     * [AH Time Converter (Standard AH Scale)](#ah-time-converter-standard-ah-scale)
+    * **[APH Graph Demo](#aph-graph-demo)**
 6.  [Technical Details](#technical-details)
     * [Time Calculation Concepts](#time-calculation-concepts)
         * [Standard Another Hour (AH) Time Calculation](#standard-another-hour-ah-time-calculation)
@@ -42,35 +43,33 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
     * Visual theme inverts to dark mode during the selected timezone's AH period.
 
 * **Personalized AH Clock (APH Clock) (`/pages/personalized-ah-clock.html`):**
-    * **Concept:** Empowers users to create their own custom time experience by defining the length of their "normal" day, thereby personalizing the duration of the "Another Personalized Hour(s)" (APH). This feature allows for profound exploration of time perception.
+    * **Concept:** Empowers users to create their own custom time experience by defining the length of their "normal" day, thereby personalizing the duration of the "Another Personalized Hour(s)" (APH).
     * **Customizable "Normal APH Day Duration":**
         * Users can set the duration of the standard part of their day using an intuitive slider.
-        * The range is from **0 minutes** (meaning the entire 24 real hours become APH, starting immediately at APH 24:00) up to **24 hours (1440 minutes)** (meaning no APH period, the clock runs at a 1:1 scale with real time, effectively becoming a standard clock displaying "APH" time equivalent to real time).
-        * The selected duration is clearly displayed (e.g., "8 hours 32 minutes").
+        * The range is from **0 minutes** (meaning the entire 24 real hours become APH, starting immediately at APH 24:00) up to **24 hours (1440 minutes)** (meaning no APH period, the clock runs at a 1:1 scale with real time).
+        * The selected duration is clearly displayed (e.g., "Normal APH Day: 8 hours 32 minutes", "APH Duration: 15 hours 28 minutes").
+    * **Integrated Comparison Graph:**
+        * The settings view now includes a dual vertical bar graph, similar to the APH Graph Demo, directly above the slider.
+        * This graph visually compares the user's APH time distribution (orange for normal period, red for APH period) against a standard 24-hour real-time representation.
+        * The graph updates dynamically as the user adjusts the "Normal APH Day Duration" slider, providing immediate visual feedback on how their settings affect the time allocation.
     * **Time Scaling during Normal Period:**
         * During the user-defined "Normal APH Day Duration," time is scaled. The `scaleFactor` is calculated as `24 / normalAphDayDurationHours`.
-        * For example, if "Normal APH Day Duration" is set to 20 hours, the `scaleFactor` is `24/20 = 1.2`, meaning time runs 20% faster during these 20 real hours.
     * **"Another Personalized Hour(s)" (APH Period):**
-        * This period begins immediately after the "Normal APH Day Duration" (as set by the user) concludes within the 24-hour real-time cycle.
-        * **Time Speed:** Crucially, during the APH period, the clock hands and time progression revert to **normal real-time speed** (1 APH second = 1 real second). This honors the concept that the "extra" APH time gained is experienced at a familiar pace.
-        * **Digital Time Display:**
-            * The APH digital time starts at **APH 24:00:00** when the APH period begins.
-            * The hour display **accumulates** beyond 24. For instance, if a user reserves 4 real hours for APH, the digital display will progress from APH 24:00:00 up to APH 27:59:59 (approximately).
-        * **Analog Time Display:**
-            * The analog clock continues to operate on a 12-hour dial.
-            * During the APH period, the hands move at normal speed. The hour hand correctly represents the accumulated APH hours modulo 12 (e.g., APH 25:00 is shown as 1 o'clock).
-    * **Visual APH Sector (Yellow Pie):**
-        * A yellow sector on the analog dial visually represents the **duration and span of the APH period**.
-        * It starts at the **12 o'clock position** on the dial (representing the conceptual start of APH 24:00).
-        * The sweep angle of the sector corresponds to the length of the APH period (e.g., a 3-hour APH period covers 90 degrees from 12 to 3).
-        * If the APH period exceeds 12 real hours (sweep angle > 360 degrees), the sector fills the entire clock face, and an **additional red indicator line** is displayed, pointing from the center to the APH period's "final end time" on the 12-hour dial. This provides a clear visual cue for APH durations longer than one analog clock cycle.
-        * This yellow sector is **only visible during the APH period**.
+        * This period begins immediately after the "Normal APH Day Duration" concludes.
+        * **Time Speed:** During the APH period, time progression reverts to **normal real-time speed** (1 APH second = 1 real second).
+        * **Digital Time Display (Clock View):** When in the APH period, the digital display shows "Actual" real time and "APH Remaining" time. The "APH Time" (e.g., APH 24:xx) is not shown in the clock view during this period.
+        * **Analog Time Display (Clock View):** The analog clock continues on a 12-hour dial. During the APH period, hands move at normal speed, and a yellow APH sector visualizes the APH duration.
+    * **Visual APH Sector (Yellow Pie - Clock View):**
+        * A yellow sector on the analog dial (in the clock view) visually represents the duration and span of the APH period, starting from 12 o'clock.
+        * If the APH period exceeds 12 real hours, an additional red indicator line shows the APH period's "final end time" on the 12-hour dial.
+        * This yellow sector is only visible during the APH period in the clock view.
     * **Theme:** The page inverts to a dark theme during the APH period for the selected timezone.
-    * **Timezone Selection:** Users can select a timezone, and all APH calculations and period transitions are based on the local real time of that zone.
+    * **Timezone Selection:** Users can select a timezone, and all APH calculations are based on the local real time of that zone.
 
 * **World Clock Page (Standard AH) (`/pages/world-clock.html`):**
     * Displays a grid of 24 clocks for different timezones, all operating on the **standard 23/24 AH time scale**.
-    * (Other World Clock features remain as previously described)
+    * Each clock item shows city, digital AH time, digital standard time, and an analog AH clock.
+    * AH-active clocks invert to a dark theme.
 
 * **Time Tools (Standard AH Scale):**
     * **Stopwatch (`/pages/stopwatch.html`):** Measures elapsed time in standard AH units ($1$ AH sec $\approx 0.95833$ real sec).
@@ -80,38 +79,19 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
     * Converts between real-time and **standard AH time** ($24/23$ scale).
 
 * **APH Graph Demo (`/pages/aph-graph-demo.html`):**
-* **Purpose:** A visual tool to demonstrate and compare the concept of "Personalized Another Hour" (APH) time allocation against standard real-time.
-* **Dual Bar Graphs:**
-    * **Real-Time Graph (Left):** Displays a fixed 24-hour representation of actual time. Each hour (0-23) is shown as a distinct segment. Y-axis labels indicate major hour marks (0, 6, 12, 18, 24).
-    * **Another Hour Graph (APH Graph) (Right):** Dynamically illustrates the APH time distribution based on the user-set "Normal APH Day Duration."
-        * **Normal Period (Orange Block):** Represents the user-defined "normal" part of the APH day. Its height adjusts proportionally. Contains conceptual APH hour labels (0-22) distributed evenly within this block. This block disappears if "Normal APH Day Duration" is set to 0.
-        * **APH Period (Red Block):** Represents the "Another Hour" duration. Its height is inversely proportional to the Normal Period. If "Normal APH Day Duration" is 0, this block fills the entire graph.
-* **Dynamic Y-Axis Helper Labels (APH Graph):** Labels such as "AH 0", "AH 6", "AH 12", "AH 18", and "AH 24" mark significant APH time points.
-    * "AH 0" is always aligned with the top of the APH graph (equivalent to the 0-hour mark of the Real-Time graph).
-    * "AH 24" indicates the boundary between the Normal Period and APH Period. If the Normal Period is 0, "AH 24" aligns with "AH 0" at the top of the graph.
-    * "AH 6", "AH 12", "AH 18" are displayed within the Normal Period block if it exists and is tall enough, proportionally positioned.
-    * The font size of these Y-axis labels has been increased for better readability.
-* **Horizontal Helper Line (Red):** A red line extends across the width of the APH graph at the "AH 24" level, visually marking the transition from the Normal Period to the APH Period.
-* **Interactive Slider Control:**
-    * Allows users to adjust the "Normal APH Day Duration" from 0 minutes to 24 hours (1440 minutes).
-    * Changes to the slider instantly update:
-        * The textual display of "Normal APH Day Duration" and "Another Hour Duration."
-        * The relative heights of the orange and red blocks in the APH graph.
-        * The positions of the "AH 24" label and the red horizontal helper line.
-        * The visibility and positioning of "AH 6", "AH 12", "AH 18" labels.
-* **Layout:** The two graphs are positioned closely together for easier comparison, and the overall layout is managed using CSS Grid.
-
-
+    * **Purpose:** A standalone visual tool to demonstrate and compare the "Personalized Another Hour" (APH) time allocation against standard real-time. The core graphing component is now shared with the Personalized AH Clock's settings view.
+    * **Dual Bar Graphs:**
+        * **Real-Time Graph (Left):** Fixed 24-hour representation of actual time.
+        * **Another Hour Graph (APH Graph) (Right):** Dynamically illustrates APH time distribution (Normal Period in orange, APH Period in red) based on the slider.
+    * **Dynamic Y-Axis Helper Labels (APH Graph):** "AH 0", "AH 6", "AH 12", "AH 18", and "AH 24" mark significant APH time points.
+    * **Horizontal Helper Line (Red):** Marks the transition from Normal Period to APH Period on the APH graph.
+    * **Interactive Slider Control:** Allows adjustment of "Normal APH Day Duration," instantly updating textual readouts and graph visuals.
 
 * **Visual Theme:**
-    * The application defaults to a light theme.
-    * The Main Clock page and the Personalized AH Clock page dynamically switch to a dark theme when their respective clocks enter their "Another Hour" or "Another Personalized Hour" period.
-    * Individual clock items on the World Clock page use a dark theme effect for their AH period.
+    * Defaults to a light theme.
+    * Main Clock, Personalized AH Clock, and individual World Clock items dynamically switch to a dark theme during their respective "Another Hour" or APH periods.
 
 ## Project Structure
-
-(No changes requested to this section, assuming it's up-to-date with `personalized-ah-clock.html` etc.)
-
 
 ```
 project/
@@ -242,6 +222,19 @@ project/
 * This tool is useful for planning or understanding specific time conversions within the Another Hour system.
 
 ### Personalized AH Clock (APH Clock)
+* Accessible via the "Personalized AH Clock" link or directly at `/pages/personalized-ah-clock.html`.
+* **Views:**
+    * **Clock View:** Shows the analog and digital APH clock.
+    * **Settings View:** Allows customization of the APH parameters.
+* **Settings View Features:**
+    * **Comparison Graph:** Displays a dual bar graph (Real Time vs. Another Hour distribution) directly linked to the slider.
+    * **"Normal APH Day Duration" Slider:** Adjust the slider (0 to 1440 minutes) to define the length of your scaled-time day. Text readouts for "Normal APH Day" and the resulting "APH Duration" (the unscaled portion) update with the slider.
+    * **Timezone Selection:** Choose a timezone for all APH calculations.
+* **Clock View Features (During APH Period):**
+    * Time progresses at normal real-time speed.
+    * Digital display shows "Actual" time and "APH Remaining."
+    * Analog clock shows a yellow sector for the APH duration.
+    * Theme inverts to dark.
 * Accessible via the "Personalized AH Clock" link on the landing page, or directly at `/pages/personalized-ah-clock.html`.
 * **Objective:** This clock allows users to dynamically alter their experience of a day by customizing how much "normal time" they perceive before entering their "Another Personalized Hour(s)" (APH).
 * **Setting Normal APH Day Duration:**
