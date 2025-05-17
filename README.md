@@ -93,6 +93,7 @@ The application includes the original Main Clock, an advanced World Clock, Stopw
 project/
 ├── public/                   # Frontend assets and client-side code
 │   ├── css/                  # Stylesheets directory
+│   │   ├── aph-graph-demo.css # APH Graph demo styles
 │   │   ├── components.css    # Common UI component styles
 │   │   ├── main-clock.css    # Main clock page styles
 │   │   ├── personalized-ah-clock.css # Personalized AH clock styles
@@ -100,13 +101,15 @@ project/
 │   │   ├── timer.css         # Timer page styles
 │   │   └── world-clock.css   # World clock page styles
 │   ├── js/                   # Client-side JavaScript modules
-│   │   ├── city-timezones.js   # Timezone data and utilities
+│   │   ├── aph-graph-demo.js # APH Graph demo functionality
+│   │   ├── city-timezones.js # Timezone data and utilities
 │   │   ├── personalized-ah-clock-ui.js # Personalized AH clock functionality
 │   │   ├── stopwatch-ui.js   # Stopwatch functionality
 │   │   ├── timer-ui.js       # Timer functionality
 │   │   ├── timezone-manager.js # Timezone management utilities
 │   │   └── world-clock-ui.js # World clock functionality
 │   ├── pages/                # HTML pages for specific features
+│   │   ├── aph-graph-demo.html # APH Graph demo interface
 │   │   ├── converter.html    # AH Time Converter interface
 │   │   ├── main-clock.html   # Main clock interface
 │   │   ├── personalized-ah-clock.html # Personalized AH clock interface
