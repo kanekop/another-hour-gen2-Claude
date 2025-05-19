@@ -129,7 +129,7 @@ export function getCustomAhAngles(date, timezone, normalAphDayDurationMinutes) {
   }
 
 
-
+  
   let aphHoursDigital, aphMinutesDigital, aphSecondsFloat;
   const isPersonalizedAhPeriod = realMillisecondsInDay >= normalAphDayDurationMs;
 
