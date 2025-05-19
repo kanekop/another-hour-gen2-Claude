@@ -1,6 +1,8 @@
 // public/js/timer-ui.js
-import { fromAhMillis } from '/shared/ah-time.js';
-import { toAhMillis } from '/shared/ah-time.js';
+// import { fromAhMillis, toAhMillis } from '/shared/ah-time.js'; // 古いインポートを削除
+import { convertToScaledMs, convertFromScaledMs } from '/shared/ah-time.js'; // 新しいインポート
+import { getCurrentScalingInfo } from './scaling-utils.js'; // 新しいユーティリティをインポート
+import { दिनमान } from "../../../../../../../../../../../../../../home/language Partners/kanekop/another-hour-gen2/another-hour-gen2-e70c9708a0029e8bd2e6d8d6719e6589f8cf0c55/public/js/personalized-ah-clock-ui";
 
 const display = document.querySelector('.timer-display');
 const startBtn = document.getElementById('start');
@@ -10,49 +12,101 @@ const hoursInput = document.getElementById('hours');
 const minutesInput = document.getElementById('minutes');
 const secondsInput = document.getElementById('seconds');
 
-let remaining = 0;
-let endTime = 0;
-let intervalId = null;
+let targetRealTime = 0; // タイマーが0になる実時間のタイムスタンプ
+let animationFrameId = null;
+let remainingScaledMsAtPause = 0; // 一時停止時の残りスケール時間
 
-function updateDisplay(ms) {
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  display.textContent = `${String(hours).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+function formatDisplayTime(scaledMs) {
+  if (scaledMs < 0) scaledMs = 0;
+  const totalSeconds = Math.floor(scaledMs / 1000);
+  const s = String(totalSeconds % 60).padStart(2, '0');
+  const m = String(Math.floor(totalSeconds / 60) % 60).padStart(2, '0');
+  const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  display.textContent = `${h}:${m}:${s}`;
 }
-
-function start() {
-  const hours = parseInt(hoursInput.value) || 0;
-  const minutes = parseInt(minutesInput.value) || 0;
-  const seconds = parseInt(secondsInput.value) || 0;
-
-  const ahMillis = (hours * 3600 + minutes * 60 + seconds) * 1000;
-  const realMillis = fromAhMillis(ahMillis);
-
-  endTime = Date.now() + realMillis;
-  update();
-  intervalId = setInterval(update, 100);
-}
-
 
 function update() {
-  remaining = Math.max(0, endTime - Date.now());
-  if (remaining <= 0) {
-    clearInterval(intervalId);
+  const now = Date.now();
+  const realMsRemaining = Math.max(0, targetRealTime - now);
+
+  if (realMsRemaining <= 0) {
+    formatDisplayTime(0);
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
     alert('Time is up!');
+    // Reset inputs or handle as needed
+    return;
   }
-  updateDisplay(toAhMillis(remaining));  // AH時間に変換して表示
+
+  // 表示用の残り時間を計算するために、現在のスケールファクターを毎回取得
+  const { scaleFactor } = getCurrentScalingInfo();
+  const scaledMsRemaining = convertToScaledMs(realMsRemaining, scaleFactor);
+  formatDisplayTime(scaledMsRemaining);
+  remainingScaledMsAtPause = scaledMsRemaining; // 一時停止用に現在の残りスケール時間を保存
+
+  animationFrameId = requestAnimationFrame(update);
 }
 
-startBtn.addEventListener('click', start);
+function startTimer() {
+  if (animationFrameId) return; // 既に実行中の場合は何もしない
+
+  let initialScaledDurationMs;
+
+  if (targetRealTime > 0 && remainingScaledMsAtPause > 0) { // 一時停止からの再開
+    initialScaledDurationMs = remainingScaledMsAtPause;
+  } else { // 新規スタートまたはリセット後のスタート
+    const hours = parseInt(hoursInput.value) || 0;
+    const minutes = parseInt(minutesInput.value) || 0;
+    const seconds = parseInt(secondsInput.value) || 0;
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      formatDisplayTime(0);
+      return;
+    }
+    initialScaledDurationMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+  }
+
+  if (initialScaledDurationMs <= 0) {
+      formatDisplayTime(0);
+      return;
+  }
+
+  // タイマー開始時のスケールファクターを取得して、実時間の終了時刻を計算
+  const { scaleFactor: startScaleFactor } = getCurrentScalingInfo();
+  const realDurationMs = convertFromScaledMs(initialScaledDurationMs, startScaleFactor);
+  targetRealTime = Date.now() + realDurationMs;
+
+  // 最初の表示を更新
+  formatDisplayTime(initialScaledDurationMs);
+  remainingScaledMsAtPause = initialScaledDurationMs;
+
+
+  animationFrameId = requestAnimationFrame(update);
+}
+
+startBtn.addEventListener('click', startTimer);
+
 stopBtn.addEventListener('click', () => {
-  clearInterval(intervalId);
-  remaining = Math.max(0, endTime - Date.now());
-  updateDisplay(remaining);
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+    // remainingScaledMsAtPause は update() で最新の値がセットされている
+  }
 });
 
 resetBtn.addEventListener('click', () => {
-  clearInterval(intervalId);
-  updateDisplay(0);
-  hoursInput.value = minutesInput.value = secondsInput.value = '';
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+  targetRealTime = 0;
+  remainingScaledMsAtPause = 0;
+  hoursInput.value = '';
+  minutesInput.value = '';
+  secondsInput.value = '';
+  formatDisplayTime(0);
 });
+
+// 初期表示
+formatDisplayTime(0);

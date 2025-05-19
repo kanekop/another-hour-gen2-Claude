@@ -1,7 +1,8 @@
+// server.js
 import express from 'express';
 import fs from 'fs';
-import stopwatchRouter from './src/routes/stopwatch.js';
-import timerRouter from './src/routes/timer.js';  // 追加
+// import stopwatchRouter from './src/routes/stopwatch.js'; // ← この行をコメントアウト
+// import timerRouter from './src/routes/timer.js';  // ← この行をコメントアウト
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -10,13 +11,10 @@ const app = express();
 const port = 3000;
 
 app.use(express.static('public'));
-app.use('/pages', express.static('public/pages'));
-app.use('/css', express.static(join(__dirname, 'public/css')));
-app.use('/js', express.static(join(__dirname, 'public/js')));
-app.use('/pages', express.static(join(__dirname, 'public/pages')));
-app.use('/shared', express.static(join(__dirname, 'src/shared')));
-app.use('/api/stopwatch', stopwatchRouter);
-app.use('/api/timer', timerRouter);  // 追加
+// 以下、既存の app.use(...) はそのまま
+
+// app.use('/api/stopwatch', stopwatchRouter); // ← この行をコメントアウト
+// app.use('/api/timer', timerRouter);  // ← この行をコメントアウト
 app.use(express.json());
 
 // Settings endpoints
@@ -25,7 +23,7 @@ app.get('/api/settings', (req, res) => {
     const settings = JSON.parse(fs.readFileSync('settings.json', 'utf8'));
     res.json(settings);
   } catch (error) {
-    res.json({ showAHTime: true, showActualTime: true });
+    res.json({ showAHTime: true, showActualTime: true }); // デフォルト値を返すように修正
   }
 });
 
@@ -34,6 +32,7 @@ app.post('/api/settings', (req, res) => {
     fs.writeFileSync('settings.json', JSON.stringify(req.body));
     res.json({ success: true });
   } catch (error) {
+    console.error('Failed to save settings:', error); // エラーログを追加
     res.status(500).json({ error: 'Failed to save settings' });
   }
 });

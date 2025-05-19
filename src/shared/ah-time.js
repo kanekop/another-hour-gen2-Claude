@@ -1,20 +1,24 @@
 // src/shared/ah-time.js
 
 /**
- * Used exclusively by the Stopwatch and Timer utilities.
+ * 実時間のミリ秒を、指定されたスケールファクターに基づいてスケールされたミリ秒に変換します。
+ * @param {number} realMs - 実時間のミリ秒。
+ * @param {number} scaleFactor - 適用するスケールファクター。
+ * @returns {number} スケールされたミリ秒。
  */
-const AH_FACTOR = 23/24;
+export const convertToScaledMs = (realMs, scaleFactor) => {
+  if (scaleFactor === 0) return realMs; // スケールファクター0は未定義の動作なので、実時間をそのまま返すかエラー処理
+  if (scaleFactor === Infinity) return 0; // 無限大スケールの場合、経過時間は0に収束すると考える (またはエラー)
+  return realMs * scaleFactor;
+};
 
 /**
- * Converts real-time milliseconds to Another Hour (AH) milliseconds for Stopwatch/Timer.
- * @param {number} realMs - Real-time duration in milliseconds.
- * @returns {number} Equivalent duration in AH milliseconds.
+ * 指定されたスケールファクターに基づいてスケールされたミリ秒を、実時間のミリ秒に変換します。
+ * @param {number} scaledMs - スケールされたミリ秒。
+ * @param {number} scaleFactor - 適用されたスケールファクター。
+ * @returns {number} 実時間のミリ秒。
  */
-export const toAhMillis = realMs => realMs / AH_FACTOR;
-
-/**
- * Converts Another Hour (AH) milliseconds to real-time milliseconds for Stopwatch/Timer.
- * @param {number} ahMs - AH duration in milliseconds.
- * @returns {number} Equivalent duration in real-time milliseconds.
- */
-export const fromAhMillis = ahMs => ahMs * AH_FACTOR;
+export const convertFromScaledMs = (scaledMs, scaleFactor) => {
+  if (scaleFactor === 0 || scaleFactor === Infinity) return scaledMs; // 不適切なスケールファクターの場合は入力値をそのまま返すかエラー処理
+  return scaledMs / scaleFactor;
+};
