@@ -1,11 +1,5 @@
 // public/js/personalized-ah-clock-ui.js
 
-// --- 定数のエクスポート ---
-export const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
-export const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible'; // 元々あったもの
-export const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';       // 元々あったもの
-export const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone'; // ★ 新しくエクスポート
-
 import { getCustomAhAngles } from "../clock-core.js";
 import {
   getDisplayTimezones,
@@ -17,9 +11,10 @@ import { drawAphGraph, updateAphAxisLabels } from "./aph-graph-demo.js";
 // ▲▲▲ ここまで追加 ▲▲▲
 
 //ローカル保存用定数
-// const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
-// const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible';
-// const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';
+export const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
+const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible';
+const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';
+const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone';
 
 // ▼▼▼ 実時間グラフ描画関数を追加 ▼▼▼
 function drawRealTimeGraph(realHoursBarElement) {
@@ -173,7 +168,7 @@ function initializeSlider() {
       drawRealTimeGraph(elements.personalizedRealHoursBar);
   }
   // ▲▲▲ ここまで追加 ▲▲▲
-  
+
 
   // スライダーの初期値をUIに反映 (グラフも含む)
   updateSliderRelatedDisplays(); // この中でグラフも初期描画される
@@ -246,16 +241,19 @@ function initializeTimezoneSelect() {
     elements.timezoneSelect.appendChild(option);
   });
 
+  // Check localStorage for saved timezone first
+  const savedTimezone = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE);
   const params = new URLSearchParams(window.location.search);
   const urlTimezone = params.get("timezone");
 
-  // ★ localStorage から保存されたタイムゾーンを読み込む試みを追加
-  const savedTimezone = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE);
-
-  let initialTimezone =
-    urlTimezone && moment.tz.zone(urlTimezone)
-      ? urlTimezone
-      : getUserLocalTimezone() || "UTC";
+  let initialTimezone;
+  if (savedTimezone && moment.tz.zone(savedTimezone)) {
+    initialTimezone = savedTimezone;
+  } else if (urlTimezone && moment.tz.zone(urlTimezone)) {
+    initialTimezone = urlTimezone;
+  } else {
+    initialTimezone = getUserLocalTimezone() || "UTC";
+  }
 
   const isValidInitial = state.displayTimezones.some(
     (tz) => tz.timezone === initialTimezone,
@@ -275,10 +273,14 @@ function initializeTimezoneSelect() {
   elements.timezoneSelect.value = state.selectedTimezone;
   updateCityNameDisplay(state.selectedTimezone);
 
+  // Save timezone to localStorage
+  localStorage.setItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE, state.selectedTimezone);
+
   elements.timezoneSelect.addEventListener("change", (event) => {
     state.selectedTimezone = event.target.value;
     updateCityNameDisplay(state.selectedTimezone);
-    // updatePersonalizedClock();
+    // Save timezone to localStorage when changed
+    localStorage.setItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE, state.selectedTimezone);
   });
 }
 
