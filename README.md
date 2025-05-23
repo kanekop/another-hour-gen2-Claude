@@ -96,41 +96,51 @@ project/
 ├── public/                   \# Frontend assets and client-side code  
 │   ├── css/                  \# Stylesheets directory  
 │   │   ├── aph-graph-demo.css \# Graph Demo styles  
+│   │   ├── clock-themes.css  \# Clock theme styles  
 │   │   ├── components.css    \# Common UI component styles  
+│   │   ├── main-clock.css    \# Main clock styles  
 │   │   ├── personalized-ah-clock.css \# Customizable Main Clock styles  
 │   │   ├── stopwatch.css     \# Stopwatch page styles  
-│   │   └── timer.css         \# Timer page styles  
+│   │   ├── timer.css        \# Timer page styles  
+│   │   └── world-clock.css  \# World clock styles  
 │   ├── js/                   \# Client-side JavaScript modules  
+│   │   ├── ah-time.js       \# Time conversion utilities  
 │   │   ├── aph-graph-demo.js \# Graph Demo functionality  
 │   │   ├── city-timezones.js \# Timezone data and utilities  
+│   │   ├── clock-theme-manager.js \# Theme management  
 │   │   ├── personalized-ah-clock-ui.js \# Customizable Main Clock functionality  
+│   │   ├── scaling-utils.js  \# Time scaling utilities  
 │   │   ├── stopwatch-ui.js   \# Stopwatch functionality  
 │   │   ├── timer-ui.js       \# Timer functionality  
-│   │   └── timezone-manager.js \# Timezone management utilities  
+│   │   ├── timezone-manager.js \# Timezone management utilities  
+│   │   └── world-clock-ui.js \# World clock functionality  
 │   ├── pages/                \# HTML pages for specific features  
 │   │   ├── aph-graph-demo.html \# Graph Demo interface  
+│   │   ├── converter.html    \# Time converter interface  
+│   │   ├── main-clock.html   \# Main clock interface  
 │   │   ├── personalized-ah-clock.html \# Customizable Main Clock interface  
 │   │   ├── stopwatch.html    \# Stopwatch interface  
-│   │   └── timer.html        \# Timer interface  
+│   │   ├── timer.html        \# Timer interface  
+│   │   └── world-clock.html  \# World clock interface  
 │   ├── clock-core.js         \# Core clock calculation logic  
 │   ├── index.html            \# Landing page linking to all features  
-│   ├── main.js               \# Entry point for Customizable Main Clock (if personalized-ah-clock-ui.js is not the sole entry)  
+│   ├── main.js               \# Entry point for Customizable Main Clock  
 │   └── style.css             \# Global styles  
 ├── src/                      \# Server-side source code  
 │   ├── routes/               \# Express route handlers  
 │   │   ├── stopwatch.js      \# Stopwatch API routes  
 │   │   └── timer.js          \# Timer API routes  
 │   └── shared/               \# Shared utilities  
-│       └── ah-time.js        \# Time conversion utilities (ensure this aligns with customizable scale if used by server)  
+│       └── ah-time.js        \# Time conversion utilities  
 ├── .gitignore                \# Git ignore configuration  
 ├── .replit                   \# Replit configuration  
 ├── README.md                 \# Project documentation  
 ├── generated-icon.png        \# Application icon  
+├── index.js                  \# Node.js entry point  
 ├── package-lock.json         \# Node.js dependency lock  
 ├── package.json              \# Node.js project configuration  
 ├── server.js                 \# Express server  
-└── settings.json             \# Application settings (might need review if it stored old clock settings)
-
+└── settings.json             \# Application settings
 ```
 
 ## Getting Started
