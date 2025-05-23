@@ -1,5 +1,11 @@
 // public/js/personalized-ah-clock-ui.js
 
+// --- 定数のエクスポート ---
+export const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
+export const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible'; // 元々あったもの
+export const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';       // 元々あったもの
+export const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone'; // ★ 新しくエクスポート
+
 import { getCustomAhAngles } from "../clock-core.js";
 import {
   getDisplayTimezones,
@@ -11,9 +17,9 @@ import { drawAphGraph, updateAphAxisLabels } from "./aph-graph-demo.js";
 // ▲▲▲ ここまで追加 ▲▲▲
 
 //ローカル保存用定数
-const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
-const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible';
-const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';
+// const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
+// const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible';
+// const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';
 
 // ▼▼▼ 実時間グラフ描画関数を追加 ▼▼▼
 function drawRealTimeGraph(realHoursBarElement) {
@@ -242,6 +248,10 @@ function initializeTimezoneSelect() {
 
   const params = new URLSearchParams(window.location.search);
   const urlTimezone = params.get("timezone");
+
+  // ★ localStorage から保存されたタイムゾーンを読み込む試みを追加
+  const savedTimezone = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE);
+
   let initialTimezone =
     urlTimezone && moment.tz.zone(urlTimezone)
       ? urlTimezone

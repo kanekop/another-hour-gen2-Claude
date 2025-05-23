@@ -2,7 +2,6 @@
 // import { fromAhMillis, toAhMillis } from '/shared/ah-time.js'; // 古いインポートを削除
 import { convertToScaledMs, convertFromScaledMs } from '/shared/ah-time.js'; // 新しいインポート
 import { getCurrentScalingInfo } from './scaling-utils.js'; // 新しいユーティリティをインポート
-import { दिनमान } from "../../../../../../../../../../../../../../home/language Partners/kanekop/another-hour-gen2/another-hour-gen2-e70c9708a0029e8bd2e6d8d6719e6589f8cf0c55/public/js/personalized-ah-clock-ui";
 
 const display = document.querySelector('.timer-display');
 const startBtn = document.getElementById('start');
