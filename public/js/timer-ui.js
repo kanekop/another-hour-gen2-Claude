@@ -1,60 +1,89 @@
-// public/js/stopwatch-ui.js
-import { convertToScaledMs } from '/shared/ah-time.js';
+// public/js/timer-ui.js
+import { convertToScaledMs, convertFromScaledMs } from './ah-time.js';
 import { getCurrentScalingInfo } from './scaling-utils.js';
 
-const display = document.querySelector('.stopwatch-display');
+const display = document.querySelector('.timer-display');
 const startBtn = document.getElementById('start');
 const stopBtn = document.getElementById('stop');
 const resetBtn = document.getElementById('reset');
+const hoursInput = document.getElementById('hours');
+const minutesInput = document.getElementById('minutes');
+const secondsInput = document.getElementById('seconds');
 
-let startTime = null;
-let pausedTime = 0;
+let targetRealTime = 0;
 let animationFrameId = null;
-let accumulatedPausedTime = 0;
+let remainingScaledMsAtPause = 0;
 
 function formatDisplayTime(scaledMs) {
-  const totalHundredths = Math.floor(scaledMs / 10);
-  const hundredths = String(totalHundredths % 100).padStart(2, '0');
-
+  if (scaledMs < 0) scaledMs = 0;
   const totalSeconds = Math.floor(scaledMs / 1000);
-  const seconds = String(totalSeconds % 60).padStart(2, '0');
-  const minutes = String(Math.floor(totalSeconds / 60) % 60).padStart(2, '0');
-  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-
-  display.textContent = `${hours}:${minutes}:${seconds}.${hundredths.substring(0,1)}`;
+  const s = String(totalSeconds % 60).padStart(2, '0');
+  const m = String(Math.floor(totalSeconds / 60) % 60).padStart(2, '0');
+  const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  display.textContent = `${h}:${m}:${s}`;
 }
 
 function update() {
-  if (startTime) {
-    const realElapsed = Date.now() - startTime;
-    const { scaleFactor } = getCurrentScalingInfo();
-    const scaledElapsed = convertToScaledMs(realElapsed, scaleFactor);
-    formatDisplayTime(scaledElapsed);
+  const now = Date.now();
+  const realMsRemaining = Math.max(0, targetRealTime - now);
+
+  if (realMsRemaining <= 0) {
+    formatDisplayTime(0);
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+    alert('Time is up!');
+    return;
   }
+
+  const { scaleFactor } = getCurrentScalingInfo();
+  const scaledMsRemaining = convertToScaledMs(realMsRemaining, scaleFactor);
+  formatDisplayTime(scaledMsRemaining);
+  remainingScaledMsAtPause = scaledMsRemaining;
+
   animationFrameId = requestAnimationFrame(update);
 }
 
-startBtn.addEventListener('click', () => {
-  if (!startTime) {
-    startTime = Date.now() - accumulatedPausedTime;
-    accumulatedPausedTime = 0;
-  } else if (animationFrameId === null) {
-     startTime = Date.now() - accumulatedPausedTime;
+function startTimer() {
+  if (animationFrameId) return;
+
+  let initialScaledDurationMs;
+
+  if (targetRealTime > 0 && remainingScaledMsAtPause > 0) {
+    initialScaledDurationMs = remainingScaledMsAtPause;
+  } else {
+    const hours = parseInt(hoursInput.value) || 0;
+    const minutes = parseInt(minutesInput.value) || 0;
+    const seconds = parseInt(secondsInput.value) || 0;
+    if (hours === 0 && minutes === 0 && seconds === 0) {
+      formatDisplayTime(0);
+      return;
+    }
+    initialScaledDurationMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
   }
 
-  if(animationFrameId) {
-    return;
+  if (initialScaledDurationMs <= 0) {
+      formatDisplayTime(0);
+      return;
   }
+
+  const { scaleFactor: startScaleFactor } = getCurrentScalingInfo();
+  const realDurationMs = convertFromScaledMs(initialScaledDurationMs, startScaleFactor);
+  targetRealTime = Date.now() + realDurationMs;
+
+  formatDisplayTime(initialScaledDurationMs);
+  remainingScaledMsAtPause = initialScaledDurationMs;
+
   animationFrameId = requestAnimationFrame(update);
-});
+}
+
+startBtn.addEventListener('click', startTimer);
 
 stopBtn.addEventListener('click', () => {
   if (animationFrameId) {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
-    if(startTime) {
-        accumulatedPausedTime = Date.now() - startTime;
-    }
   }
 });
 
@@ -63,8 +92,11 @@ resetBtn.addEventListener('click', () => {
     cancelAnimationFrame(animationFrameId);
     animationFrameId = null;
   }
-  startTime = null;
-  accumulatedPausedTime = 0;
+  targetRealTime = 0;
+  remainingScaledMsAtPause = 0;
+  hoursInput.value = '';
+  minutesInput.value = '';
+  secondsInput.value = '';
   formatDisplayTime(0);
 });
 

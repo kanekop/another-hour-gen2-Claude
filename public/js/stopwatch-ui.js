@@ -1,5 +1,5 @@
 // public/js/stopwatch-ui.js
-import { convertToScaledMs } from '/shared/ah-time.js';
+import { convertToScaledMs } from './ah-time.js';
 import { getCurrentScalingInfo } from './scaling-utils.js';
 
 const display = document.querySelector('.stopwatch-display');

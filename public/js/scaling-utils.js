@@ -1,6 +1,6 @@
 // public/js/scaling-utils.js
 
-// localStorage keys
+// localStorage keys - これらは personalized-ah-clock-ui.js と同じ値を使用
 const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
 const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone';
 
@@ -11,11 +11,14 @@ const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone';
 export function getCurrentScalingInfo() {
     // localStorageから設定値を取得
     const savedDurationString = localStorage.getItem(LOCAL_STORAGE_KEY_APH_DURATION);
+    console.log('Saved duration string:', savedDurationString);
+
     // デフォルト値を Customizable Main Clock の初期値に合わせる (例: 23時間 = 1380分)
     let normalAphDayDurationMinutes = savedDurationString ? parseInt(savedDurationString, 10) : 1380;
 
     // 値のバリデーション (0分から1440分)
     normalAphDayDurationMinutes = Math.max(0, Math.min(normalAphDayDurationMinutes, 1440));
+    console.log('Normal APH day duration (minutes):', normalAphDayDurationMinutes);
 
     // Moment.jsが利用可能かチェック
     if (typeof moment === 'undefined' || typeof moment.tz === 'undefined') {
@@ -32,6 +35,7 @@ export function getCurrentScalingInfo() {
     if (!selectedTimezone) {
         selectedTimezone = moment.tz.guess() || 'UTC';
     }
+    console.log('Selected timezone:', selectedTimezone);
 
     const now = new Date();
     const localTime = moment(now).tz(selectedTimezone);
@@ -40,6 +44,7 @@ export function getCurrentScalingInfo() {
     const normalAphDayDurationMs = normalAphDayDurationMinutes * 60 * 1000;
 
     const isAhPeriod = realMillisecondsInDay >= normalAphDayDurationMs;
+    console.log('Is AH period:', isAhPeriod);
 
     let scaleFactor;
     if (isAhPeriod) {
@@ -55,6 +60,9 @@ export function getCurrentScalingInfo() {
             scaleFactor = 24 / normalAphDayDurationHours;
         }
     }
+
+    console.log('Calculated scale factor:', scaleFactor);
+    console.log('Normal APH duration hours:', normalAphDayDurationMinutes / 60);
 
     return {
         scaleFactor: scaleFactor,
