@@ -369,3 +369,214 @@ body.inverted #personalized-aph-graph-display-area h4 {
   Personalized AH Clock 専用のクラス (例: .personalized-clock-graph-area) を使って
   スコープを限定するか、カスケーディングを利用して上書きする必要があるかもしれません。
 */
+
+/* Add to public/css/personalized-ah-clock.css */
+
+/* Fine-tune buttons for slider */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.fine-tune-btn {
+  background: #4CAF50;
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.fine-tune-btn:hover:not(:disabled) {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.fine-tune-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.fine-tune-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.fine-tune-btn.decrement::before {
+  content: '◀';
+}
+
+.fine-tune-btn.increment::before {
+  content: '▶';
+}
+
+/* Adjust slider wrapper to fit with buttons */
+.slider-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+/* Dark mode styles */
+body.inverted .fine-tune-btn {
+  background: #66bb6a;
+}
+
+body.inverted .fine-tune-btn:hover:not(:disabled) {
+  background: #4caf50;
+}
+
+body.inverted .fine-tune-btn:disabled {
+  background: #424242;
+  opacity: 0.6;
+}
+
+/* Add to public/css/personalized-ah-clock.css */
+
+/* Fine-tune buttons for slider */
+.slider-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.fine-tune-btn {
+  background: #4CAF50;
+  border: none;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.1s;
+  flex-shrink: 0;
+  user-select: none; /* Prevent text selection on long press */
+  -webkit-user-select: none;
+}
+
+.fine-tune-btn:hover:not(:disabled) {
+  background: #45a049;
+  transform: scale(1.1);
+}
+
+.fine-tune-btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.fine-tune-btn:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.fine-tune-btn.decrement::before {
+  content: '◀';
+}
+
+.fine-tune-btn.increment::before {
+  content: '▶';
+}
+
+/* Adjust slider wrapper to fit with buttons */
+.slider-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+/* Dark mode styles */
+body.inverted .fine-tune-btn {
+  background: #66bb6a;
+}
+
+body.inverted .fine-tune-btn:hover:not(:disabled) {
+  background: #4caf50;
+}
+
+body.inverted .fine-tune-btn:disabled {
+  background: #424242;
+  opacity: 0.6;
+}
+
+/* Slider thumb color change from red to green */
+input[type="range"]#normal-duration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border: 1px solid #333;
+  height: 24px;
+  width: 12px;
+  border-radius: 3px;
+  background: #4CAF50; /* Changed from #c00000 to green */
+  margin-top: -6px;
+  position: relative;
+  z-index: 2;
+}
+
+input[type="range"]#normal-duration-slider::-moz-range-thumb {
+  border: 1px solid #333;
+  height: 24px;
+  width: 12px;
+  border-radius: 3px;
+  background: #4CAF50; /* Changed from #c00000 to green */
+  position: relative;
+  z-index: 2;
+}
+
+/* Slider track color change - APH portion from orange to red */
+input[type="range"]#normal-duration-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(to right,
+    #6e8bc4 0%, /* Normal period - blue */
+    #6e8bc4 var(--slider-progress-percent, 95.83%),
+    #d9534f var(--slider-progress-percent, 95.83%), /* APH period - changed to red */
+    #d9534f 100%
+  );
+  border-radius: 6px;
+}
+
+input[type="range"]#normal-duration-slider::-moz-range-track {
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(to right,
+    #6e8bc4 0%,
+    #6e8bc4 var(--slider-progress-percent, 95.83%),
+    #d9534f var(--slider-progress-percent, 95.83%), /* APH period - changed to red */
+    #d9534f 100%
+  );
+  border-radius: 6px;
+  border: none;
+}
+
+/* Real time indicator color change to green */
+.slider-real-time-indicator::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 9px solid #4CAF50; /* Changed from #c00000 to green */
+  margin-bottom: 3px;
+}
+
+.slider-real-time-text {
+  font-size: 0.85em;
+  color: #4CAF50; /* Changed from #c00000 to green */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-weight: bold;
+}

@@ -1,0 +1,141 @@
+/* public/css/clock-themes.css */
+
+/* ===== Clock Face Themes ===== */
+
+/* Classic Theme (default) - 現在のデザイン */
+.clock-theme-classic .analog-clock-svg {
+  display: block;
+}
+.clock-theme-classic .digital-clock {
+  display: block;
+}
+
+/* Minimalist Theme - 数字なし、シンプルな針 */
+.clock-theme-minimalist .hour-number {
+  display: none;
+}
+.clock-theme-minimalist .tick:not(.major) {
+  display: none;
+}
+.clock-theme-minimalist .common-clock-tick-major {
+  stroke-width: 1;
+  stroke: #999;
+}
+.clock-theme-minimalist .common-clock-hand {
+  stroke-width: 2;
+}
+.clock-theme-minimalist .common-clock-hand-second {
+  display: none; /* 秒針を非表示 */
+}
+
+/* Digital Only Theme */
+.clock-theme-digital .analog-clock-svg {
+  display: none !important;
+}
+.clock-theme-digital .digital-clock {
+  font-size: 3em;
+  padding: 40px;
+  border: 2px solid #333;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+.clock-theme-digital.inverted .digital-clock {
+  border-color: #666;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Roman Theme - ローマ数字 */
+.clock-theme-roman .hour-number {
+  font-family: 'Times New Roman', serif;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* ===== Color Themes ===== */
+
+/* Light Themes for Scaled 24 Period */
+.color-theme-default.scaled24 {
+  --bg-color: #e5e5e5;
+  --text-color: #1a1a1a;
+  --clock-face-fill: #ddd;
+  --clock-face-stroke: #bbb;
+  --clock-hand-color: #333;
+  --clock-second-hand: #c00000;
+}
+
+.color-theme-blue.scaled24 {
+  --bg-color: #e3f2fd;
+  --text-color: #0d47a1;
+  --clock-face-fill: #bbdefb;
+  --clock-face-stroke: #1976d2;
+  --clock-hand-color: #0d47a1;
+  --clock-second-hand: #1565c0;
+}
+
+.color-theme-green.scaled24 {
+  --bg-color: #e8f5e9;
+  --text-color: #1b5e20;
+  --clock-face-fill: #c8e6c9;
+  --clock-face-stroke: #388e3c;
+  --clock-hand-color: #1b5e20;
+  --clock-second-hand: #2e7d32;
+}
+
+/* Dark Themes for AH Period */
+.color-theme-default.ah-period {
+  --bg-color: #1a1a1a;
+  --text-color: #ffffff;
+  --clock-face-fill: #222;
+  --clock-face-stroke: #444;
+  --clock-hand-color: #e0e0e0;
+  --clock-second-hand: #ff6b6b;
+}
+
+.color-theme-blue.ah-period {
+  --bg-color: #0d47a1;
+  --text-color: #ffffff;
+  --clock-face-fill: #1565c0;
+  --clock-face-stroke: #1976d2;
+  --clock-hand-color: #ffffff;
+  --clock-second-hand: #64b5f6;
+}
+
+.color-theme-green.ah-period {
+  --bg-color: #1b5e20;
+  --text-color: #ffffff;
+  --clock-face-fill: #2e7d32;
+  --clock-face-stroke: #388e3c;
+  --clock-hand-color: #ffffff;
+  --clock-second-hand: #81c784;
+}
+
+/* Apply color variables */
+body.clock-theme-applied {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.clock-theme-applied .common-clock-face {
+  fill: var(--clock-face-fill);
+  stroke: var(--clock-face-stroke);
+  transition: fill 0.5s ease, stroke 0.5s ease;
+}
+
+.clock-theme-applied .common-clock-hand {
+  stroke: var(--clock-hand-color);
+  transition: stroke 0.5s ease;
+}
+
+.clock-theme-applied .common-clock-hand-second {
+  stroke: var(--clock-second-hand);
+}
+
+.clock-theme-applied .hour-number {
+  fill: var(--text-color);
+}
+
+.clock-theme-applied .common-clock-tick {
+  stroke: var(--text-color);
+  opacity: 0.5;
+}

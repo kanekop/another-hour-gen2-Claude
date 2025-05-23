@@ -6,9 +6,16 @@ import {
   getUserLocalTimezone,
   getCityNameByTimezone,
 } from "./timezone-manager.js";
-// ▼▼▼ aph-graph-demo.js からエクスポートされた関数をインポート ▼▼▼
 import { drawAphGraph, updateAphAxisLabels } from "./aph-graph-demo.js";
-// ▲▲▲ ここまで追加 ▲▲▲
+import { 
+  initializeThemeManager, 
+  applyClockFace, 
+  applyColorTheme, 
+  saveColorPreferences,
+  createThemeSettingsUI,
+  CLOCK_FACES,
+  COLOR_THEMES
+} from "./clock-theme-manager.js";
 
 //ローカル保存用定数
 export const LOCAL_STORAGE_KEY_APH_DURATION = "personalizedAhDurationMinutes";
@@ -16,30 +23,25 @@ const LOCAL_STORAGE_KEY_SETTINGS_VISIBLE = 'personalizedAhSettingsVisible';
 const LOCAL_STORAGE_KEY_CURRENT_VIEW = 'personalizedAhCurrentView';
 const LOCAL_STORAGE_KEY_SELECTED_TIMEZONE = 'personalizedAhSelectedTimezone';
 
-// ▼▼▼ 実時間グラフ描画関数を追加 ▼▼▼
+// 実時間グラフ描画関数
 function drawRealTimeGraph(realHoursBarElement) {
     if (!realHoursBarElement) {
         console.error("Real hours bar element not provided for drawing.");
         return;
     }
-    realHoursBarElement.innerHTML = ''; // クリア
+    realHoursBarElement.innerHTML = '';
 
     for (let i = 0; i < 24; i++) {
         const segment = document.createElement('div');
-        segment.classList.add('bar-segment'); // aph-graph-demo.css のスタイルを利用
-        segment.style.height = `${100 / 24}%`; // 高さを均等に分割
+        segment.classList.add('bar-segment');
+        segment.style.height = `${100 / 24}%`;
         segment.textContent = i;
-        // 必要に応じて aph-graph-demo.html の .real-hours-bar .bar-segment のスタイルを適用
-        // 例: segment.style.backgroundColor = '#0c58bb'; (CSSで定義されているなら不要)
         realHoursBarElement.appendChild(segment);
     }
 }
-// ▲▲▲ ここまで追加 ▲▲▲
-
 
 // DOM Elements
 const elements = {
-  // ... (既存の要素参照はそのまま) ...
   normalDurationSlider: document.getElementById("normal-duration-slider"),
   normalDurationDisplay: document.getElementById("normal-duration-display"),
   anotherHourDurationDisplay: document.getElementById(
@@ -69,27 +71,26 @@ const elements = {
   settingsPanel: document.getElementById('aph-settings-panel'),
   toggleViewBtn: document.getElementById('toggle-view-btn'),
   clockViewContainer: document.getElementById('clock-view-container'),
-  // ▼▼▼ グラフ表示用の新しい要素参照を追加 ▼▼▼
-  personalizedAphGraphContainer: document.getElementById('personalizedAphGraphContainer'), // グラフ全体のコンテナ
-  personalizedAphGraphBar: document.getElementById('personalizedAphGraphBar'),             // グラフのバー部分
-  personalizedAphAxisLabels: document.getElementById('personalizedAphAxisLabels'),         // グラフのY軸ラベル部分
-  // ▲▲▲ ここまで追加 ▲▲▲
-  // ▼▼▼ 実時間グラフ用の要素参照を追加 ▼▼▼
+  personalizedAphGraphContainer: document.getElementById('personalizedAphGraphContainer'),
+  personalizedAphGraphBar: document.getElementById('personalizedAphGraphBar'),
+  personalizedAphAxisLabels: document.getElementById('personalizedAphAxisLabels'),
   personalizedRealHoursBar: document.getElementById('personalizedRealHoursBar'),
-  // ▲▲▲ ここまで追加 ▲▲▲
+  themeSettingsContainer: document.getElementById('theme-settings-container'),
+  sliderDecrement: document.getElementById('slider-decrement'),
+  sliderIncrement: document.getElementById('slider-increment')
 };
 
-// Application State (変更なし)
+// Application State
 const state = {
   selectedTimezone: "",
-  normalAphDayDurationMinutes: 1380, // Default to 23 hours (23 * 60)
+  normalAphDayDurationMinutes: 1380,
   displayTimezones: [],
   animationFrameId: null,
+  themeSettings: null,
+  currentIsAhPeriod: false
 };
 
 // --- Utility Functions ---
-// formatDuration は aph-graph-demo.js からインポートしても良いですが、
-// こちらにもあるので、そのまま利用します。
 function formatDuration(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
@@ -113,7 +114,7 @@ function updateSliderRelatedDisplays() {
   elements.normalDurationDisplay.textContent = `Normal APH Day: ${formatDuration(normalAphDayMinutes)}`;
   const totalRealMinutesInDay = 24 * 60;
   const aphDurationMinutes = totalRealMinutesInDay - normalAphDayMinutes;
-  elements.anotherHourDurationDisplay.textContent = `${formatDuration(aphDurationMinutes)}`; // APH Duration の表示を修正
+  elements.anotherHourDurationDisplay.textContent = `${formatDuration(aphDurationMinutes)}`;
 
   const realTimeHourEquivalent = Math.floor(normalAphDayMinutes / 60);
   const realTimeMinuteEquivalent = normalAphDayMinutes % 60;
@@ -133,12 +134,60 @@ function updateSliderRelatedDisplays() {
     `${thumbPositionRatio * 100}%`,
   );
 
-  // ▼▼▼ スライダーの値が変更されたらグラフも更新 ▼▼▼
   if (elements.personalizedAphGraphBar && elements.personalizedAphAxisLabels && elements.personalizedAphGraphContainer) {
     drawAphGraph(elements.personalizedAphGraphBar, normalAphDayMinutes);
     updateAphAxisLabels(elements.personalizedAphAxisLabels, elements.personalizedAphGraphContainer, normalAphDayMinutes);
   }
-  // ▲▲▲ ここまで追加 ▲▲▲
+}
+
+// --- Theme Functions ---
+function initializeThemes() {
+  state.themeSettings = initializeThemeManager();
+
+  // Create and insert theme settings UI
+  if (elements.themeSettingsContainer) {
+    const themeUI = createThemeSettingsUI();
+    elements.themeSettingsContainer.appendChild(themeUI);
+
+    // Set initial values
+    const faceSelect = document.getElementById('clock-face-select');
+    const colorScaled24Select = document.getElementById('color-scaled24-select');
+    const colorAhSelect = document.getElementById('color-ah-select');
+
+    if (faceSelect) faceSelect.value = state.themeSettings.clockFace;
+    if (colorScaled24Select) colorScaled24Select.value = state.themeSettings.colorScaled24;
+    if (colorAhSelect) colorAhSelect.value = state.themeSettings.colorAH;
+
+    // Add event listeners
+    faceSelect?.addEventListener('change', (e) => {
+      applyClockFace(e.target.value);
+      // Re-draw ticks if switching to/from Roman
+      if (e.target.value === CLOCK_FACES.ROMAN || state.themeSettings.clockFace === CLOCK_FACES.ROMAN) {
+        drawTicks();
+        applyClockFace(e.target.value); // Re-apply to update numerals
+      }
+      state.themeSettings.clockFace = e.target.value;
+    });
+
+    colorScaled24Select?.addEventListener('change', (e) => {
+      state.themeSettings.colorScaled24 = e.target.value;
+      saveColorPreferences(state.themeSettings.colorScaled24, state.themeSettings.colorAH);
+      if (!state.currentIsAhPeriod) {
+        applyColorTheme(false, state.themeSettings.colorScaled24, state.themeSettings.colorAH);
+      }
+    });
+
+    colorAhSelect?.addEventListener('change', (e) => {
+      state.themeSettings.colorAH = e.target.value;
+      saveColorPreferences(state.themeSettings.colorScaled24, state.themeSettings.colorAH);
+      if (state.currentIsAhPeriod) {
+        applyColorTheme(true, state.themeSettings.colorScaled24, state.themeSettings.colorAH);
+      }
+    });
+  }
+
+  // Apply initial theme
+  applyClockFace(state.themeSettings.clockFace);
 }
 
 // --- Initialization Functions ---
@@ -163,29 +212,142 @@ function initializeSlider() {
   elements.normalDurationSlider.value =
     state.normalAphDayDurationMinutes.toString();
 
-  // ▼▼▼ 実時間グラフの初期描画を追加 ▼▼▼
   if (elements.personalizedRealHoursBar) {
       drawRealTimeGraph(elements.personalizedRealHoursBar);
   }
-  // ▲▲▲ ここまで追加 ▲▲▲
 
+  updateSliderRelatedDisplays();
 
-  // スライダーの初期値をUIに反映 (グラフも含む)
-  updateSliderRelatedDisplays(); // この中でグラフも初期描画される
-
+  // Slider input event
   elements.normalDurationSlider.addEventListener("input", () => {
     state.normalAphDayDurationMinutes = parseInt(
       elements.normalDurationSlider.value,
       10,
     );
-    updateSliderRelatedDisplays(); // スライダー変更時にテキストとグラフを更新
+    updateSliderRelatedDisplays();
+    updateFineTuneButtons();
     localStorage.setItem(
       LOCAL_STORAGE_KEY_APH_DURATION,
       state.normalAphDayDurationMinutes.toString(),
     );
   });
-}
 
+  // Fine-tune button functions
+  function updateFineTuneButtons() {
+    const currentValue = parseInt(elements.normalDurationSlider.value, 10);
+    const min = parseInt(elements.normalDurationSlider.min, 10);
+    const max = parseInt(elements.normalDurationSlider.max, 10);
+
+    if (elements.sliderDecrement) {
+      elements.sliderDecrement.disabled = currentValue <= min;
+    }
+    if (elements.sliderIncrement) {
+      elements.sliderIncrement.disabled = currentValue >= max;
+    }
+  }
+
+  function adjustSliderValue(delta) {
+    const currentValue = parseInt(elements.normalDurationSlider.value, 10);
+    const min = parseInt(elements.normalDurationSlider.min, 10);
+    const max = parseInt(elements.normalDurationSlider.max, 10);
+    const newValue = Math.max(min, Math.min(max, currentValue + delta));
+
+    if (newValue !== currentValue) {
+      elements.normalDurationSlider.value = newValue.toString();
+      state.normalAphDayDurationMinutes = newValue;
+      updateSliderRelatedDisplays();
+      updateFineTuneButtons();
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY_APH_DURATION,
+        state.normalAphDayDurationMinutes.toString(),
+      );
+    }
+  }
+
+  // Long press functionality
+  let longPressInterval = null;
+  let longPressTimeout = null;
+  let longPressSpeed = 100; // Initial speed in ms
+  const minSpeed = 20; // Fastest speed
+  const speedupFactor = 0.9; // Speed multiplier
+
+  function startLongPress(delta) {
+    // First, do one adjustment immediately
+    adjustSliderValue(delta);
+
+    // Start with slower speed
+    longPressSpeed = 100;
+
+    // Set timeout for starting rapid fire after 500ms
+    longPressTimeout = setTimeout(() => {
+      longPressInterval = setInterval(() => {
+        adjustSliderValue(delta);
+        // Gradually speed up
+        if (longPressSpeed > minSpeed) {
+          clearInterval(longPressInterval);
+          longPressSpeed *= speedupFactor;
+          longPressInterval = setInterval(() => adjustSliderValue(delta), longPressSpeed);
+        }
+      }, longPressSpeed);
+    }, 500);
+  }
+
+  function stopLongPress() {
+    if (longPressTimeout) {
+      clearTimeout(longPressTimeout);
+      longPressTimeout = null;
+    }
+    if (longPressInterval) {
+      clearInterval(longPressInterval);
+      longPressInterval = null;
+    }
+    longPressSpeed = 100; // Reset speed
+  }
+
+  // Add event listeners for fine-tune buttons with long press support
+  if (elements.sliderDecrement) {
+    // Mouse events
+    elements.sliderDecrement.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      startLongPress(-1);
+    });
+
+    // Touch events
+    elements.sliderDecrement.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      startLongPress(-1);
+    });
+  }
+
+  if (elements.sliderIncrement) {
+    // Mouse events
+    elements.sliderIncrement.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      startLongPress(1);
+    });
+
+    // Touch events
+    elements.sliderIncrement.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      startLongPress(1);
+    });
+  }
+
+  // Global mouse/touch up events to stop long press
+  document.addEventListener("mouseup", stopLongPress);
+  document.addEventListener("touchend", stopLongPress);
+  document.addEventListener("touchcancel", stopLongPress);
+
+  // Stop if mouse leaves the window
+  document.addEventListener("mouseleave", (e) => {
+    if (e.target === document.documentElement) {
+      stopLongPress();
+    }
+  });
+
+  // Initialize button states
+  updateFineTuneButtons();
+}
 
 function initializeViewToggle() {
   if (!elements.clockViewContainer || !elements.settingsPanel || !elements.toggleViewBtn) {
@@ -207,18 +369,14 @@ function initializeViewToggle() {
       elements.settingsPanel.style.display = 'block';
       elements.toggleViewBtn.textContent = 'Show Clock';
       localStorage.setItem(LOCAL_STORAGE_KEY_CURRENT_VIEW, 'settings');
-      // ▼▼▼ 設定パネル表示時に実時間グラフも描画 ▼▼▼
       if (elements.personalizedRealHoursBar) {
           drawRealTimeGraph(elements.personalizedRealHoursBar);
       }
-      // ▲▲▲ ここまで追加 ▲▲▲
-      // ▼▼▼ 設定パネル表示時にグラフを現在のスライダー値で再描画/初期描画 ▼▼▼
       if (elements.normalDurationSlider && elements.personalizedAphGraphBar && elements.personalizedAphAxisLabels && elements.personalizedAphGraphContainer) {
           const currentSliderValue = parseInt(elements.normalDurationSlider.value, 10);
           drawAphGraph(elements.personalizedAphGraphBar, currentSliderValue);
           updateAphAxisLabels(elements.personalizedAphAxisLabels, elements.personalizedAphGraphContainer, currentSliderValue);
       }
-      // ▲▲▲ ここまで追加 ▲▲▲
     }
   }
 
@@ -241,7 +399,6 @@ function initializeTimezoneSelect() {
     elements.timezoneSelect.appendChild(option);
   });
 
-  // Check localStorage for saved timezone first
   const savedTimezone = localStorage.getItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE);
   const params = new URLSearchParams(window.location.search);
   const urlTimezone = params.get("timezone");
@@ -273,13 +430,11 @@ function initializeTimezoneSelect() {
   elements.timezoneSelect.value = state.selectedTimezone;
   updateCityNameDisplay(state.selectedTimezone);
 
-  // Save timezone to localStorage
   localStorage.setItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE, state.selectedTimezone);
 
   elements.timezoneSelect.addEventListener("change", (event) => {
     state.selectedTimezone = event.target.value;
     updateCityNameDisplay(state.selectedTimezone);
-    // Save timezone to localStorage when changed
     localStorage.setItem(LOCAL_STORAGE_KEY_SELECTED_TIMEZONE, state.selectedTimezone);
   });
 }
@@ -386,8 +541,8 @@ function drawAhPersonalizedSector(
   elements.ahSector.setAttribute("d", d_sector);
 
   if (originalSweepAngleDegrees > 360) {
-    const indicatorAngleDegrees = originalSweepAngleDegrees % 360; // 360度を超えた分
-    const svgIndicatorAngle = (startAngleDegrees + indicatorAngleDegrees) - 90; // セクター開始角度からの相対的な角度
+    const indicatorAngleDegrees = originalSweepAngleDegrees % 360;
+    const svgIndicatorAngle = (startAngleDegrees + indicatorAngleDegrees) - 90;
     const indicatorRad = (svgIndicatorAngle * Math.PI) / 180;
     const indicatorX = cx + radius * Math.cos(indicatorRad);
     const indicatorY = cy + radius * Math.sin(indicatorRad);
@@ -442,6 +597,12 @@ function updatePersonalizedClock() {
     actualTimeDisplayElement.textContent = `Actual: ${localTime.format("HH:mm:ss")}`;
   }
 
+  // Apply color theme based on period
+  if (state.currentIsAhPeriod !== isPersonalizedAhPeriod) {
+    state.currentIsAhPeriod = isPersonalizedAhPeriod;
+    applyColorTheme(isPersonalizedAhPeriod, state.themeSettings.colorScaled24, state.themeSettings.colorAH);
+  }
+
   if (isPersonalizedAhPeriod) {
     if (aphTimeDisplayElement) aphTimeDisplayElement.style.display = 'none';
     if (actualTimeDisplayElement) actualTimeDisplayElement.style.display = 'block';
@@ -478,9 +639,9 @@ function updatePersonalizedClock() {
     }
     if (elements.personalizedAhTitle) {
       elements.personalizedAhTitle.textContent = "You are now in APH Period.";
-      elements.personalizedAhTitle.style.color = "var(--dark-text)"; // components.css で定義されている想定
     }
-    document.body.classList.add("inverted");
+    // Remove manual inverted class - now handled by theme manager
+    // document.body.classList.add("inverted");
 
   } else {
     if (aphTimeDisplayElement) aphTimeDisplayElement.style.display = 'block';
@@ -495,14 +656,13 @@ function updatePersonalizedClock() {
     }
     if (elements.personalizedAhTitle) {
       elements.personalizedAhTitle.textContent = "Personalized AH Clock";
-      elements.personalizedAhTitle.style.color = "";
     }
-    document.body.classList.remove("inverted");
+    // Remove manual inverted class - now handled by theme manager
+    // document.body.classList.remove("inverted");
   }
 
   state.animationFrameId = requestAnimationFrame(updatePersonalizedClock);
 }
-
 
 // --- Main Initialization ---
 function initialize() {
@@ -516,9 +676,10 @@ function initialize() {
   }
 
   initializeTimezoneSelect();
-  initializeSlider(); // スライダー初期化時にグラフも初期描画される
+  initializeSlider();
   drawTicks();
   initializeViewToggle();
+  initializeThemes();
 
   if (state.animationFrameId) cancelAnimationFrame(state.animationFrameId);
   updatePersonalizedClock();
