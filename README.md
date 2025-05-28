@@ -1,31 +1,31 @@
 # Another Hour Clock
 
-Another Hour Clock is a unique web-based application that redefines your perception of time. This application allows you to personalize your day by defining the length of your **"Scaled 24"** period—the duration you wish your conceptual 'day' to last in real time. The remaining time within a standard 24-hour real day becomes the **"Another Hour" (AH)** period.
+Another Hour Clock is a unique web-based application that redefines your perception of time. This application allows you to personalize your day by defining the length of your **"Designed 24"** period—the duration you wish your conceptual 'day' to last in real time. The remaining time within a standard 24-hour real day becomes the **"Another Hour" (AH)** period.
 
 ## ✨ Key Concepts
 
-- **Scaled 24 Period**: Your customizable conceptual 24-hour day that can last anywhere from 0 to 24 real hours
+- **Designed 24 Period**: Your customizable conceptual 24-hour day that can last anywhere from 0 to 24 real hours
 - **Another Hour (AH) Period**: The remaining real time in a 24-hour day, running at normal speed
-- **Time Scaling**: During the "Scaled 24" period, time runs at a customized pace to fit 24 conceptual hours into your chosen real-time duration
+- **Time Scaling**: During the "Designed 24" period, time runs at a customized pace to fit 24 conceptual hours into your chosen real-time duration
 
 ## 🚀 Features
 
 ### 🎯 **Main Clock** (Customizable Time Experience)
-- **Custom Duration Control**: Set your "Scaled 24" period anywhere from 0 to 24 real hours using an intuitive slider
+- **Custom Duration Control**: Set your "Designed 24" period anywhere from 0 to 24 real hours using an intuitive slider
 - **Visual Feedback**: Integrated comparison graph showing your personalized time distribution vs. standard time
-- **Dynamic Time Scaling**: Time runs faster or slower during your "Scaled 24" period based on your settings
+- **Dynamic Time Scaling**: Time runs faster or slower during your "Designed 24" period based on your settings
 - **Another Hour Visualization**: Visual AH sector on the analog clock during AH periods
 - **Theme Switching**: Automatically switches to dark theme during AH periods
 - **Timezone Support**: Full timezone selection with major world cities
 
 ### ⏱️ **Stopwatch & Timer** (Scaled Time Tools)
 - **Adaptive Speed**: Operates based on your Main Clock's current scaling settings
-- **Real-time Sync**: Speed changes automatically when switching between Scaled 24 and AH periods
+- **Real-time Sync**: Speed changes automatically when switching between Designed 24 and AH periods
 - **Intuitive Interface**: Clean, easy-to-use controls for all timing functions
 
 ### 📊 **Graph Demo** (Time Visualization)
 - **Dual Bar Graphs**: Side-by-side comparison of real time vs. your personalized time
-- **Interactive Controls**: Real-time updates as you adjust your "Scaled 24" duration
+- **Interactive Controls**: Real-time updates as you adjust your "Designed 24" duration
 - **Visual Learning**: Helps understand how time allocation changes with different settings
 
 ## 🏗️ Architecture
@@ -92,11 +92,11 @@ another-hour/
 ### Main Clock (Personalized Experience)
 1. **Access**: Click "Main Clock" from the landing page
 2. **Configure**: Use "Show Settings" to access configuration
-   - Adjust the slider to set your "Scaled 24" duration
+   - Adjust the slider to set your "Designed 24" duration
    - Select your preferred timezone
    - View the real-time graph comparison
 3. **Experience**: Switch to "Show Clock" to see your personalized time in action
-   - Watch time scale during your "Scaled 24" period
+   - Watch time scale during your "Designed 24" period
    - Experience normal-speed time during "Another Hour" periods
    - Observe automatic theme changes
 
@@ -106,7 +106,7 @@ another-hour/
 - **Scaled Duration**: Set timer durations in "perceived" time units
 
 ### Graph Demo
-- **Interactive Learning**: Experiment with different "Scaled 24" durations
+- **Interactive Learning**: Experiment with different "Designed 24" durations
 - **Visual Understanding**: See how your choices affect time distribution
 - **Real-time Updates**: All changes reflected immediately
 
@@ -120,7 +120,7 @@ The application uses sophisticated time scaling algorithms:
 // Core scaling formula
 scaleFactor = 24 / scaled24Hours
 
-// During Scaled 24 period: time runs at scaleFactor speed
+// During Designed 24 period: time runs at scaleFactor speed
 // During AH period: time runs at normal speed (scaleFactor = 1)
 ```
 
@@ -216,7 +216,7 @@ We welcome contributions! Here's how to get started:
 ## 🐛 Known Issues
 
 - Timer accuracy may vary slightly during rapid scaling changes
-- Very short "Scaled 24" periods (< 1 hour) may cause display precision issues
+- Very short "Designed 24" periods (< 1 hour) may cause display precision issues
 - Graph rendering may need refresh on some mobile browsers after orientation change
 
 ## 🆘 Troubleshooting
